@@ -1,0 +1,15 @@
+.login_container {
+	margin:auto;
+	margin-top:200px;
+	text-align: left;
+}
+label { width: 120px; }
+.logo {
+	background: url('../img/logo.png') no-repeat top left;
+	width: 146px;
+	height: 94px;
+}
+.box {
+	-moz-box-shadow: 5px 5px 5px black;
+	border:1px solid #000;
+}

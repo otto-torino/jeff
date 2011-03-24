@@ -1,0 +1,1 @@
+<span><?= $start ?>-<?= $end ?> di <?= $total ?></span>

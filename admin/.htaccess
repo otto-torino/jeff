@@ -1,0 +1,26 @@
+RewriteEngine on
+
+RewriteBase /git/jeff/admin/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.+[^/])$ $1/  [R]
+
+RewriteRule ^.*favicon.ico$ favicon.ico
+
+RewriteRule ^$ admin.php
+RewriteRule ^home/$ admin.php
+RewriteRule ^login/$ admin.php?login [L]
+RewriteRule ^logout/$ admin.php?logout
+RewriteRule ^noaccess/$ ../noaccess.php
+
+RewriteRule ^(\w+)/new/$ admin.php?module=$1&method=manage$1 [L]
+RewriteRule ^(\w+)/edit/([0-9]+)/$ admin.php?module=$1&method=manage$1&id=$2 [L]
+RewriteRule ^(\w+)/(\w+)/$ admin.php?module=$1&method=$2&%{QUERY_STRING} [L]
+RewriteRule ^(\w+)/(\w+)/([^/]+)/$ admin.php?module=$1&method=$2&id=$3&%{QUERY_STRING} [L]
+RewriteRule ^(\w+)/(\w+)/([^/]+)/([^/]+)/([^/]+)/$ admin.php?module=$1&method=$2&id=$3&$4=$5&%{QUERY_STRING} [L]
+RewriteRule ^(\w+)/(\w+)/([^/]+)/([^/]+)/$ admin.php?module=$1&method=$2&$3=$4 [L]
+
+RewriteRule ^event/$ admin.php
+

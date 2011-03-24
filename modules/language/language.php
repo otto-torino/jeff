@@ -1,0 +1,84 @@
+<?php
+
+class language extends model {
+
+
+	function __construct($registry, $id) {
+	
+		$this->_registry = $registry;
+		$this->_tbl_data = TBL_LNG;
+		parent::__construct($this->initP($id));
+
+	}
+
+	private function initP($id) {
+
+		return $this->initDbProp($id);
+
+	}
+	
+	public static function get($registry, $opts=null) {
+	
+		$objs = array();
+		$where = gOpt($opts, "where", ''); 
+		$rows = $registry->db->autoSelect("id", TBL_LNG, $where, 'language');
+		foreach($rows as $row) $objs[] = new language($registry, $row['id']);
+
+		return $objs;
+	
+	}
+
+	public static function getFromLabel($registry, $label) {
+
+		$rows = $registry->db->autoSelect("id", TBL_LNG, "label='$label'", 'language');
+		if(count($rows)) return new language($registry, $rows[0]['id']);
+
+		return null;
+	
+	}
+
+	public static function setLanguage($registry) {
+	
+		$language = null;
+		if($code = cleanInput('get', 'lng', 'string')) {
+			// charge language and put it in session
+			$rows = $registry->db->autoSelect(array("id", "language"), TBL_LNG, "code='$code'", 'language');
+			$language = $rows[0]['language'];
+			$_SESSION['lng'] = $language;
+			header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+		}
+		elseif(isset($_SESSION['lng'])) {
+			// use session language
+			$language = $_SESSION['lng'];
+		}
+
+		if(!$language) {
+			// default language
+			$rows = $registry->db->autoSelect(array("id", "language"), TBL_LNG, "main='1'", 'language');
+			$language = $rows[0]['language'];
+			$_SESSION['lng'] = $language;
+		}
+
+		function __($id) {
+			
+			$core = new core();
+			$theme = $core->getTheme();
+			
+			if(is_readable(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php'))
+				$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php');
+			else $lng = array();
+
+			if(get_class($theme)!= 'defaultTheme')
+				if(is_readable($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'))
+					$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'));
+
+			return isset($lng[$id]) ? $lng[$id] : $id;
+
+		}
+
+		return $language;
+	}
+
+}
+
+?>

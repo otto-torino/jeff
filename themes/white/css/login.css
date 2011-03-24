@@ -1,0 +1,18 @@
+a.top_bar:link, a.top_bar:visited {
+	color:#ffff00;
+}
+
+.login {
+}
+.login h1 {
+	color: #880000;
+}
+.login input[type=text], .login input[type=password] {
+	font-size: 0.9em;
+	border:1px solid #999;
+	color:#666;
+	font-size:0.9em;
+	width:140px;
+	margin-top: 5px;
+}
+
