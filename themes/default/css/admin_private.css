@@ -1,0 +1,31 @@
+form {
+	margin: 5px 0;
+	border:1px dotted #ccc;
+	padding:10px;
+}
+.col1 {
+	width: 19%
+}
+.col2 {
+	width: 79%;
+}
+table.generic {
+	border-collapse: collapse;
+	margin:10px 0;
+}
+table.generic th {
+	border: 1px solid #666;
+	background-color: #ddd;
+}
+table.generic td {
+	border: 1px solid #666;
+	background-color: #fff;
+}
+
+.selected, .selected a:visited, .selected a:link {
+	color: #ff6666;
+}
+
+.section_title {
+	}
+

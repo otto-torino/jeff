@@ -1,0 +1,109 @@
+html {
+	background: url('../img/html_bkg.jpg') repeat top left;
+	background: #eee;
+}
+
+body {
+	font: normal normal 12px/1.5em "Lucida Grande", Lucida, Verdana, Arial;
+	padding: 5px;
+	text-align: center;
+	color:#333;
+}
+a:link, a:visited { color: #00aa00; }
+h1 { color: #000; font-weight: bold; }
+section { padding: 10px; margin:0 10px; }
+.container {
+	border-bottom-width: 0px;
+	margin:auto;
+	position:relative;
+	width: 1000px;
+	text-align:left;
+}
+.box {
+	background: #ccffcc;
+	-moz-border-radius: 8px 8px;
+	margin-bottom:10px;
+}
+/*
+ * Top Bar
+ */
+div.doctop {
+	position:relative;
+}
+
+div.header_logo {
+
+	background: url('../img/logo.png') no-repeat top left;
+	height: 100px;
+	margin: 0;
+
+}
+div.header_lng {
+	position:absolute;
+	top:80px;
+	right:5px;
+}
+div.header_bottom {
+}
+
+/*
+ * Content
+ */
+.docbody {
+	padding: 0;
+	background:#fff;
+}
+
+/*
+ * Bottom
+ */
+.docbottom {
+	background-color:#fff;
+}
+.credits {
+	background: url('../img/menu_bkg.png') repeat top left;
+	width:1000px;
+	margin:auto;
+	color: #fff;
+	height:30px;
+	padding-top:10px;
+}
+
+.credits a:link, .credits a:visited {
+	color: #004400;
+}
+
+#footer {
+	width: 1000px;
+	height: 40px;
+}
+
+.menu {
+	color: #000;
+	padding: 0px;
+
+}
+.col1 {
+	clear:both;
+	margin-top:5px;
+	width: 69%;
+}
+.col2 {
+	margin-top:5px;
+	width: 29%;
+}
+
+/* styles */
+caption { font-style: italic; }
+.title { font-size: 1.2em; }
+.subtitle { font-size: 1.1em; font-style:italic; color: #880000;  }
+
+input[type=submit], input[type=button] {
+	cursor: pointer;
+	background: url('../img/genericBtn_bkg.jpg') repeat-x;
+	background-position: top left;
+	font-size: 10px;
+	font-weight: bold;
+	height: 20px;
+	padding: 2px 5px;
+}

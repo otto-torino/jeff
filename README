@@ -1,0 +1,32 @@
+===================================================================
+JEFF PHP FRAMEWORK by Otto srl, MIT license
+===================================================================
+Jeff is a light php framework design to help the programmer in the 
+developement of a web site or web application. It's written
+following the MVC pattern. Other patterns are used in the
+framework.
+The project is in developement, no stable release still exists.
+Even if I consider it quite stable, it's incomplete. It has many
+features and capabilities that have to be fully implemented.
+
+REQUIREMENTS
+php >= 5
+mysql >= 5 (may be easily extended to use other DBMS)
+apache >= 2
+
+the following apache modules have to be enabled
+- mod_expires
+- mod_headers
+- mod_rewrite
+
+the short_open_tag directive must be enabled in php.ini
+
+set your DBMS in order to work with utf8 text encoding
+ 
+INSTALL
+- copy all files into a directory under the web server root.
+- Adjust the RewriteBase Rule in .htaccess and admin/.htaccess to
+fit your path situation.
+- create the db using the jeff.sql file
+- configure the db connection paramethers in configuration.php
+- surf your install directory and oila

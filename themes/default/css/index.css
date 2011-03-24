@@ -1,0 +1,10 @@
+#index-index {
+	padding: 0 10px;
+}
+#index-index .content {
+	text-align:justify;
+}
+#index-index img {
+	width: 200px;
+	margin: 0 10px 10px 0;
+}

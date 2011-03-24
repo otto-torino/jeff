@@ -1,0 +1,13 @@
+ul.menu {
+	margin : 5px 0;
+	padding: 0;
+	list-style-position:inside;
+	height:16px;
+}
+
+ul.menu li {
+	float: left;
+	list-style-type: none;
+	margin: 0 10px 0 0;
+}
+
