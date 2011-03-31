@@ -14,7 +14,7 @@ class menu extends model {
 
 	private function initAdminMenu() {
 	
-		$this->voices[__("Home")] = ROOT;
+		$this->voices[__("Home")] = ROOT.'/';
 		$this->voices[__("HomeAdmin")] = ROOT.'/admin/';
 		$this->voices[__("Configuration")] = array(
 			__("AppPref") => $this->_registry->router->linkHref('siteSettings', 'manage'),
@@ -33,7 +33,7 @@ class menu extends model {
 	
 	private function initMainMenu() {
 	
-		$this->voices[__("Home")] = ROOT;
+		$this->voices[__("Home")] = ROOT.'/';
 		if(access::check($this->_registry, 'admin_view')) $this->voices[__("HomeAdmin")] = ROOT.'/admin/';
 		if($this->_registry->user->id) $this->voices[__("Logout")] = $this->_registry->router->linkHref('logout', null);
 
