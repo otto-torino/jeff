@@ -356,18 +356,6 @@ class form {
 			}
 			else return __("noAvailableOptions");
 		}
-		else {
-			$result = mysql_query($data);
-			if(mysql_num_rows($result) > 0) {
-				while ($row = mysql_fetch_array($result)) {
-					if(gOpt($opts, 'maxChars')) $label = cutHtmlText($row[1], gOpt($opts, 'maxChars'), '...', true, gOpt($opts, 'cutWords')?gOpt($opts, 'cutWords'):false, true);
-					else $label = $row[1];
-					$title = isset($row[2]) ? $row[2] : null;
-					$buffer .= "<option value=\"".htmlInput($row[0])."\" ".($row[0]==$selected?"selected=\"selected\"":"")." ".($title ? "title=\"$title\"":"").">".htmlVar($label)."</option>\n";
-				}
-			}
-		 	else return __("noAvailableOptions");
-		}
 
 		$buffer .= "</select>\n";
 
@@ -494,14 +482,14 @@ class form {
 		if(isset($_FILES[$name]['name']) && $_FILES[$name]['name']) {
 			$nfile_size = $_FILES[$name]['size'];
 			if($max_file_size && $nfile_size>$max_file_size) {
-				if($error_query) mysql_query($error_query);
+				if($error_query) $this->registry->db->executeQuery($error_query);
 				exit(error::errorMessage(array('error'=>__("MaxSizeError")), $link_error));
 			}
 			$tmp_file = $_FILES[$name]['tmp_name'];
 			$nfile = $this->setFileName($name, $path, $prefix); 
 
 			if(!$this->checkExtension($nfile, $valid_extension) || preg_match('#%00#', $nfile) || ($check_content && !in_array( $_FILES[$name]['type'], $contents_allowed))) {
-				if($error_query) mysql_query($error_query);
+				if($error_query) $this->registry->db->executeQuery($error_query);
 				exit(error::errorMessage(array('error'=>__("FileConsistentError")), $link_error));
 			}
 
@@ -518,7 +506,7 @@ class form {
 		if($delete) {
 			if(is_file($path.$this->_requestVars['old_'.$name]))	
 			if(!@unlink($path.$this->_requestVars['old_'.$name])) {
-				if($error_query) mysql_query($error_query);
+				if($error_query) $this->registry->db->executeQuery($error_query);
 				exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
 			}
 
@@ -526,7 +514,7 @@ class form {
 
 		if($upload) {
 			if(!$this->upload($tmp_file, $nfile, $path)) { 
-				if($error_query) mysql_query($error_query);
+				if($error_query) $this->registry->db->executeQuery($error_query);
 				exit(error::errorMessage(array('error'=>__("CantUploadError")), $link_error));
 			}
 		}
