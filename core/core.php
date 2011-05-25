@@ -75,8 +75,19 @@ class core {
 	public function getTheme() {
 
 		$rows = $this->_registry->db->autoSelect(array("name"), TBL_THEMES, "active='1'", '');
+		$theme_name = $rows[0]['name'];
 
-		return new theme($this->_registry, $rows[0]['name']);
+		if(is_readable(ABS_THEMES.DS.$theme_name.DS.$theme_name.'.php'))
+			require_once(ABS_THEMES.DS.$theme_name.DS.$theme_name.'.php');
+		else 
+			Error::syserrorMessage('coew', 'getTheme', sprintf(__("CantLoadThemeError"), $theme_name, __LINE__));
+
+		$theme_class = $theme_name.'Theme';
+
+		if(class_exists($theme_class))
+			return new $theme_class($this->_registry);
+		else 
+			Error::syserrorMessage('coew', 'getTheme', sprintf(__("CantLoadThemeError"), $theme_name, __LINE__));
 
 	}
 
