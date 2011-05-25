@@ -109,7 +109,8 @@ return array(
 	"DefaultTheme"=>"Tema di default",
 	"DefaultThemeDescription"=>"Tema base di Jeff",
 	"WhiteTheme"=>"Tema chiaro",
-	"WhiteThemeDescription"=>"Tema dai colori tenui"
+	"WhiteThemeDescription"=>"Tema dai colori tenui",
+	"CantLoadThemeError"=>"Impossibile caricare la classe del tema %s"
 
 )
 

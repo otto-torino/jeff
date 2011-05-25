@@ -109,7 +109,8 @@ return array(
 	"DefaultTheme"=>"Default theme",
 	"DefaultThemeDescription"=>"Base Jeff's theme",
 	"WhiteTheme"=>"White theme",
-	"WhiteThemeDescription"=>"Theme with soft colors"
+	"WhiteThemeDescription"=>"Theme with soft colors",
+	"CantLoadThemeError"=>"Can't find the %s theme class"
 
 )
 

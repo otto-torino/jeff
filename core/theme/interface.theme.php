@@ -11,6 +11,9 @@ interface Itheme {
 	public function setTpl($tpl);
 	public function getCss();
 	public function getJs();
+	public function getName();
+	public function getDescription();
+	public function getImage();
 
 }
 
