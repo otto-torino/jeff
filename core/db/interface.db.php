@@ -6,6 +6,7 @@ interface DbManager {
 
 	public function openConnection();
 	public function escapeString($string);
+	public function executeQuery($query);
 	public function autoSelect($fields, $tables, $where, $order=null, $limit=null);
 	public function getNumRecords($table, $where=null, $field='id');
 	public function getFieldsName($table);

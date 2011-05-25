@@ -49,10 +49,18 @@ class mysql implements DbManager {
 	
 	private function setUtf8() {
 
-		$db_charset = mysql_query( "SHOW VARIABLES LIKE 'character_set_database'" );
+		$db_charset = $this->executeQuery( "SHOW VARIABLES LIKE 'character_set_database'" );
 		$charset_row = mysql_fetch_assoc( $db_charset );
-		mysql_query( "SET NAMES '" . $charset_row['Value'] . "'" );
+		$this->executeQuery( "SET NAMES '" . $charset_row['Value'] . "'" );
 		unset( $db_charset, $charset_row );
+
+	}
+
+	public function executeQuery($query) {
+	
+		$res = mysql_query($query);
+
+		return $res;
 
 	}
 
@@ -67,7 +75,7 @@ class mysql implements DbManager {
 		$qlimit = count($limit) ? "LIMIT ".$limit[0].",".$limit[1]:"";
 
 		$query = "SELECT $qfields FROM $qtables $qwhere $qorder $qlimit";
-		$res = mysql_query($query);
+		$res = $this->executeQuery($query);
 		if($res) {
 			while($row = mysql_fetch_assoc($res)) {
 				$results[] = $row;
@@ -85,7 +93,7 @@ class mysql implements DbManager {
 
 		$qwhere = $where ? "WHERE ".$where : "";
 		$query = "SELECT COUNT($field) AS tot FROM $table $qwhere";
-		$res = mysql_query($query);
+		$res = $this->executeQuery($query);
 		if($res) {
 			while($row = mysql_fetch_assoc($res)) {
 				$tot = $row['tot'];
@@ -102,7 +110,7 @@ class mysql implements DbManager {
 		$fields = array();
 		$query = "SHOW COLUMNS FROM ".$table;
 		
-		$res = mysql_query($query);
+		$res = $this->executeQuery($query);
 		while($row = mysql_fetch_assoc($res)) {
 			$results[] = $row;
 		}
@@ -120,7 +128,7 @@ class mysql implements DbManager {
 		$fields = array();
 
 		$query = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".$this->_db_dbname."' AND TABLE_NAME = '$table'";
-		$res = mysql_query($query);
+		$res = $this->executeQuery($query);
 		
 		while($row = mysql_fetch_array($res)) {
 			preg_match("#(\w+)\((\d+),?(\d+)?\)#", $row['COLUMN_TYPE'], $matches);
@@ -147,7 +155,7 @@ class mysql implements DbManager {
 		$tables = array();
 		$query = "SHOW TABLES".($like ? " LIKE '$like'":'');
 		
-		$res = mysql_query($query);
+		$res = $this->executeQuery($query);
 		while($row = mysql_fetch_array($res)) {
 			$results[] = $row;
 		}
@@ -170,7 +178,7 @@ class mysql implements DbManager {
 		}
 
 		$query = "INSERT INTO ".$table." (".implode(",", $fields).") VALUES (".implode(",", $values).")"; 
-		$result = mysql_query($query);
+		$result = $this->executeQuery($query);
 
 		return $result ? $this->lastInsertedId() : false;
 	}
@@ -181,7 +189,7 @@ class mysql implements DbManager {
 		foreach($data as $f=>$v) $sets[] = is_null($v) ? "$f=NULL" : "$f='$v'";
 		$query = "UPDATE ".$table." SET ".implode(",", $sets)." ".($where ? "WHERE $where":"");
 
-		$result = mysql_query($query);
+		$result = $this->executeQuery($query);
 
 		return $result;
 	}
@@ -197,7 +205,7 @@ class mysql implements DbManager {
 
 		$query = "DELETE FROM $table ".($where ? "WHERE $where":"");
 
-		$result = mysql_query($query);
+		$result = $this->executeQuery($query);
 
 		return $result;
 	}
