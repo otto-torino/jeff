@@ -349,10 +349,16 @@ class adminTable {
 		if(!$pkeys) { 
 			$pkeys = array(0=>null); 
 			$insert = true; 
-			if($this->_insertion) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+			if(!$this->_insertion) {
+				header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+				exit();
+			}
 		}
 		else {
-			if($this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+			if($this->_edit_deny=='all') {
+				header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+				exit();
+			}
 		}
 
 		if(count($pkeys)) {
