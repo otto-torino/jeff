@@ -9,6 +9,7 @@ class adminTable {
 	private $_cls_cbk_del, $_mth_cbk_del;
 
 	private $_insertion, $_edit_deny;
+	private $_changelist_fields;
 
 	private $_view;
 	private $_arrow_down_path, $_arrow_up_path;
@@ -23,6 +24,8 @@ class adminTable {
 		$this->_insertion = gOpt($opts, 'insertion', true);
 		// denty all/some pkeys modifications
 		$this->_edit_deny = gOpt($opts, 'edit_deny', null);
+		// fields to show in changelist view (all if null)
+		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
 
 		$this->_efp = gOpt($opts, "efp", 10);
 
@@ -60,6 +63,13 @@ class adminTable {
 		}
 	}
 
+	public function setChangelistFields($fields) {
+		
+		if(is_array($fields))
+			$this->_changelist_fields = $fields;
+
+	}
+
 	public function manage() {
 
 		if(!$this->_primary_key) return __("NoPrimaryKeyTable");
@@ -93,44 +103,56 @@ class adminTable {
 
 		$limit = array($pag->start(), $this->_efp);
 
-		// different queries if the order field is a foreign key
-		if(isset($this->_fkeys[$field_order])) {
-			$records = $this->_registry->db->autoSelect("a.*", array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), "a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
+		if(count($this->_changelist_fields)) {
+			if(!in_array($this->_primary_key, $this->_changelist_fields)) 
+				array_unshift($this->_changelist_fields, $this->_primary_key);
+			$field_selection = isset($this->_fkeys[$field_order]) 
+					? 'a.'.implode(', a.', $this->_changelist_fields)
+					: implode(',', $this->_changelist_fields);
 		}
 		else 
-			$records = $this->_registry->db->autoSelect("*", $this->_table, null, $order, $limit);
+			$field_selection = "*"; 
+
+		// different queries if the order field is a foreign key
+		if(isset($this->_fkeys[$field_order])) {
+			$records = $this->_registry->db->autoSelect($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), "a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
+		}
+		else 
+			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, null, $order, $limit);
 
 		$all = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').setProperty('checked', 'checked');\">".__("all")."</span>";
 		$none = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').removeProperty('checked');\">".__("none")."</span>";
 		$heads = $this->_edit_deny == 'all' ? array() : array("0"=>"$all | $none");
 		foreach($fields_names as $fn) {
-			$ord = $order == $fn." ASC" ? $fn." DESC" : $fn." ASC";
+			if(!$this->_changelist_fields || in_array($fn, $this->_changelist_fields)) {
+				$ord = $order == $fn." ASC" ? $fn." DESC" : $fn." ASC";
 
-			if($order == $fn." ASC") {
-				$jsover = "$(this).getNext('img').setProperty('src', '$this->_arrow_down_path')";
-				$jsout = "$(this).getNext('img').setProperty('src', '$this->_arrow_up_path')";
-				$a_style = "visibility:visible";
-				$apath = $this->_arrow_up_path;
-			}
-			elseif($order == $fn." DESC") {
-				$jsover = "$(this).getNext('img').setProperty('src', '$this->_arrow_up_path')";
-				$jsout = "$(this).getNext('img').setProperty('src', '$this->_arrow_down_path')";
-				$js = "$(this).getNext('img').getNext('img').setStyle('visibility', 'visible')";
-				$a_style = "visibility:visible";
-				$apath = $this->_arrow_down_path;
-			}
-			else {
-				$js = '';
-				$jsover = "$(this).getNext('img').setStyle('visibility', 'visible')";
-				$jsout = "$(this).getNext('img').setStyle('visibility', 'hidden')";
-				$a_style = "visibility:hidden";
-				$apath = $this->_arrow_up_path;
-			}
+				if($order == $fn." ASC") {
+					$jsover = "$(this).getNext('img').setProperty('src', '$this->_arrow_down_path')";
+					$jsout = "$(this).getNext('img').setProperty('src', '$this->_arrow_up_path')";
+					$a_style = "visibility:visible";
+					$apath = $this->_arrow_up_path;
+				}
+				elseif($order == $fn." DESC") {
+					$jsover = "$(this).getNext('img').setProperty('src', '$this->_arrow_up_path')";
+					$jsout = "$(this).getNext('img').setProperty('src', '$this->_arrow_down_path')";
+					$js = "$(this).getNext('img').getNext('img').setStyle('visibility', 'visible')";
+					$a_style = "visibility:visible";
+					$apath = $this->_arrow_down_path;
+				}
+				else {
+					$js = '';
+					$jsover = "$(this).getNext('img').setStyle('visibility', 'visible')";
+					$jsout = "$(this).getNext('img').setStyle('visibility', 'hidden')";
+					$a_style = "visibility:hidden";
+					$apath = $this->_arrow_up_path;
+				}
 
-			$link = preg_replace("#/p/\d+/#", "/", $_SERVER['REQUEST_URI']);
-			$link = preg_replace("#\?.*#", "", $link);
-			$head_t = anchor($link."?order=$ord", __($fn), array('over'=>$jsover, 'out'=>$jsout));
-			$heads[] = $head_t." <img src=\"$apath\" alt=\"down\" style=\"$a_style\" />";
+				$link = preg_replace("#/p/\d+/#", "/", $_SERVER['REQUEST_URI']);
+				$link = preg_replace("#\?.*#", "", $link);
+				$head_t = anchor($link."?order=$ord", __($fn), array('over'=>$jsover, 'out'=>$jsout));
+				$heads[] = $head_t." <img src=\"$apath\" alt=\"down\" style=\"$a_style\" />";
+			}
 		}
 
 		$rows = array();
