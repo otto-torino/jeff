@@ -45,7 +45,10 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	$input = filter_input($method_string, $name, $filter, $options);
 	settype($input, $type);
 
-	if(!(gOpt($opts, 'escape')===false)) $input = $db->escapeString($input);
+	if(!(gOpt($opts, 'escape')===false)) {
+		if(get_magic_quotes_gpc()) $input = stripslashes($input);	// magic_quotes_gpc = On
+		$input = $db->escapeString($input);
+	}
 
 	return $input;
 
@@ -83,7 +86,10 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 	$input = filter_input($method_string, $name, $filter, $options);
 
 	if(!(gOpt($opts, 'escape')===false) && count($input)) 
-		foreach($input as $k=>$in) $input[$k] = $db->escapeString($in);
+		foreach($input as $k=>$in) {
+			if(get_magic_quotes_gpc()) $input[$k] = stripslashes($in);	// magic_quotes_gpc = On
+			$input[$k] = $db->escapeString($in);
+		}
 
 	return $input;
 
@@ -103,6 +109,7 @@ function htmlVar($var) {
 }
 
 function htmlInput($var) {
+	$var = preg_replace('#"#', '&#34;', $var);
 	return $var;
 }
 
