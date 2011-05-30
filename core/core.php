@@ -57,16 +57,19 @@ class core {
 
 		ob_start();
 
-		$this->_registry = new registry();
 		$this->_registry->db = db::getInstance();
 		$this->_registry->router = new router($this->_registry, $this->_base_path);
-		
+		$this->_registry->theme = $this->getTheme();
+		$this->_registry->lng = language::setLanguage($this->_registry);
+		$this->_registry->site_settings = new siteSettings($this->_registry);
+		$this->_registry->dtime = new dtime($this->_registry);
+		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 		/*
 		 * check login/logout
 		 */
 		authentication::check($this->_registry);
 
-		echo $registry->router->loader(null);
+		echo $this->_registry->router->loader(null);
 		ob_end_flush();
 
 		exit(); 
