@@ -37,9 +37,9 @@ class menu extends model {
 			access::check($this->_registry, 'privileges', 1)
 		) {
 			$v = array();
-			if(access::check($this->_registry, 'user', 1)) $v[__("AppPref")] = $this->_registry->router->linkHref('user', 'manage');
-			if(access::check($this->_registry, 'group', 1)) $v[__("DatetimePref")] = $this->_registry->router->linkHref('group', 'manage');
-			if(access::check($this->_registry, 'privileges', 1)) $v[__("Languages")] = $this->_registry->router->linkHref('privilege', 'manage'); 
+			if(access::check($this->_registry, 'user', 1)) $v[__("Users")] = $this->_registry->router->linkHref('user', 'manage');
+			if(access::check($this->_registry, 'group', 1)) $v[__("Groups")] = $this->_registry->router->linkHref('group', 'manage');
+			if(access::check($this->_registry, 'privileges', 1)) $v[__("Permissions")] = $this->_registry->router->linkHref('privilege', 'manage'); 
 			$this->voices[__("Users")] = $v;
 		}
 
