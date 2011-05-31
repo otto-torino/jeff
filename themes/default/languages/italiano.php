@@ -16,7 +16,7 @@ return array(
 	"login"=>"login",
 	"poweredby"=>"realizzato da",
 	"AdminArea"=>"Area Amministrativa",
-	"adminWelcome"=>"<p>Benvenuto nella sezione amministrativa di Jeff. Da qui potrai controllare ogni aspetto della tua applicazione, configurarla a tuo piacimento, espanderla e personalizzarla.</p><p>Al momento sono attive le gestioni degli utenti, delle lingue e del layout.</p>",
+	"adminWelcome"=>"<p>Benvenuto nella sezione amministrativa di Jeff. Da qui potrai controllare ogni aspetto della tua applicazione, compatibilmente con i tuoi privilegi.</p>",
 	"ManageTable"=>"Gestione tabella",
 	"Record"=>"Record",
 	"RecordInTable"=>"Record nella tabella",
