@@ -16,7 +16,7 @@ return array(
 	"login"=>"login",
 	"poweredby"=>"powered by",
 	"AdminArea"=>"Administrative Area",
-	"adminWelcome"=>"<p>Welcome in the Jeff's administrative area. From here you may control every aspect of your application, configure it, expand and personalize it.</p>",
+	"adminWelcome"=>"<p>Welcome in the Jeff's administrative area. From here you may control every aspect of your application, depending on your perivilege settings</p>",
 	"ManageTable"=>"Manage table",
 	"Record"=>"Record",
 	"RecordInTable"=>"Records in table",
