@@ -341,6 +341,8 @@ class form {
 		$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
 		$buffer .= ">\n";
 
+		if(!is_array($selected)) $selected = array($selected);
+
 		if(!gOpt($opts, 'noFirst')) $buffer .= "<option value=\"\"></option>\n";
 		elseif(gOpt($opts, 'firstVoice')) $buffer .= "<option value=\"".gOpt($opts, 'firstValue')."\">".gOpt($opts, "firstVoice")."</option>";
 		
@@ -351,7 +353,7 @@ class form {
 					if(is_array($value)) { $label = $value['label']; $title = $value['title']; }
 					else $label = $value;
 					if(gOpt($opts, 'maxChars')) $label = cutHtmlText($label, gOpt($opts, 'maxChars'), '...', true, gOpt($opts, 'cutWords')?gOpt($opts, 'cutWords'):false, true);
-					$buffer .= "<option value=\"$key\" ".($key==$selected?"selected=\"selected\"":"")." ".($title ? "title=\"$title\"":"").">".$label."</option>\n";
+					$buffer .= "<option value=\"$key\" ".(in_array($key, $selected)?"selected=\"selected\"":"")." ".($title ? "title=\"$title\"":"").">".$label."</option>\n";
 				}
 			}
 			else return __("noAvailableOptions");
