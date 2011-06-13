@@ -30,7 +30,7 @@ class document {
 		$this->_registry->description = $this->_registry->site_settings->app_description;	
 		$this->_registry->language = APP_LANGUAGE;
 		$this->_registry->keywords = $this->_registry->site_settings->app_keywords;
-		$this->_registry->favicon = ROOT."/favion.ico";
+		$this->_registry->favicon = ROOT."/favicon.ico";
 		$this->_registry->addCss(REL_CSS."/main.css");
 		$this->_registry->addCss(REL_CSS."/datepicker_dashboard.css");
 		$this->_registry->addCss(REL_CSS."/slimbox.css");
