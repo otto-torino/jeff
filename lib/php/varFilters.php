@@ -95,12 +95,6 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 
 }
 
-function dbInput($string) {
-	
-	return mysql_real_escape_string($string);
-
-}
-
 /*
  * Output filters
  */
