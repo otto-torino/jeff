@@ -27,11 +27,6 @@ class group extends model {
 	
 	}
 
-	public function save() {
-	
-	}
-	
-
 }
 
 ?>
