@@ -24,6 +24,8 @@ return array(
 	"Edit"=>"Modifica",
 	"delete"=>"elimina",
 	"insert"=>"inserisci",
+	"exportSelected"=>"esporta selezionati",
+	"exportAll"=>"esporta tutti",
 	"insertNewRecord"=>"inserisci nuovo record",
 	"SelectAtleastRecord"=>"Seleziona almeno un record",
 	"ProcedeDeleteSelectedFields"=>"Procedere con l'eliminazione dei campi selezionati?",

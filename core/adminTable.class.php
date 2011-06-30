@@ -27,6 +27,8 @@ class adminTable {
 		// fields to show in changelist view (all if null)
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
 
+		$this->_export = gOpt($opts, 'export', false);
+
 		$this->_efp = gOpt($opts, "efp", 10);
 
 		$structure = $this->_registry->db->getTableStructure($this->_table);
@@ -85,7 +87,7 @@ class adminTable {
 		
 	}
 
-	private function view() {
+	public function view() {
 
 		$order = cleanInput('get', 'order', 'string');
 
@@ -174,22 +176,43 @@ class adminTable {
 
 		$table = $this->_view->render();
 
-		if($this->_edit_deny=='all') {
+		if($this->_edit_deny!='all' || $this->_export) {
+			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$formstart = $myform->sform('?edit', null);
+			$formend = $myform->cform();
+		}
+		else {
 			$formstart = '';
 			$formend = '';
+		}
+
+		if($this->_edit_deny=='all') {
 			$input_edit = '';
 			$input_delete = '';
 		}
 		else {
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
 			$onclick = "var checked = false;
 				    var felements = $$('#atbl_form input[type=checkbox]');
 				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
 				    if(!checked) {alert('".__("SelectAtleastRecord")."'); return false;}";
 			$input_edit = $myform->input('submit_edit', 'submit', __("edit"), array("js"=>"onclick=\"$onclick\""));
 			$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".__("ProcedeDeleteSelectedFields")."')\""));
-			$formstart = $myform->sform('?edit', null);
-			$formend = $myform->cform();
+		}
+
+		if($this->_export) {
+			$onclick = "var checked = false;
+				    var felements = $$('#atbl_form input[type=checkbox]');
+				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
+				    if(!checked) {alert('".__("SelectAtleastRecord")."'); return false;}";
+			$input_export_selected = $myform->input('submit_export_selected', 'submit', __("exportSelected"), array("js"=>"onclick=\"$onclick \""));
+			$input_export_all = $myform->input('submit_export_all', 'submit', __("exportAll"), array());
+			$input_where_query = $myform->hidden('where_query', '');
+		
+		}
+		else {
+			$input_export_selected = null;
+			$input_export_all = null;
+			$input_where_query = '';	
 		}
 
 		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord")) : null;
@@ -201,13 +224,16 @@ class adminTable {
 		$this->_view->assign('formend', $formend);
 		$this->_view->assign('input_edit', $input_edit);
 		$this->_view->assign('input_delete', $input_delete);
+		$this->_view->assign('input_where_query', $input_where_query);
+		$this->_view->assign('input_export_selected', $input_export_selected);
+		$this->_view->assign('input_export_all', $input_export_all);
 		$this->_view->assign('psummary', $pag->summary());
 		$this->_view->assign('pnavigation', $pag->navigation());
 
 		return $this->_view->render();
 	}
 
-	private function parseForeignKeys($row) {
+	public function parseForeignKeys($row) {
 
 		$res = array();
 
@@ -224,12 +250,12 @@ class adminTable {
 
 	}
 
-	private function parseSpecialFields($row) {
+	public function parseSpecialFields($row, $opts=null) {
 
 		$res = array();
 		foreach($row as $k=>$v) {
 			if(isset($this->_sfields[$k])) {
-				if($this->_sfields[$k]['type']=='password') $res[$k] = $v ? "**************" : '';
+				if($this->_sfields[$k]['type']=='password') $res[$k] = $v ? (gOpt($opts, 'show_pwd', false) ? $v : "**************") : '';
 				elseif($this->_sfields[$k]['type']=='bool')
 					$res[$k] = $v ? $this->_sfields[$k]['true_label'] : $this->_sfields[$k]['false_label'];
 				elseif($this->_sfields[$k]['type']=='multicheck') {
@@ -260,7 +286,11 @@ class adminTable {
 		$f_s = gOpt($opts, "f_s", cleanInputArray('post', 'f', 'string'));
 		$submit_edit = cleanInput('post', 'submit_edit', 'string');
 		$submit_delete = cleanInput('post', 'submit_delete', 'string');
+		$submit_export_selected = cleanInput('post', 'submit_export_selected', 'string');
+		$submit_export_all = cleanInput('post', 'submit_export_all', 'string');
 
+		if($submit_export_selected) $this->export($f_s);
+		if($submit_export_all) $this->export('all', cleanInput('post', 'where_query', 'string'));
 		if($submit_delete) {
 			if(count($f_s)) {
 				if($this->_cls_cbk_del && $this->_mth_cbk_del)
@@ -440,6 +470,32 @@ class adminTable {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
 			$model->{$fname} = implode(",", $checked);
 		}
+	}
+
+	private function export($f_s, $where='') {
+
+		if(!is_array($f_s) && $f_s!='all') {
+			header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+			exit();
+		}
+
+
+		if(is_array($f_s) && count($f_s)) $rids = implode(",", $f_s);
+		elseif(!$where) $rids = '*';
+		else {
+			$rids_a = array();
+			$records = $this->_registry->db->autoSelect($this->_primary_key, $this->_table, $where);
+			foreach($records as $r) $rids_a[] = $r[$this->_primary_key];
+			$rids = implode(",", $rids_a);
+		}		
+
+		$expObj = new export($this->_registry, array("table"=>$this->_table, "pkey"=>$this->_primary_key, "sfields"=>$this->_sfields, "fkeys"=>$this->_fkeys));
+		$expObj->setRids($rids);
+
+		$expObj->exportData($this->_table.'_'.$this->_registry->dtime->now('%Y%m%d').'.csv', 'csv');
+
+		exit();
+	
 	}
 
 }
