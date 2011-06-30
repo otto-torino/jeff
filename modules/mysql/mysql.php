@@ -40,11 +40,11 @@ class mysql implements DbManager {
 			
 			if($this->_db_charset=='utf8') $this->setUtf8();
 			@mysql_select_db($this->_db_dbname, $this->_connection) 
-				OR Error::syserrorMessage('MySql', 'openConnection', __("DbSelectionError"), __LINE__);
+				OR exit("Db selection error");
 		
 		} 
 		else 
-			Error::syserrorMessage('MySql', 'openConnection', __("DbConnectionError"), __LINE__);
+			exit("Db connection error");
 	}
 	
 	private function setUtf8() {

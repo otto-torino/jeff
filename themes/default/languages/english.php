@@ -104,8 +104,6 @@ return array(
 	"TplNotFound"=>"%s template not found",
 	"CantChargeTplError"=>"Cant't charge %s template",
 	"CantChargeModuleError"=>"Can't charge %s module, source searched in %s",
-	"DbSelectionError"=>"Database selection error",
-	"DbConnectionError"=>"Database connection error",
 	"DefaultTheme"=>"Default theme",
 	"DefaultThemeDescription"=>"Base Jeff's theme",
 	"WhiteTheme"=>"White theme",
