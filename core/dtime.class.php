@@ -30,7 +30,8 @@ class dtime {
 	private function parseFormat($format) {
 		
 		if($format=='date') $string = $this->_settings->date_format;
-		if($format=='time') $string = $this->_settings->time_format;
+		elseif($format=='time') $string = $this->_settings->time_format;
+		elseif($format) $string = $format;
 		else $string = $this->_settings->datetime_format;
 
 		$chars = array("#%(Y)#", "#%(m)#", "#%(d)#", "#%(H)#", "#%(i)#", "#%(s)#");
