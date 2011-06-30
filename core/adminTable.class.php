@@ -113,7 +113,7 @@ class adminTable {
 					: implode(',', $this->_changelist_fields);
 		}
 		else 
-			$field_selection = "*"; 
+			$field_selection = isset($this->_fkeys[$field_order]) ? "a.*" : "*"; 
 
 		// different queries if the order field is a foreign key
 		if(isset($this->_fkeys[$field_order])) {
