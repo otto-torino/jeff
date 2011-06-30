@@ -196,7 +196,7 @@ class adminTable {
 				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
 				    if(!checked) {alert('".__("SelectAtleastRecord")."'); return false;}";
 			$input_edit = $myform->input('submit_edit', 'submit', __("edit"), array("js"=>"onclick=\"$onclick\""));
-			$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".__("ProcedeDeleteSelectedFields")."')\""));
+			$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedFields"))."')\""));
 		}
 
 		if($this->_export) {
