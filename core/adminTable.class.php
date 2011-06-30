@@ -356,7 +356,7 @@ class adminTable {
 		elseif($field['type'] == 'varchar')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>40, "maxlength"=>$field['max_length']));
 		elseif($field['type'] == 'text')
-                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("cols"=>45, "rows"=>6));
+                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6));
 		elseif($field['type'] == 'date')
                 	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), '');
 		elseif($field['type'] == 'datetime')
