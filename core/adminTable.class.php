@@ -194,7 +194,7 @@ class adminTable {
 			$onclick = "var checked = false;
 				    var felements = $$('#atbl_form input[type=checkbox]');
 				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
-				    if(!checked) {alert('"jsVar(.__("SelectAtleastRecord"))."'); return false;}";
+				    if(!checked) {alert('".jsVar(__("SelectAtleastRecord"))."'); return false;}";
 			$input_edit = $myform->input('submit_edit', 'submit', __("edit"), array("js"=>"onclick=\"$onclick\""));
 			$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedFields"))."')\""));
 		}
