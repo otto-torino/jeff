@@ -31,6 +31,7 @@ class dtime {
 		
 		if($format=='date') $string = $this->_settings->date_format;
 		elseif($format=='time') $string = $this->_settings->time_format;
+		elseif($format=='datetime') $string = $this->_settings->datetime_format;
 		elseif($format) $string = $format;
 		else $string = $this->_settings->datetime_format;
 
