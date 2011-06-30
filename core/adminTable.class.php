@@ -194,7 +194,7 @@ class adminTable {
 			$onclick = "var checked = false;
 				    var felements = $$('#atbl_form input[type=checkbox]');
 				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
-				    if(!checked) {alert('".__("SelectAtleastRecord")."'); return false;}";
+				    if(!checked) {alert('"jsVar(.__("SelectAtleastRecord"))."'); return false;}";
 			$input_edit = $myform->input('submit_edit', 'submit', __("edit"), array("js"=>"onclick=\"$onclick\""));
 			$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedFields"))."')\""));
 		}
@@ -203,7 +203,7 @@ class adminTable {
 			$onclick = "var checked = false;
 				    var felements = $$('#atbl_form input[type=checkbox]');
 				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
-				    if(!checked) {alert('".__("SelectAtleastRecord")."'); return false;}";
+				    if(!checked) {alert('".jsVar(__("SelectAtleastRecord"))."'); return false;}";
 			$input_export_selected = $myform->input('submit_export_selected', 'submit', __("exportSelected"), array("js"=>"onclick=\"$onclick \""));
 			$input_export_all = $myform->input('submit_export_all', 'submit', __("exportAll"), array());
 			$input_where_query = $myform->hidden('where_query', '');
