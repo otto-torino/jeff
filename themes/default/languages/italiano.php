@@ -104,8 +104,6 @@ return array(
 	"TplNotFound"=>"Impossibile trovare il template, %s",
 	"CantChargeTplError"=>"Impossibile caricare il template %s",
 	"CantChargeModuleError"=>"Impossibile caricare il modulo %s, sorgente cercata in %s",
-	"DbSelectionFailedError"=>"Impossibile selezionare il database",
-	"DbConnectionError"=>"Impossibile connettersi al database",
 	"DefaultTheme"=>"Tema di default",
 	"DefaultThemeDescription"=>"Tema base di Jeff",
 	"WhiteTheme"=>"Tema chiaro",
