@@ -162,6 +162,7 @@ class adminTable {
 			$input = "<input type=\"checkbox\" name=\"f[]\" value=\"".$r[$this->_primary_key]."\" />";
 			if($tot_fk) $r = $this->parseForeignKeys($r);
 			if($tot_sf) $r = $this->parseSpecialFields($r);
+			$r = $this->parseDateFields($r);
 			if($this->_edit_deny=='all') $rows[] = $r;
 			elseif(is_array($this->_edit_deny) && in_array($r[$this->_primary_key], $this->_edit_deny)) $rows[] = array_merge(array(""), $r);
 			else $rows[] = array_merge(array($input), $r);
@@ -258,6 +259,10 @@ class adminTable {
 				if($this->_sfields[$k]['type']=='password') $res[$k] = $v ? (gOpt($opts, 'show_pwd', false) ? $v : "**************") : '';
 				elseif($this->_sfields[$k]['type']=='bool')
 					$res[$k] = $v ? $this->_sfields[$k]['true_label'] : $this->_sfields[$k]['false_label'];
+				elseif($this->_sfields[$k]['type']=='email') {
+					$mailto = isset($this->_sfields[$k]['list_mailto']) && $this->_sfields[$k]['list_mailto'] ? true : false;
+					$res[$k] = $v ? ($mailto ? anchor('mailto:'.$v, $v) : $v) : '';
+				}
 				elseif($this->_sfields[$k]['type']=='multicheck') {
 					$vf = array();
 					foreach(explode(",", $v) as $vp) {
@@ -268,6 +273,22 @@ class adminTable {
 					$res[$k] = implode(", ", $vf);
 				}
 			}
+			else $res[$k] = $v;
+		}
+
+		return $res;
+
+	}
+	
+	public function parseDateFields($row) {
+
+		$res = array();
+
+		$structure = $this->_registry->db->getTableStructure($this->_table);
+
+		foreach($row as $k=>$v) {
+			if($structure['fields'][$k]['type']=='date') $res[$k] = $this->_registry->dtime->view($v, 'date');
+			elseif($structure['fields'][$k]['type']=='datetime') $res[$k] = $this->_registry->dtime->view($v);
 			else $res[$k] = $v;
 		}
 
@@ -364,6 +385,12 @@ class adminTable {
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
 				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname, $value), array(1=>$t_l,0=>$f_l), $dft, $fname, array("required"=>true));
 			}
+			elseif($this->_sfields[$fname]['type']=='email') {
+				$req = 	$this->_sfields[$fname]['required'];
+				$pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
+				$hint = "mario.rossi@example.com";
+				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("pattern"=>$pattern)); 
+			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : null;
@@ -388,9 +415,9 @@ class adminTable {
 		elseif($field['type'] == 'text')
                 	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6));
 		elseif($field['type'] == 'date')
-                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), '');
+                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required));
 		elseif($field['type'] == 'datetime')
-                	return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), '');
+			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required));
 
 	}
 
