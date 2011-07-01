@@ -423,7 +423,7 @@ class adminTable {
 		}
 		elseif($field['type'] == 'int') 
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
-		elseif($field['type'] == 'float')
+		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
 		elseif($field['type'] == 'varchar')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>40, "maxlength"=>$field['max_length']));
@@ -494,7 +494,7 @@ class adminTable {
 	private function cleanField($name, $type) {
 	
 		if($type=='int') return cleanInput('post', $name, 'int');
-		elseif($type=='float') return cleanInput('post', $name, 'float');
+		elseif($type=='float' || $type=='double' || $type=='decimal') return cleanInput('post', $name, 'float');
 		elseif($type=='varchar' || $type=='text') return cleanInput('post', $name, 'string');
 		elseif($type=='date') return cleanInput('post', $name, 'date');
 		elseif($type=='datetime') return cleanInput('post', $name, 'datetime');
