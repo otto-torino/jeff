@@ -24,6 +24,8 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	}
 
 	if($type=='string' || $type=='email') {
+	    	if($type=='email' && !preg_match("#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i", $_REQUEST[$name])) return null;
+
 		$filter = $type=='email' ? FILTER_SANITIZE_EMAIL : FILTER_SANITIZE_STRING;
 		$flags[] = FILTER_FLAG_NO_ENCODE_QUOTES;
 		$type = 'string';
