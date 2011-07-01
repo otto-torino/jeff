@@ -397,21 +397,18 @@ class adminTable {
 				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar($fname), $label), array("required"=>$req, "size"=>40, "maxlength"=>$field['max_length']));
 			}
 			elseif($this->_sfields[$fname]['type']=='bool') {
-				$req = 	$this->_sfields[$fname]['required'];
 				$t_l = 	$this->_sfields[$fname]['true_label'];
 				$f_l = 	$this->_sfields[$fname]['false_label'];
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
-				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname, $value), array(1=>$t_l,0=>$f_l), $dft, $fname, array("required"=>true));
+				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname, $value), array(1=>$t_l,0=>$f_l), $dft, $fname, array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
-				$req = 	$this->_sfields[$fname]['required'];
 				$pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
 				$hint = "mario.rossi@example.com";
-				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("pattern"=>$pattern)); 
+				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("pattern"=>$pattern, "required"=>$required)); 
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
-				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : null;
 				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
 				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname, explode(",", $value)), $options, $fname, array("required"=>$required));
 			}
