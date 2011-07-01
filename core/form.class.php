@@ -308,7 +308,7 @@ class form {
 		if(is_array($data)) {
 			$i=0;
 			foreach($data AS $k => $v) {
-				$buffer .= ($i?$space:'')."<input type=\"radio\" name=\"$name\" value=\"$k\" ".($comparison==$k?"checked=\"checked\"":"")." ";
+				$buffer .= ($i?$space:'')."<input type=\"radio\" name=\"$name\" value=\"$k\" ".($comparison===$k?"checked=\"checked\"":"")." ";
 				$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
 				$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
 				$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
