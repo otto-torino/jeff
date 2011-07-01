@@ -23,9 +23,10 @@ function cleanInput($method, $name, $type, $opts=array()) {
 		$type = 'string';
 	}
 
-	if($type=='string') {
-		$filter = FILTER_SANITIZE_STRING;
+	if($type=='string' || $type=='email') {
+		$filter = $type=='email' ? FILTER_SANITIZE_EMAIL : FILTER_SANITIZE_STRING;
 		$flags[] = FILTER_FLAG_NO_ENCODE_QUOTES;
+		$type = 'string';
 	}
 	elseif($type=='int') $filter = FILTER_SANITIZE_NUMBER_INT;
 	elseif($type=='float') {
