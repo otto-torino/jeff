@@ -337,11 +337,7 @@ class adminTable {
 		elseif(count($f_s)) {
 
 			foreach($f_s as $f) {
-				$buffer .= $myform->hidden($this->_primary_key."[]", $f);
-				$content = '';
-				foreach($this->_fields as $fname=>$field) {
-					if($fname != $this->_primary_key && $field['extra']!='auto_increment') $content .= $this->formElement($myform, $fname, $field, $f);
-				}
+				$content = $this->formRecord($f, $myform);
 				if(array_key_exists($this->_primary_key, $this->_fkeys)) {
 					$fk = $this->_fkeys[$this->_primary_key];
 					$records = $this->_registry->db->autoSelect($fk['field'], $fk['table'], $fk['key']."='$f'" , null);
@@ -356,6 +352,28 @@ class adminTable {
 		$buffer .= $myform->input('submit_'.($insert ? "insert" : "modify"), 'submit', $insert ? __("insert") : __("edit"), array());
 
 		$buffer .= $myform->cform();
+
+		return $buffer;
+
+	}
+
+	public function formRecord($pk, $myform=null, $formaction=null) {
+
+		$buffer = '';
+		if(!$myform) {
+			if(!$formaction) $formaction = '?save';
+			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
+			$myform->load();
+			$buffer .= $myform->sform($formaction, null);
+		}	
+
+		$buffer .= $myform->hidden($this->_primary_key."[]", $pk);
+		foreach($this->_fields as $fname=>$field) {
+			if($fname != $this->_primary_key && $field['extra']!='auto_increment') 
+				$buffer .= $this->formElement($myform, $fname, $field, $pk);
+		}
+
+		if(!$myform) $buffer .= $myform->cform();
 
 		return $buffer;
 
@@ -442,34 +460,37 @@ class adminTable {
 
 		if(count($pkeys)) {
 			foreach($pkeys as $pk) {
-				if(!in_array($pk, $this->_edit_deny)) {
-					$res = array();
-					if(is_null($pk)) {
-						$fields = $this->_registry->db->getFieldsName($this->_table);
-						foreach($fields as $f) $res[$f] = null;	
-						$data = $res;
-						$pkf = $pk;
-					}
-					else {
-						$pkf = preg_replace("#\s#", "_", $pk); // POST replaces spaces with '_'
-						$res = $this->_registry->db->autoSelect(array("*"), array($this->_table), $this->_primary_key."='$pk'", null);
-						$data = $res[0];
-					}
-					$model = new model($data);
-					$model->setRegistry($this->_registry);
-					$model->setIdName($this->_primary_key);
-					$model->setTable($this->_table);
-
-					foreach($this->_fields as $fname=>$field) 
-						if(array_key_exists($fname, $this->_sfields)) 
-							$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
-						elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
-							$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
-
-					$model->saveData(is_null($pk) ? true : false);
-				}
+				$this->saveRecord($pk);
 			}
 
+		}
+	}
+
+	public function saveRecord($pk) {
+		
+		if(!in_array($pk, $this->_edit_deny)) {
+			$res = array();
+			if(is_null($pk)) {
+				$fields = $this->_registry->db->getFieldsName($this->_table);
+				foreach($fields as $f) $res[$f] = null;	
+				$data = $res;
+				$pkf = $pk;
+			}
+			else {
+				$pkf = preg_replace("#\s#", "_", $pk); // POST replaces spaces with '_'
+				$res = $this->_registry->db->autoSelect(array("*"), array($this->_table), $this->_primary_key."='$pk'", null);
+				$data = $res[0];
+			}
+			$model = new model($data);
+			$model->setRegistry($this->_registry);
+			$model->setIdName($this->_primary_key);
+			$model->setTable($this->_table);
+				foreach($this->_fields as $fname=>$field) 
+				if(array_key_exists($fname, $this->_sfields)) 
+					$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
+				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
+					$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
+				$model->saveData(is_null($pk) ? true : false);
 		}
 	}
 
@@ -493,6 +514,7 @@ class adminTable {
 			else $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'string');	
 		}
 		elseif($this->_sfields[$fname]['type']=='bool') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'int');
+		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email');
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
 			$model->{$fname} = implode(",", $checked);
