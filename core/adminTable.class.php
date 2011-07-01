@@ -466,7 +466,7 @@ class adminTable {
 		}
 	}
 
-	public function saveRecord($pk) {
+	private function saveRecord($pk) {
 		
 		if(!in_array($pk, $this->_edit_deny)) {
 			$res = array();
