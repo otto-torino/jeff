@@ -301,14 +301,13 @@ class form {
 	public function radio($name, $value, $data, $default, $opts){
 		
 		$buffer = '';
-
 		$comparison = is_null($value)? $default:$value;
 		$space = gOpt($opts, 'aspect')=='v'? "<br />":"&nbsp;";
 			
 		if(is_array($data)) {
 			$i=0;
 			foreach($data AS $k => $v) {
-				$buffer .= ($i?$space:'')."<input type=\"radio\" name=\"$name\" value=\"$k\" ".($comparison===$k?"checked=\"checked\"":"")." ";
+				$buffer .= ($i?$space:'')."<input type=\"radio\" name=\"$name\" value=\"$k\" ".($comparison==$k && !($comparison==='' && $k===0) ?"checked=\"checked\"":"")." ";
 				$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
 				$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
 				$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
