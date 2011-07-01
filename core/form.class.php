@@ -231,7 +231,7 @@ class form {
 	public function cinput_datetime($name, $value, $label, $opts){
 
 		$opts['size'] = gOpt($opts, 'seconds')==true ? 19 : 16;
-		$opts['maxlength'] = gOpt($opts, 'seconds')==true ? 19 : 16;
+		$opts['maxlength'] = 19; // the input/output format has always seconds
 		$opts['pattern'] = "^\d\d\d\d-\d\d-\d\d \d\d:\d\d(:\d\d)?$";
 		$opts['hint'] = "dd/mm/yyyy hh:mm";
 
