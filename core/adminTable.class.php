@@ -272,6 +272,12 @@ class adminTable {
 					}
 					$res[$k] = implode(", ", $vf);
 				}
+				elseif($this->_sfields[$k]['type']=='file') {
+					$sf = $this->_sfields[$k];
+					if($sf['preview'] && $v)
+						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
+					else $res[$k] = $v;
+				}
 			}
 			else $res[$k] = $v;
 		}
@@ -293,6 +299,13 @@ class adminTable {
 		}
 
 		return $res;
+
+	}
+
+	private function checkUpload() {
+		
+		foreach($this->_sfields as $fname=>$finfo) if($finfo['type']=='file') return true;
+		return false;
 
 	}
 
@@ -327,7 +340,7 @@ class adminTable {
 
 		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
 		$myform->load();
-		$buffer = $myform->sform($formaction, null);
+		$buffer = $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
 
 		if($insert) {
 			foreach($this->_fields as $fname=>$field) {
@@ -364,7 +377,7 @@ class adminTable {
 			if(!$formaction) $formaction = '?save';
 			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
 			$myform->load();
-			$buffer .= $myform->sform($formaction, null);
+			$buffer .= $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
 		}	
 
 		$buffer .= $myform->hidden($this->_primary_key."[]", $pk);
@@ -411,6 +424,12 @@ class adminTable {
 				$sf = $this->_sfields[$fname];
 				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
 				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname, explode(",", $value)), $options, $fname, array("required"=>$required));
+			}
+			elseif($this->_sfields[$fname]['type']=='file') {
+				$sf = $this->_sfields[$fname];
+				$preview = isset($sf['preview']) ? $sf['preview'] : false;
+				$rel_path = $sf['rel_path'];
+				return $myform->cinput_file($fname."_".$id_f, $myform->retvar($fname, $value), array($sf['label'], $extensions), array("extensions"=>$sf['extensions'], "preview"=>$preview, "rel_path"=>$rel_path));
 			}
 		}
 		elseif(array_key_exists($fname, $this->_fkeys)) {
@@ -515,6 +534,12 @@ class adminTable {
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
 			$model->{$fname} = implode(",", $checked);
+		}
+		elseif($this->_sfields[$fname]['type']=='file') {
+			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
+			$sf = $this->_sfields[$fname];
+			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
 		}
 	}
 

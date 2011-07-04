@@ -444,7 +444,7 @@ class form {
 			$buffer .= "<div style=\"margin-top:5px;\">";
 			$buffer .= $this->checkbox("del_".$name, false, 1)." ".__("elimina")." ";
 			if(gOpt($opts, 'preview') && $rel_path) 
-				$value = "<span class=\"link lightbox\" onclick=\"Slimbox.open('".$rel_path.$value."')\">$value</span>";
+				$value = "<a title=\"$value\" href=\"".$rel_path.$value."\">$value</a><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$rel_path.$value."]')[0]);</script>";
 			$buffer .= sprintf(__("chargedFileForm"), $value);
 			$buffer .= "</div>\n";
 		}
