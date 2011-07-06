@@ -85,8 +85,9 @@ class adminTable {
 		if($save) {
 			$res = $this->saveFields(); 
 			if(isset($_POST['submit_c_insert']) || isset($_POST['submit_c_modify'])) {
-				//$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
-				return $this->editFields(array("f_s"=>$res));
+				// save and continue editing
+				$_SESSION['adminTable_f_s'] = $res;
+				header("Location: ".preg_replace("#\?.*$#", "?edit", $_SERVER['REQUEST_URI']));
 			}
 			else
 				header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
@@ -328,7 +329,12 @@ class adminTable {
 		if($insert && !$this->_insertion) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 
 		$formaction = gOpt($opts, 'action', '?save');
-		$f_s = gOpt($opts, "f_s", cleanInputArray('post', 'f', 'string'));
+		$f_s = gOpt($opts, "f_s", null);
+		if(is_null($f_s)) {
+			if(isset($_POST['f'])) $f_s = cleanInputArray('post', 'f', 'string');
+			elseif(isset($_SESSION['adminTable_f_s'])) $f_s = $_SESSION['adminTable_f_s']; 
+			else $f_s = array();
+		}
 		$submit_edit = cleanInput('post', 'submit_edit', 'string');
 		$submit_delete = cleanInput('post', 'submit_delete', 'string');
 		$submit_export_selected = cleanInput('post', 'submit_export_selected', 'string');
@@ -470,6 +476,9 @@ class adminTable {
 	}
 
 	public function saveFields() {
+
+		// save and continue editing clear session
+		if(isset($_SESSION['adminTable_f_s'])) unset($_SESSION['adminTable_f_s']);
 
 		$res = array();
 		$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
