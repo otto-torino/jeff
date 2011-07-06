@@ -19,7 +19,7 @@ class datetimeSettingsController extends controller {
 
 		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
-		$at = new adminTable($this->_registry, TBL_SYS_DATETIME_SETTINGS, array('insertion'=>false));
+		$at = new adminTable($this->_registry, TBL_SYS_DATETIME_SETTINGS, array('insertion'=>false, "deletion"=>false));
 
 		$table = $at->manage();
 

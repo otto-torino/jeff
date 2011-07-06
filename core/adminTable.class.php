@@ -22,6 +22,8 @@ class adminTable {
 
 		// allow record insertion
 		$this->_insertion = gOpt($opts, 'insertion', true);
+		// allow record deletion
+		$this->_deletion = gOpt($opts, 'deletion', true);
 		// denty all/some pkeys modifications
 		$this->_edit_deny = gOpt($opts, 'edit_deny', null);
 		// fields to show in changelist view (all if null)
@@ -80,7 +82,15 @@ class adminTable {
 		$insert = isset($_GET['insert']) ? true : false;
 		$save = isset($_GET['save']) ? true : false;
 
-		if($save) {$this->saveFields(); header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));}
+		if($save) {
+			$res = $this->saveFields(); 
+			if(isset($_POST['submit_c_insert']) || isset($_POST['submit_c_modify'])) {
+				//$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
+				return $this->editFields(array("f_s"=>$res));
+			}
+			else
+				header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+		}
 		elseif($edit || $insert) return $this->editFields();
 		else return $this->view();
 
@@ -124,7 +134,7 @@ class adminTable {
 
 		$all = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').setProperty('checked', 'checked');\">".__("all")."</span>";
 		$none = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').removeProperty('checked');\">".__("none")."</span>";
-		$heads = $this->_edit_deny == 'all' ? array() : array("0"=>"$all | $none");
+		$heads = ($this->_edit_deny != 'all' || $this->_export) ? array("0"=>"$all | $none") : array();
 		foreach($fields_names as $fn) {
 			if(!$this->_changelist_fields || in_array($fn, $this->_changelist_fields)) {
 				$ord = $order == $fn." ASC" ? $fn." DESC" : $fn." ASC";
@@ -197,7 +207,9 @@ class adminTable {
 				    for(var i=0;i<felements.length;i++) if(felements[i].checked) {checked = true;break;}
 				    if(!checked) {alert('".jsVar(__("SelectAtleastRecord"))."'); return false;}";
 			$input_edit = $myform->input('submit_edit', 'submit', __("edit"), array("js"=>"onclick=\"$onclick\""));
-			$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedFields"))."')\""));
+			if($this->_deletion)
+				$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedFields"))."')\""));
+			else $input_delete = '';
 		}
 
 		if($this->_export) {
@@ -316,7 +328,6 @@ class adminTable {
 		if($insert && !$this->_insertion) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 
 		$formaction = gOpt($opts, 'action', '?save');
-
 		$f_s = gOpt($opts, "f_s", cleanInputArray('post', 'f', 'string'));
 		$submit_edit = cleanInput('post', 'submit_edit', 'string');
 		$submit_delete = cleanInput('post', 'submit_delete', 'string');
@@ -326,10 +337,12 @@ class adminTable {
 		if($submit_export_selected) $this->export($f_s);
 		if($submit_export_all) $this->export('all', cleanInput('post', 'where_query', 'string'));
 		if($submit_delete) {
+			if(!$this->_deletion || $this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 			if(count($f_s)) {
 				if($this->_cls_cbk_del && $this->_mth_cbk_del)
 					call_user_func(array($this->_cls_cbk_del,$this->_mth_cbk_del), $this->_registry, $f_s);
 				else {
+					if(is_array($this->_edit_deny) && count($this->_edit_deny)) $f_s = array_diff($f_s, $this->_edit_deny);
 					$where = $this->_primary_key."='".implode("' OR ".$this->_primary_key."='", $f_s)."'";
 					$this->_registry->db->delete($this->_table, $where);
 				}
@@ -362,7 +375,8 @@ class adminTable {
 			}
 		}
 
-		$buffer .= $myform->input('submit_'.($insert ? "insert" : "modify"), 'submit', $insert ? __("insert") : __("edit"), array());
+		$buffer .= $myform->input('submit_'.($insert ? "insert" : "modify"), 'submit', __('save'), array());
+		$buffer .= "&#160;".$myform->input('submit_c_'.($insert ? "insert" : "modify"), 'submit', __('saveContinueEditing'), array());
 
 		$buffer .= $myform->cform();
 
@@ -475,9 +489,11 @@ class adminTable {
 		}
 
 		if(count($pkeys)) {
+			$res = array();
 			foreach($pkeys as $pk) {
-				$this->saveRecord($pk);
+				$res[] = $this->saveRecord($pk);
 			}
+			return $res;
 
 		}
 	}
@@ -501,12 +517,14 @@ class adminTable {
 			$model->setRegistry($this->_registry);
 			$model->setIdName($this->_primary_key);
 			$model->setTable($this->_table);
-				foreach($this->_fields as $fname=>$field) 
-				if(array_key_exists($fname, $this->_sfields)) 
-					$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
-				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
-					$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
-				$model->saveData(is_null($pk) ? true : false);
+			foreach($this->_fields as $fname=>$field) 
+			if(array_key_exists($fname, $this->_sfields)) 
+				$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
+			elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
+				$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
+			$model->saveData(is_null($pk) ? true : false);
+
+			return $model->{$this->_primary_key};
 		}
 	}
 

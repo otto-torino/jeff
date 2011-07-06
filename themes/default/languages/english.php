@@ -24,6 +24,8 @@ return array(
 	"Edit"=>"Edit",
 	"delete"=>"delete",
 	"insert"=>"insert",
+	"save"=>"save",
+	"saveContinueEditing"=>"save and continue editing",
 	"exportSelected"=>"export selected records",
 	"exportAll"=>"export all",
 	"insertNewRecord"=>"insert new record",
