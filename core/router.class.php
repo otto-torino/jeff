@@ -12,6 +12,18 @@ class router {
 
 	}
 
+	public function module() {
+
+		return $this->_module;
+
+	}
+
+	public function method() {
+
+		return $this->_method;
+
+	}
+
 	public function loader($route) {
 
 		/*** check the route ***/
@@ -39,7 +51,7 @@ class router {
 		return $controller->$method($params);
  	}
 
-	private function getModule($route) {
+	public function getModule($route) {
 
 		if(is_array($route) && isset($route['module']) && isset($route['method'])) {
 			$this->_module = $route['module'];
