@@ -471,6 +471,7 @@ class adminTable {
 
 	public function saveFields() {
 
+		$res = array();
 		$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
 		$insert = false;
 		if(!$pkeys) { 
@@ -489,13 +490,13 @@ class adminTable {
 		}
 
 		if(count($pkeys)) {
-			$res = array();
 			foreach($pkeys as $pk) {
 				$res[] = $this->saveRecord($pk);
 			}
-			return $res;
-
 		}
+
+		return $res;
+
 	}
 
 	private function saveRecord($pk) {
