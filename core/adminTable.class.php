@@ -86,7 +86,7 @@ class adminTable {
 			$res = $this->saveFields(); 
 			if(isset($_POST['submit_c_insert']) || isset($_POST['submit_c_modify'])) {
 				// save and continue editing
-				$_SESSION['adminTable_f_s'] = $res;
+				$_SESSION['adminTable_f_s_'.$this->_table] = $res;
 				header("Location: ".preg_replace("#\?.*$#", "?edit", $_SERVER['REQUEST_URI']));
 			}
 			else
@@ -332,9 +332,10 @@ class adminTable {
 		$f_s = gOpt($opts, "f_s", null);
 		if(is_null($f_s)) {
 			if(isset($_POST['f'])) $f_s = cleanInputArray('post', 'f', 'string');
-			elseif(isset($_SESSION['adminTable_f_s'])) $f_s = $_SESSION['adminTable_f_s']; 
+			elseif(isset($_SESSION['adminTable_f_s_'.$this->_table])) $f_s = $_SESSION['adminTable_f_s_'.$this->_table]; 
 			else $f_s = array();
 		}
+		if(!$insert && !$f_s) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 		$submit_edit = cleanInput('post', 'submit_edit', 'string');
 		$submit_delete = cleanInput('post', 'submit_delete', 'string');
 		$submit_export_selected = cleanInput('post', 'submit_export_selected', 'string');
@@ -478,7 +479,7 @@ class adminTable {
 	public function saveFields() {
 
 		// save and continue editing clear session
-		if(isset($_SESSION['adminTable_f_s'])) unset($_SESSION['adminTable_f_s']);
+		if(isset($_SESSION['adminTable_f_s_'.$this->_table])) unset($_SESSION['adminTable_f_s_'.$this->_table]);
 
 		$res = array();
 		$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
