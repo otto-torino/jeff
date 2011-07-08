@@ -275,6 +275,7 @@ class form {
 		$buffer = "<textarea name=\"$name\" ";
 
 		$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
+		$buffer .= gOpt($opts, 'class') ? "class=\"".gOpt($opts, 'class')."\" ":"";
 		$buffer .= gOpt($opts, 'pattern') ? "pattern=\"".gOpt($opts, 'pattern')."\" ":"";
 		$buffer .= gOpt($opts, 'hint') ? "placeholder=\"".gOpt($opts, 'hint')."\" ":"";
 		$buffer .= gOpt($opts, 'cols') ? "cols=\"".gOpt($opts, 'cols')."\" ":"";
