@@ -12,7 +12,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	$db = db::getInstance();
 
 	$flags = array();
-	$opts = null;
+	$filter_opts = null;
 
 	if($method=='get') $method_string = INPUT_GET;
 	elseif($method=='post') $method_string = INPUT_POST;
@@ -28,7 +28,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	    	if($type=='email' && !preg_match("#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i", $_REQUEST[$name])) return null;
 
 		if($type=='email') $filter = FILTER_SANITIZE_EMAIL;
-		elseif($type=='html') { $filter = FILTER_CALLBACK; $opts = "sanitizeHtml"; }
+		elseif($type=='html') { $filter = FILTER_CALLBACK; $filter_opts = "sanitizeHtml"; }
 		else $filter = FILTER_SANITIZE_STRING;
 
 		$flags[] = FILTER_FLAG_NO_ENCODE_QUOTES;
@@ -47,15 +47,17 @@ function cleanInput($method, $name, $type, $opts=array()) {
 			$f = $i ? $f | $flags[$i] : $flags[0];
 
 	$options = array("flags"=>$f);
-	if($opts) $options["options"] = $opts;
+	if($filter_opts) $options["options"] = $filter_opts;
 
 
 	$input = filter_input($method_string, $name, $filter, $options);
+
+	if(get_magic_quotes_gpc()) $input = stripslashes($input);	// magic_quotes_gpc = On
+
 	if(is_null($filter)) exit($input);
 	settype($input, $type);
 
 	if(!(gOpt($opts, 'escape')===false)) {
-		if(get_magic_quotes_gpc()) $input = stripslashes($input);	// magic_quotes_gpc = On
 		$input = $db->escapeString($input);
 	}
 
