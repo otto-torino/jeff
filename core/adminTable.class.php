@@ -2,17 +2,17 @@
 
 class adminTable {
 
-	private $_registry, $_table;
-	private $_primary_key, $_fields, $_fkeys, $_sfields;
-	private $_efp;
-	private $_cls_cbk_edit, $_mth_cbk_edit;
-	private $_cls_cbk_del, $_mth_cbk_del;
+	protected $_registry, $_table;
+	protected $_primary_key, $_fields, $_fkeys, $_sfields;
+	protected $_efp;
+	protected $_cls_cbk_edit, $_mth_cbk_edit;
+	protected $_cls_cbk_del, $_mth_cbk_del;
 
-	private $_insertion, $_edit_deny;
-	private $_changelist_fields;
+	protected $_insertion, $_edit_deny;
+	protected $_changelist_fields;
 
-	private $_view;
-	private $_arrow_down_path, $_arrow_up_path;
+	protected $_view;
+	protected $_arrow_down_path, $_arrow_up_path;
 
 	function __construct($registry, $table, $opts=null) {
 
@@ -325,6 +325,10 @@ class adminTable {
 	public function editFields($opts=null) {
 
 		$insert = (isset($_GET['insert']) || gOpt($opts, 'insert')) ? true : false;
+		$submit_edit = cleanInput('post', 'submit_edit', 'string');
+		$submit_delete = cleanInput('post', 'submit_delete', 'string');
+		$submit_export_selected = cleanInput('post', 'submit_export_selected', 'string');
+		$submit_export_all = cleanInput('post', 'submit_export_all', 'string');
 
 		if($insert && !$this->_insertion) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 
@@ -335,14 +339,10 @@ class adminTable {
 			elseif(isset($_SESSION['adminTable_f_s_'.$this->_table])) $f_s = $_SESSION['adminTable_f_s_'.$this->_table]; 
 			else $f_s = array();
 		}
-		if(!$insert && !$f_s) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
-		$submit_edit = cleanInput('post', 'submit_edit', 'string');
-		$submit_delete = cleanInput('post', 'submit_delete', 'string');
-		$submit_export_selected = cleanInput('post', 'submit_export_selected', 'string');
-		$submit_export_all = cleanInput('post', 'submit_export_all', 'string');
+		if((!$insert && !$submit_export_all) && !$f_s) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 
 		if($submit_export_selected) $this->export($f_s);
-		if($submit_export_all) $this->export('all', cleanInput('post', 'where_query', 'string'));
+		if($submit_export_all) $this->export('all', cleanInput('post', 'where_query', 'string', array("escape"=>false)));
 		if($submit_delete) {
 			if(!$this->_deletion || $this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 			if(count($f_s)) {
