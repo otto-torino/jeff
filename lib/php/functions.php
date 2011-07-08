@@ -73,4 +73,48 @@ function floatcomp($a,$comp,$b,$decimals=2) {
 	}
 }
 
+function chargeEditor($registry, $selector) {
+
+	$stylesheets = '';
+	foreach($registry->css as $css) 
+		$stylesheets .= $css.";";
+	$stylesheets .= ROOT."/css/dojo_frame.css";
+
+	$registry->addJs("https://ajax.googleapis.com/ajax/libs/dojo/1.6.0/dojo/dojo.xd.js");
+	$registry->addJs(ROOT."/lib/js/dojo.js");
+	$registry->addCss(ROOT."/css/dojo.css");
+
+
+	$buffer = "<script>";
+	$buffer .= "dojo.ready(function(){
+		      	var textareas = dojo.query(\"$selector\");
+  			if(textareas && textareas.length){
+    				dojo.addClass(dojo.body(), \"claro\");
+    				textareas.instantiate(dijit.Editor, {
+      					styleSheets: \"$stylesheets\",
+      					plugins: [
+        					\"collapsibletoolbar\",
+        					\"fullscreen\", \"viewsource\", \"|\",
+        					\"undo\", \"redo\", \"|\",
+        					\"cut\", \"copy\", \"paste\", \"|\",
+        					\"bold\", \"italic\", \"underline\", \"strikethrough\", \"|\",
+        					\"insertOrderedList\", \"insertUnorderedList\", \"indent\", \"outdent\", \"||\",
+        					\"formatBlock\", \"fontName\", \"fontSize\", \"||\",
+        					\"findreplace\", \"insertEntity\", \"blockquote\", \"|\",
+        					\"createLink\", \"insertImage\", \"insertanchor\", \"|\",
+       					 	\"foreColor\", \"hiliteColor\", \"|\",
+       	 					\"showblocknodes\", \"pastefromword\",
+        					// headless plugins
+        					\"normalizeindentoutdent\", \"prettyprint\",
+        					\"autourllink\", \"dijit._editor.plugins.EnterKeyHandling\"
+      					]
+    				});
+  			}
+		});";
+	$buffer .= "</script>";
+
+	return $buffer;
+
+}
+
 ?>

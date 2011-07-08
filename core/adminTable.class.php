@@ -10,6 +10,7 @@ class adminTable {
 
 	protected $_insertion, $_edit_deny;
 	protected $_changelist_fields;
+	protected $_editor;
 
 	protected $_view;
 	protected $_arrow_down_path, $_arrow_up_path;
@@ -28,6 +29,8 @@ class adminTable {
 		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
 		// fields to show in changelist view (all if null)
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
+		// dojo editor for html fields
+		$this->_editor = gOpt($opts, 'editor', false);
 
 		$this->_export = gOpt($opts, 'export', false);
 
@@ -349,7 +352,6 @@ class adminTable {
 			else $f_s = array();
 		}
 		if((!$insert && !$submit_export_all) && !$f_s) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
-
 		if($submit_export_selected) $this->export($f_s);
 		if($submit_export_all) $this->export('all', cleanInput('post', 'where_query', 'string', array("escape"=>false)));
 		if($submit_delete) {
@@ -395,6 +397,8 @@ class adminTable {
 		$buffer .= "&#160;".$myform->input('submit_c_'.($insert ? "insert" : "modify"), 'submit', __('saveContinueEditing'), array());
 
 		$buffer .= $myform->cform();
+		
+		if($this->_editor) $buffer .= chargeEditor($this->_registry, "textarea[class=html]");
 
 		return $buffer;
 
@@ -477,7 +481,7 @@ class adminTable {
 		elseif($field['type'] == 'varchar')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>40, "maxlength"=>$field['max_length']));
 		elseif($field['type'] == 'text')
-                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6));
+                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "class"=>in_array($fname, $this->_html_fields) ? 'html' : ''));
 		elseif($field['type'] == 'date')
                 	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required));
 		elseif($field['type'] == 'datetime')
@@ -591,7 +595,6 @@ class adminTable {
 			header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 			exit();
 		}
-
 
 		if(is_array($f_s) && count($f_s)) $rids = implode(",", $f_s);
 		elseif(!$where) $rids = '*';
