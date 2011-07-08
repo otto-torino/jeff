@@ -12,6 +12,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	$db = db::getInstance();
 
 	$flags = array();
+	$opts = null;
 
 	if($method=='get') $method_string = INPUT_GET;
 	elseif($method=='post') $method_string = INPUT_POST;
@@ -23,10 +24,13 @@ function cleanInput($method, $name, $type, $opts=array()) {
 		$type = 'string';
 	}
 
-	if($type=='string' || $type=='email') {
+	if($type=='string' || $type=='email' || $type=='html') {
 	    	if($type=='email' && !preg_match("#^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$#i", $_REQUEST[$name])) return null;
 
-		$filter = $type=='email' ? FILTER_SANITIZE_EMAIL : FILTER_SANITIZE_STRING;
+		if($type=='email') $filter = FILTER_SANITIZE_EMAIL;
+		elseif($type=='html') { $filter = FILTER_CALLBACK; $opts = "sanitizeHtml"; }
+		else $filter = FILTER_SANITIZE_STRING;
+
 		$flags[] = FILTER_FLAG_NO_ENCODE_QUOTES;
 		$type = 'string';
 	}
@@ -43,9 +47,11 @@ function cleanInput($method, $name, $type, $opts=array()) {
 			$f = $i ? $f | $flags[$i] : $flags[0];
 
 	$options = array("flags"=>$f);
+	if($opts) $options["options"] = $opts;
 
 
 	$input = filter_input($method_string, $name, $filter, $options);
+	if(is_null($filter)) exit($input);
 	settype($input, $type);
 
 	if(!(gOpt($opts, 'escape')===false)) {
@@ -95,6 +101,13 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 		}
 
 	return $input;
+
+}
+
+function sanitizeHtml($html) {
+
+	// strip dangerous tags here
+	return $html;
 
 }
 

@@ -3,7 +3,7 @@
 class adminTable {
 
 	protected $_registry, $_table;
-	protected $_primary_key, $_fields, $_fkeys, $_sfields;
+	protected $_primary_key, $_fields, $_fkeys, $_sfields, $_html_fields;
 	protected $_efp;
 	protected $_cls_cbk_edit, $_mth_cbk_edit;
 	protected $_cls_cbk_del, $_mth_cbk_del;
@@ -25,7 +25,7 @@ class adminTable {
 		// allow record deletion
 		$this->_deletion = gOpt($opts, 'deletion', true);
 		// denty all/some pkeys modifications
-		$this->_edit_deny = gOpt($opts, 'edit_deny', null);
+		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
 		// fields to show in changelist view (all if null)
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
 
@@ -38,6 +38,7 @@ class adminTable {
 		$this->_fields = $structure['fields'];
 		$this->_fkeys = array();
 		$this->_sfields = array();
+		$this->_html_fields = array();
 
 		$this->_arrow_down_path = ROOT."/img/down_arrow-black.png";
 		$this->_arrow_up_path = ROOT."/img/up_arrow-black.png";
@@ -71,6 +72,14 @@ class adminTable {
 		
 		if(is_array($fields))
 			$this->_changelist_fields = $fields;
+
+	}
+
+	// fields which allow html insertion, only char and text type
+	public function setHtmlFields($fields) {
+		
+		if(is_array($fields))
+			$this->_html_fields = $fields;
 
 	}
 
@@ -528,9 +537,12 @@ class adminTable {
 			$model->setRegistry($this->_registry);
 			$model->setIdName($this->_primary_key);
 			$model->setTable($this->_table);
+
 			foreach($this->_fields as $fname=>$field) 
 			if(array_key_exists($fname, $this->_sfields)) 
 				$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
+			elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment' && in_array($fname, $this->_html_fields)) 
+				$model->{$fname} = $this->cleanField($fname."_".$pkf, 'html');
 			elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
 				$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
 			$model->saveData(is_null($pk) ? true : false);
@@ -544,6 +556,7 @@ class adminTable {
 		if($type=='int') return cleanInput('post', $name, 'int');
 		elseif($type=='float' || $type=='double' || $type=='decimal') return cleanInput('post', $name, 'float');
 		elseif($type=='varchar' || $type=='text') return cleanInput('post', $name, 'string');
+		elseif($type=='html') return cleanInput('post', $name, 'html');
 		elseif($type=='date') return cleanInput('post', $name, 'date');
 		elseif($type=='datetime') return cleanInput('post', $name, 'datetime');
 
