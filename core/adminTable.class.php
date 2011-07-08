@@ -459,7 +459,7 @@ class adminTable {
 				$sf = $this->_sfields[$fname];
 				$preview = isset($sf['preview']) ? $sf['preview'] : false;
 				$rel_path = $sf['rel_path'];
-				return $myform->cinput_file($fname."_".$id_f, $myform->retvar($fname, $value), $sf['label'], array("extensions"=>$sf['extensions'], "preview"=>$preview, "rel_path"=>$rel_path));
+				return $myform->cinput_file($fname."_".$id_f, $myform->retvar($fname, $value), $sf['label'], array("required"=>$required, "extensions"=>$sf['extensions'], "preview"=>$preview, "rel_path"=>$rel_path));
 			}
 		}
 		elseif(array_key_exists($fname, $this->_fkeys)) {
