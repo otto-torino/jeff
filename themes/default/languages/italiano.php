@@ -30,7 +30,7 @@ return array(
 	"exportAll"=>"esporta tutti",
 	"insertNewRecord"=>"inserisci nuovo record",
 	"SelectAtleastRecord"=>"Seleziona almeno un record",
-	"ProcedeDeleteSelectedFields"=>"Procedere con l'eliminazione dei campi selezionati?",
+	"ProcedeDeleteSelectedRecords"=>"Procedere con l'eliminazione dei record selezionati?",
 	"yes"=>"si",
 	"no"=>"no",
 	"userEditPwdLabel"=>"lasciare il campo vuoto se non si intende modificare la password",

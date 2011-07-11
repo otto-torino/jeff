@@ -256,6 +256,10 @@ textarea {
 	float:left;
 }
 
+form .html {
+	margin-bottom: 10px;
+}
+
 /* TOOLTIPS */
 .tips {
 }

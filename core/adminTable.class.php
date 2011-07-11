@@ -221,7 +221,7 @@ class adminTable {
 				    if(!checked) {alert('".jsVar(__("SelectAtleastRecord"))."'); return false;}";
 			$input_edit = $myform->input('submit_edit', 'submit', __("edit"), array("js"=>"onclick=\"$onclick\""));
 			if($this->_deletion)
-				$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedFields"))."')\""));
+				$input_delete = $myform->input('submit_delete', 'submit', __("delete"), array("js"=>"onclick=\"$onclick return confirmSubmit('".jsVar(__("ProcedeDeleteSelectedRecords"))."')\""));
 			else $input_delete = '';
 		}
 
@@ -398,7 +398,7 @@ class adminTable {
 
 		$buffer .= $myform->cform();
 		
-		if($this->_editor) $buffer .= chargeEditor($this->_registry, "textarea[class=html]");
+		if($this->_editor) $buffer .= chargeEditor($this->_registry, "#atbl_form div[class=html]");
 
 		return $buffer;
 
@@ -481,7 +481,7 @@ class adminTable {
 		elseif($field['type'] == 'varchar')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>40, "maxlength"=>$field['max_length']));
 		elseif($field['type'] == 'text')
-                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "class"=>in_array($fname, $this->_html_fields) ? 'html' : ''));
+                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>in_array($fname, $this->_html_fields) ? true : false));
 		elseif($field['type'] == 'date')
                 	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required));
 		elseif($field['type'] == 'datetime')

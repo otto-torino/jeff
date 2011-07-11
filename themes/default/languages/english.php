@@ -30,7 +30,7 @@ return array(
 	"exportAll"=>"export all",
 	"insertNewRecord"=>"insert new record",
 	"SelectAtleastRecord"=>"Select at least one record",
-	"ProcedeDeleteSelectedFields"=>"Go on with the deletion of the selected fields?",
+	"ProcedeDeleteSelectedRecords"=>"Go on with the deletion of the selected records?",
 	"yes"=>"yes",
 	"no"=>"no",
 	"userEditPwdLabel"=>"leave the field empty if you don't want to change the password",

@@ -272,19 +272,24 @@ class form {
 
 	public function textarea($name, $value, $opts){
 		
-		$buffer = "<textarea name=\"$name\" ";
+		if(gOpt($opts, 'editor', false)) {
+			$buffer = "<div id=\"$name\" class=\"html\">$value</div>";
+		}
+		else {
+			$buffer = "<textarea name=\"$name\" ";
 
-		$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
-		$buffer .= gOpt($opts, 'class') ? "class=\"".gOpt($opts, 'class')."\" ":"";
-		$buffer .= gOpt($opts, 'pattern') ? "pattern=\"".gOpt($opts, 'pattern')."\" ":"";
-		$buffer .= gOpt($opts, 'hint') ? "placeholder=\"".gOpt($opts, 'hint')."\" ":"";
-		$buffer .= gOpt($opts, 'cols') ? "cols=\"".gOpt($opts, 'cols')."\" ":"";
-		$buffer .= gOpt($opts, 'rows') ? "rows=\"".gOpt($opts, 'rows')."\" ":"";
-		$buffer .= gOpt($opts, 'readonly') ? "readonly=\"".gOpt($opts, 'readonly')."\" ":"";
-		$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
-		$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
-		$buffer .= ">";
-		$buffer .= "$value</textarea>";
+			$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
+			$buffer .= gOpt($opts, 'class') ? "class=\"".gOpt($opts, 'class')."\" ":"";
+			$buffer .= gOpt($opts, 'pattern') ? "pattern=\"".gOpt($opts, 'pattern')."\" ":"";
+			$buffer .= gOpt($opts, 'hint') ? "placeholder=\"".gOpt($opts, 'hint')."\" ":"";
+			$buffer .= gOpt($opts, 'cols') ? "cols=\"".gOpt($opts, 'cols')."\" ":"";
+			$buffer .= gOpt($opts, 'rows') ? "rows=\"".gOpt($opts, 'rows')."\" ":"";
+			$buffer .= gOpt($opts, 'readonly') ? "readonly=\"".gOpt($opts, 'readonly')."\" ":"";
+			$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
+			$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
+			$buffer .= ">";
+			$buffer .= "$value</textarea>";
+		}
 		
 		return $buffer;
 	}
