@@ -86,11 +86,14 @@ function chargeEditor($registry, $selector) {
 
 
 	$buffer = "<script>";
+	$buffer .= "var dojo_textareas = [];";
 	$buffer .= "dojo.ready(function(){
 		      	var textareas = dojo.query(\"$selector\");
   			if(textareas && textareas.length){
     				dojo.addClass(dojo.body(), \"claro\");
-    				textareas.instantiate(dijit.Editor, {
+				for(var i=0; i<textareas.length; i++) {
+					var key = textareas[i].getParents('form')[0].get('name')+'_'+textareas[i].get('id');
+					dojo_textareas[key] = new dijit.Editor({
       					styleSheets: \"$stylesheets\",
       					plugins: [
         					\"collapsibletoolbar\",
@@ -108,7 +111,8 @@ function chargeEditor($registry, $selector) {
         					\"normalizeindentoutdent\", \"prettyprint\",
         					\"autourllink\", \"dijit._editor.plugins.EnterKeyHandling\"
       					]
-    				});
+    					}, textareas[i]);
+				}
   			}
 		});";
 	$buffer .= "</script>";
