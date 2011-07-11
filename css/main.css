@@ -257,6 +257,7 @@ textarea {
 }
 
 form .html {
+	display: none;
 	margin-bottom: 10px;
 }
 
