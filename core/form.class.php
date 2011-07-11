@@ -274,6 +274,7 @@ class form {
 		
 		if(gOpt($opts, 'editor', false)) {
 			$buffer = "<div id=\"$name\" class=\"html\">$value</div>";
+			$buffer .= $this->hidden($name, '');
 		}
 		else {
 			$buffer = "<textarea name=\"$name\" ";
