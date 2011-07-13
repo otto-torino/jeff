@@ -300,7 +300,7 @@ class adminTable {
 				elseif($this->_sfields[$k]['type']=='file') {
 					$sf = $this->_sfields[$k];
 					if($sf['preview'] && $v)
-						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
+						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>if(typeof box_$name == 'undefined') var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
 					else $res[$k] = $v;
 				}
 			}
