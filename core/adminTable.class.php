@@ -426,7 +426,7 @@ class adminTable {
 
 	}
 
-	private function formElement($myform, $fname, $field, $id) {
+	protected function formElement($myform, $fname, $field, $id) {
 	
 		$id_f = preg_replace("#\s#", "_", $id); // replace spaces with '_' in form names as POST do itself
 
