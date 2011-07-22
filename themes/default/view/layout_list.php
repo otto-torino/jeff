@@ -7,7 +7,7 @@
 <? foreach($items as $item): ?>
 	<tr>
 		<td style="text-align:center">
-			<a href="<?= $item['image'] ?>" rel="lightbox"><img style="height:60px" src="<?= $item['image'] ?>" alt="screenshot"/></a>
+			<a href="<?= $item['image'] ?>" class="lightbox"><img style="height:60px" src="<?= $item['image'] ?>" alt="screenshot"/></a>
 		</td>
 		<td><?= $item['name'] ?></td>
 		<td><?= $item['description'] ?></td>
@@ -15,3 +15,6 @@
 	</tr>
 <? endforeach ?>
 </table>
+<script>
+var layout_box = new CeraBox(); layout_box.addItems($$('a[class=lightbox]'));
+</script>
