@@ -8,4 +8,6 @@ define('TBL_USERS', 'users');
 define('TBL_THEMES', 'themes');
 define('TBL_LNG', 'languages');
 
+if(is_readable(ABS_ROOT.DS.'project_tables.php')) include(ABS_ROOT.DS.'project_tables.php');
+
 ?>
