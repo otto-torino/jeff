@@ -34,7 +34,7 @@ class adminTable {
 
 		$this->_export = gOpt($opts, 'export', false);
 
-		$this->_efp = gOpt($opts, "efp", 2);
+		$this->_efp = gOpt($opts, "efp", 10);
 
 		$structure = $this->_registry->db->getTableStructure($this->_table);
 		$this->_primary_key = $structure['primary_key'];
