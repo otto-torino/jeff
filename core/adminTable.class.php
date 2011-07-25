@@ -34,7 +34,7 @@ class adminTable {
 
 		$this->_export = gOpt($opts, 'export', false);
 
-		$this->_efp = gOpt($opts, "efp", 10);
+		$this->_efp = gOpt($opts, "efp", 2);
 
 		$structure = $this->_registry->db->getTableStructure($this->_table);
 		$this->_primary_key = $structure['primary_key'];
@@ -95,14 +95,16 @@ class adminTable {
 		$save = isset($_GET['save']) ? true : false;
 
 		if($save) {
+			$order = cleanInput('post', 'order', 'string');
+			$order_param = $order ? "?order=".$order : '';
 			$res = $this->saveFields(); 
 			if(isset($_POST['submit_c_insert']) || isset($_POST['submit_c_modify'])) {
 				// save and continue editing
 				$_SESSION['adminTable_f_s_'.$this->_table] = $res;
-				header("Location: ".preg_replace("#\?.*$#", "?edit", $_SERVER['REQUEST_URI']));
+				header("Location: ".preg_replace("#\?.*$#", "?edit".($order ? "&order=$order" : ""), $_SERVER['REQUEST_URI']));
 			}
 			else
-				header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+				header("Location: ".preg_replace("#\?.*$#", $order_param, $_SERVER['REQUEST_URI']));
 		}
 		elseif($edit || $insert) return $this->editFields();
 		else return $this->view();
@@ -202,7 +204,7 @@ class adminTable {
 
 		if($this->_edit_deny!='all' || $this->_export) {
 			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
-			$formstart = $myform->sform('?edit', null);
+			$formstart = $myform->sform('?edit'.($order ? "&order=$order" : ""), null);
 			$formend = $myform->cform();
 		}
 		else {
@@ -300,7 +302,7 @@ class adminTable {
 				elseif($this->_sfields[$k]['type']=='file') {
 					$sf = $this->_sfields[$k];
 					if($sf['preview'] && $v)
-						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>if(typeof box_$name == 'undefined') var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
+						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
 					else $res[$k] = $v;
 				}
 			}
@@ -337,6 +339,8 @@ class adminTable {
 	public function editFields($opts=null) {
 
 		$insert = (isset($_GET['insert']) || gOpt($opts, 'insert')) ? true : false;
+		$order = cleanInput('get', 'order', 'string');
+		$order_param = $order ? "?order=".$order : '';
 		$submit_edit = cleanInput('post', 'submit_edit', 'string');
 		$submit_delete = cleanInput('post', 'submit_delete', 'string');
 		$submit_export_selected = cleanInput('post', 'submit_export_selected', 'string');
@@ -365,13 +369,14 @@ class adminTable {
 					$this->_registry->db->delete($this->_table, $where);
 				}
 			}
-			header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+			header("Location: ".preg_replace("#\?.*$#", $order_param, $_SERVER['REQUEST_URI']));
 			exit();
 		}
 
 		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
 		$myform->load();
 		$buffer = $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
+		$buffer .= $myform->hidden('order', $order);
 
 		if($insert) {
 			foreach($this->_fields as $fname=>$field) {
@@ -426,7 +431,7 @@ class adminTable {
 
 	}
 
-	protected function formElement($myform, $fname, $field, $id) {
+	 protected function formElement($myform, $fname, $field, $id) {
 	
 		$id_f = preg_replace("#\s#", "_", $id); // replace spaces with '_' in form names as POST do itself
 
