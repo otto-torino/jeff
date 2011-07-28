@@ -188,7 +188,7 @@ class adminTable {
 			if($tot_fk) $r = $this->parseForeignKeys($r);
 			if($tot_sf) $r = $this->parseSpecialFields($r);
 			$r = $this->parseDateFields($r);
-			if($this->_edit_deny=='all') $rows[] = $r;
+			if($this->_edit_deny=='all' && !$this->_export) $rows[] = $r;
 			elseif(is_array($this->_edit_deny) && in_array($r[$this->_primary_key], $this->_edit_deny)) $rows[] = array_merge(array(""), $r);
 			else $rows[] = array_merge(array($input), $r);
 		}
@@ -384,17 +384,18 @@ class adminTable {
 			}
 		}
 		elseif(count($f_s)) {
-
+			if($this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 			foreach($f_s as $f) {
-				$content = $this->formRecord($f, $myform);
-				if(array_key_exists($this->_primary_key, $this->_fkeys)) {
-					$fk = $this->_fkeys[$this->_primary_key];
-					$records = $this->_registry->db->autoSelect($fk['field'], $fk['table'], $fk['key']."='$f'" , null);
-					$value_p = $records[0][$fk['field']];
+				if(!is_array($this->_edit_deny) || !in_array($f, $this->_edit_deny)) {
+					$content = $this->formRecord($f, $myform);
+					if(array_key_exists($this->_primary_key, $this->_fkeys)) {
+						$fk = $this->_fkeys[$this->_primary_key];
+						$records = $this->_registry->db->autoSelect($fk['field'], $fk['table'], $fk['key']."='$f'" , null);
+						$value_p = $records[0][$fk['field']];
+					}
+					else $value_p = $f;
+					$buffer .= $myform->fieldset(__("Record")." ".$this->_primary_key." = $value_p", $content);
 				}
-				else $value_p = $f;
-				$buffer .= $myform->fieldset(__("Record")." ".$this->_primary_key." = $value_p", $content);
-
 			}
 		}
 
