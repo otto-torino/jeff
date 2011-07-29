@@ -21,6 +21,8 @@ class dtime {
 
 	public function view($date, $format=null) {
 	
+		if(!$date) return '';
+
 		$this->_datetime = new datetime($date);
 
 		return $this->parseFormat($format);
