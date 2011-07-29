@@ -52,6 +52,18 @@ class access {
 
 	}
 
+	public static function hasGroup($registry, $group_ids) {
+	
+		$user = $registry->user;
+
+		foreach($group_ids as $group_id) {
+			if(preg_match("#\b$group_id\b#", $user->groups)) return true;
+		}
+
+		return false;
+
+	}
+
 
 }
 
