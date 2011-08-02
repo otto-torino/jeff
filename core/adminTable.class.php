@@ -299,7 +299,7 @@ class adminTable {
 					}
 					$res[$k] = implode(", ", $vf);
 				}
-				elseif($this->_sfields[$k]['type']=='file') {
+				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
 					if($sf['preview'] && $v)
 						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
@@ -331,7 +331,7 @@ class adminTable {
 
 	private function checkUpload() {
 		
-		foreach($this->_sfields as $fname=>$finfo) if($finfo['type']=='file') return true;
+		foreach($this->_sfields as $fname=>$finfo) if($finfo['type']=='file' || $finfo['type']=='image') return true;
 		return false;
 
 	}
@@ -365,6 +365,7 @@ class adminTable {
 					call_user_func(array($this->_cls_cbk_del,$this->_mth_cbk_del), $this->_registry, $f_s);
 				else {
 					if(is_array($this->_edit_deny) && count($this->_edit_deny)) $f_s = array_diff($f_s, $this->_edit_deny);
+					$this->deleteFiles($f_s);
 					$where = $this->_primary_key."='".implode("' OR ".$this->_primary_key."='", $f_s)."'";
 					$this->_registry->db->delete($this->_table, $where);
 				}
@@ -407,6 +408,33 @@ class adminTable {
 		if($this->_editor) $buffer .= chargeEditor($this->_registry, "#atbl_form div[class=html]");
 
 		return $buffer;
+
+	}
+
+	protected function deleteFiles($f_s) {
+	
+		if(!count($this->_sfields)) return 0;
+
+		foreach($f_s as $fid) {
+			foreach($this->_sfields as $fname=>$fopt) {
+				if($fopt['type']=='file') {
+					$rows = $this->_registry->db->autoSelect($fname, $this->_table, $this->_primary_key."='$fid'");
+					$filename = $rows[0][$fname];
+					@unlink($fopt['path'].DS.$filename);	
+				}	
+				elseif($fopt['type']=='image') {
+					$rows = $this->_registry->db->autoSelect($fname, $this->_table, $this->_primary_key."='$fid'");
+					$filename = $rows[0][$fname];
+					@unlink($fopt['path'].DS.$filename);	
+					if($fopt['make_thumb']) {
+						$prefix_thumb = isset($fopt['prefix_thumb']) ? $fopt['prefix_thumb'] : 'thumb_';
+						@unlink($fopt['path'].DS.$prefix_thumb.$filename);	
+					}
+				}
+			}
+		}
+
+		return 0;
 
 	}
 
@@ -465,7 +493,7 @@ class adminTable {
 				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
 				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname, explode(",", $value)), $options, $fname, array("required"=>$required));
 			}
-			elseif($this->_sfields[$fname]['type']=='file') {
+			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
 				$sf = $this->_sfields[$fname];
 				$preview = isset($sf['preview']) ? $sf['preview'] : false;
 				$rel_path = $sf['rel_path'];
@@ -591,8 +619,24 @@ class adminTable {
 			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
 			$sf = $this->_sfields[$fname];
 			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
-			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
+			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, null);
 		}
+		elseif($this->_sfields[$fname]['type']=='image') {
+			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
+			$sf = $this->_sfields[$fname];
+			$opts['resize'] = isset($sf['resize']) ? $sf['resize'] : false;
+			$opts['scale'] = isset($sf['scale']) ? $sf['scale'] : false;
+			$opts['make_thumb'] = isset($sf['make_thumb']) ? $sf['make_thumb'] : false;
+			$opts['prefix'] = isset($sf['prefix']) ? $sf['prefix'] : '';
+			$opts['prefix_thumb'] = isset($sf['prefix_thumb']) ? $sf['prefix_thumb'] : 'thumb_';
+			$opts['resize_width'] = isset($sf['resize_width']) ? $sf['resize_width'] : null;
+			$opts['resize_height'] = isset($sf['resize_height']) ? $sf['resize_height'] : null;
+			$opts['thumb_width'] = isset($sf['thumb_width']) ? $sf['thumb_width'] : null;
+			$opts['thumb_height'] = isset($sf['thumb_height']) ? $sf['thumb_height'] : null;
+			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$model->{$fname} = $myform->uploadImage($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
+		}
+
 	}
 
 	private function export($f_s, $where='') {
