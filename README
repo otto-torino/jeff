@@ -9,6 +9,9 @@ The project is in developement, no stable release still exists.
 Even if I consider it quite stable, it's incomplete. It has many
 features and capabilities that have to be fully implemented.
 
+Please visit the project page for more details:
+http://www.abidibo.net/projects/php/jeff/
+
 REQUIREMENTS
 php >= 5
 mysql >= 5 (may be easily extended to use other DBMS)
