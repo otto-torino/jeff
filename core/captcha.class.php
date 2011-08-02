@@ -11,8 +11,8 @@ class captcha {
 	function __construct($name, $opts=null) {
 
 		$this->_name = $name;
-		$this->_width = gOpt($opts, 'width', 200);
-		$this->_height = gOpt($opts, 'height', 40);
+		$this->_width = 200;
+		$this->_height = 40;
 
 		$this->_font_file = ABS_ROOT.DS.'font'.DS.'initial.ttf';
 
@@ -124,6 +124,8 @@ class captcha {
 	public function check() {
 	
 		$string = preg_replace("#[ \s]#", "", $_POST[$this->_name]);
+
+		if(!$string) return false;
 
 		$result = $string === $_SESSION['captcha_code'] ? true : false;
 
