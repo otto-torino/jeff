@@ -471,6 +471,7 @@ class form {
 			"text/html",
 			"text/xml",
 			"image/jpeg",
+			"image/pjpeg",
 			"image/gif",
 			"image/png",
 			"video/mpeg",
@@ -513,10 +514,10 @@ class form {
 		
 		if($delete) {
 			if(is_file($path.$this->_requestVars['old_'.$name]))	
-			if(!@unlink($path.$this->_requestVars['old_'.$name])) {
-				if($error_query) $this->registry->db->executeQuery($error_query);
-				exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
-			}
+				if(!@unlink($path.$this->_requestVars['old_'.$name])) {
+					if($error_query) $this->registry->db->executeQuery($error_query);
+					exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
+				}
 
 		}
 
@@ -525,6 +526,129 @@ class form {
 				if($error_query) $this->registry->db->executeQuery($error_query);
 				exit(error::errorMessage(array('error'=>__("CantUploadError")), $link_error));
 			}
+		}
+
+		if($upload) return $nfile;
+		elseif($delete) return '';
+		else return $this->_requestVars['old_'.$name];
+
+	}
+	
+	public function uploadImage($name, $valid_extension, $path, $link_error, $opts) {
+	
+		$path = substr($path, -1) == DS ? $path : $path.DS;
+
+		if(!is_dir($path)) mkdir($path, 0755, true);
+		
+		$def_contents = array(
+			"image/jpeg",
+			"image/pjpeg",
+			"image/gif",
+			"image/png"
+		);
+
+		$error_query = gOpt($opts, 'error_query', null);
+		$check_content = gOpt($opts, 'check_content', true);
+		$contents_allowed = gOpt($opts, 'contents', $def_contents); 
+		$prefix = gOpt($opts, 'prefix', '');
+		$prefix_thumb = gOpt($opts, 'prefix_thumb', 'thumb_');
+		$make_thumb = gOpt($opts, 'make_thumb', false);
+		$resize = gOpt($opts, 'resize', false);
+		$scale = gOpt($opts, 'scale', false);
+		$resize_enlarge = gOpt($opts, 'resize_enlarge', false);
+		$resize_width = gOpt($opts, 'resize_width', null);
+		$resize_height = gOpt($opts, 'resize_height', null);
+		$thumb_width = gOpt($opts, 'thumb_width', null);
+		$thumb_height = gOpt($opts, 'thumb_height', null);
+		$max_file_size = gOpt($opts, 'max_file_size', null);
+
+		if(isset($_FILES[$name]['name']) && $_FILES[$name]['name']) {
+			$nfile_size = $_FILES[$name]['size'];
+			if($max_file_size && $nfile_size>$max_file_size) {
+				if($error_query) $this->registry->db->executeQuery($error_query);
+				exit(error::errorMessage(array('error'=>__("MaxSizeError")), $link_error));
+			}
+			$tmp_file = $_FILES[$name]['tmp_name'];
+			$nfile = $this->setFileName($name, $path, $prefix); 
+
+			if(!$this->checkExtension($nfile, $valid_extension) || preg_match('#%00#', $nfile) || ($check_content && !in_array( $_FILES[$name]['type'], $contents_allowed))) {
+				if($error_query) $this->registry->db->executeQuery($error_query);
+				exit(error::errorMessage(array('error'=>__("FileConsistentError")), $link_error));
+			}
+
+		}
+		else { $nfile = ''; $tmp_file = ''; }
+
+		$del_file = isset($this->_requestVars['del_'.$name]) && $this->_requestVars['del_'.$name];
+
+		$upload = $delete = false;
+
+		$upload = !empty($nfile);
+		$delete = (!empty($nfile) && !empty($this->_requestVars['old_'.$name])) || $del_file;
+		
+		if($delete) {
+			if(is_file($path.$this->_requestVars['old_'.$name]))	
+				if(!@unlink($path.$this->_requestVars['old_'.$name])) {
+					if($error_query) $this->registry->db->executeQuery($error_query);
+					exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
+				}
+			if($make_thumb) {
+				$old_file_thumb = $prefix_thumb.$this->_requestVars['old_'.$name];
+				
+				if(is_file($path.$old_file_thumb))	
+					if(!@unlink($path.$old_file_thumb)) {
+						if($error_query) $this->registry->db->executeQuery($error_query);
+						exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
+					}
+			}
+
+		}
+
+		if($upload) {
+			
+			if(!$this->upload($tmp_file, $nfile, $path)) { 
+				if($error_query) $this->registry->db->executeQuery($error_query);
+				exit(error::errorMessage(array('error'=>__("CantUploadError")), $link_error));
+			}
+			
+			$image = new image();
+			$image->load($path.$nfile);
+
+			if($resize) {
+				$opts = array("enlarge"=>$resize_enlarge);
+				if($resize_width && $resize_height) {
+					$image->resize($resize_width, $resize_height, $opts);	
+				}
+				elseif($resize_width) {
+					$image->resizeToWidth($resize_width, $opts);	
+				}
+				elseif($resize_height) {
+					$image->resizeToHeight($resize_height, $opts);	
+				}
+			}
+			elseif($scale) {
+				$image->scale($scale);	
+			}
+			
+			$image->save($path.$nfile, $image->type());
+
+			if($make_thumb) {
+				$nthumbfile = $prefix_thumb.$nfile; 
+				$opts = array("enlarge"=>true);
+				if($thumb_width && $thumb_height) {
+					$image->resize($thumb_width, $thumb_height, $opts);	
+				}
+				elseif($thumb_width) {
+					$image->resizeToWidth($thumb_width, $opts);	
+				}
+				elseif($thumb_height) {
+					$image->resizeToHeight($thumb_height, $opts);	
+				}
+
+				$image->save($path.$nthumbfile, $image->type());
+			}
+
+			//if($resize || $scale) @unlink($path.$nfile);
 		}
 
 		if($upload) return $nfile;
