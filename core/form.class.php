@@ -113,6 +113,37 @@ class form {
 		return "</form>";
 
 	}
+
+	public function ccaptcha($opts=null) {
+	
+		list($l, $d) = array(__("SecureCode"), __("SecureCodeExp"));
+
+		$this->prepareView('captcha_code', $l, $d, true, gOpt($opts, 'text_add'));
+		$this->_view->assign('formfield', $this->captcha($opts));
+		
+		return $this->_view->render();
+	}
+
+	public function captcha($opts=null) {
+
+		$class = gOpt($opts, "class", "left captcha");
+	
+		require_once(ABS_CORE.DS.'captcha.class.php');
+		$captcha = new captcha('captcha_code');
+	
+		return "<div class=\"$class\">".$captcha->render()."</div>";
+
+	}
+
+	public function checkCaptcha() {
+	
+		require_once(ABS_CORE.DS.'captcha.class.php');
+
+		$captcha = new captcha('captcha_code');
+
+		return $captcha->check();	
+
+	}
 	
 	public function fieldset($legend, $content, $opts=null) {
 

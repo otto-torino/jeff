@@ -261,6 +261,10 @@ form .html {
 	margin-bottom: 10px;
 }
 
+form .captcha {
+	margin-bottom: 10px;
+}
+
 /* TOOLTIPS */
 .tips {
 }
