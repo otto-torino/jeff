@@ -112,7 +112,10 @@ return array(
 	"DefaultThemeDescription"=>"Base Jeff's theme",
 	"WhiteTheme"=>"White theme",
 	"WhiteThemeDescription"=>"Theme with soft colors",
-	"CantLoadThemeError"=>"Can't find the %s theme class"
+	"CantLoadThemeError"=>"Can't find the %s theme class",
+	"SecureCode"=>"Secure code",
+	"SecureCodeExp"=>"Insert the string represented in the image",
+	"errorCaptcha"=>"The secure code inserted is wrong"
 
 )
 
