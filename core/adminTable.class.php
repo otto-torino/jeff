@@ -626,6 +626,7 @@ class adminTable {
 			$sf = $this->_sfields[$fname];
 			$opts['resize'] = isset($sf['resize']) ? $sf['resize'] : false;
 			$opts['scale'] = isset($sf['scale']) ? $sf['scale'] : false;
+			$opts['enlarge'] = isset($sf['resize_enlarge']) ? $sf['resize_enlarge'] : false;
 			$opts['make_thumb'] = isset($sf['make_thumb']) ? $sf['make_thumb'] : false;
 			$opts['prefix'] = isset($sf['prefix']) ? $sf['prefix'] : '';
 			$opts['prefix_thumb'] = isset($sf['prefix_thumb']) ? $sf['prefix_thumb'] : 'thumb_';
