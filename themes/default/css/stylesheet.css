@@ -1,6 +1,5 @@
 html {
-	background: url('../img/html_bkg.jpg') repeat top left;
-	background: #565656;
+	background: url('../img/html_bkg.jpg') repeat;
 }
 
 body {
@@ -9,7 +8,7 @@ body {
 	text-align: center;
 	color:#333;
 }
-a:link, a:visited { color: #4098ea; }
+a:link, a:visited, .link { color: #4098ea; }
 h1 { color: #000; font-weight: bold; }
 section { padding: 10px; margin:0 10px; }
 .container {
@@ -22,6 +21,9 @@ section { padding: 10px; margin:0 10px; }
 .box {
 	background: #fff;
 	-moz-border-radius: 8px 8px;
+	-webkit-border-radius: 8px 8px;
+	-a-border-radius: 8px 8px;
+	border-radius: 8px 8px;
 	margin-bottom:10px;
 }
 /*
@@ -34,15 +36,17 @@ div.doctop {
 div.header_logo {
 
 	background: url('../img/logo.png') no-repeat top left;
-	height: 100px;
-	margin: 0;
+	height: 150px;
+	width:182px;
+	margin: 10px 0;
 
 }
 div.header_lng {
 	position:absolute;
-	top:80px;
+	top:140px;
 	right:5px;
 }
+div.header_lng a:link, div.header_lng a:visited { color: #fff; }
 div.header_bottom {
 }
 
@@ -51,7 +55,7 @@ div.header_bottom {
  */
 .docbody {
 	padding: 0;
-	background:#eee;
+	background:#fbfbf9;
 }
 
 /*
@@ -61,12 +65,12 @@ div.header_bottom {
 	background-color:#fff;
 }
 .credits {
-	background: url('../img/menu_bkg.png') repeat top left;
+	background: #e6e9d8;
+	color: #000;
 	width:1000px;
 	margin:auto;
-	color: #fff;
-	height:30px;
-	padding-top:10px;
+	height:28px;
+	line-height: 28px;
 }
 
 .credits a:link, .credits a:visited {
@@ -97,6 +101,7 @@ div.header_bottom {
 caption { font-style: italic; }
 .title { font-size: 1.2em; }
 .subtitle { font-size: 1.1em; font-style:italic; color: #880000;  }
+.evidence { color: #ef3125; }
 
 input[type=submit], input[type=button] {
 	cursor: pointer;
@@ -106,4 +111,8 @@ input[type=submit], input[type=button] {
 	font-weight: bold;
 	height: 20px;
 	padding: 2px 5px;
+}
+table.generic tr.selected td {
+	background-color: #f99391;
+	color: #fff;
 }

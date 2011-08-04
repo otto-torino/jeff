@@ -1,15 +1,25 @@
+html { background: #fff; }
 .login_container {
 	margin:auto;
 	margin-top:200px;
 	text-align: left;
 }
-label { width: 120px; }
+label { text-align:right; width: 80px; font-size: 0.9em; color: #81827a; }
 .logo {
-	background: url('../img/logo.png') no-repeat top left;
-	width: 146px;
-	height: 94px;
+	background: url('../img/logo_big.png') no-repeat top left;
+	width: 253px;
+	height: 200px;
 }
 .box {
-	-moz-box-shadow: 5px 5px 5px black;
-	border:1px solid #000;
+	background: #e6e9d8;
+	-moz-box-shadow: 2px 2px 2px #aaa;
+	-webkit-box-shadow: 2px 2px 2px #aaa;
+	-a-box-shadow: 2px 2px 2px #aaa;
+	box-shadow: 2px 2px 2px #aaa;
+	border:1px solid #caccbe;
+	margin-top: 35px;
 }
+.login fieldset {
+	border: 1px dotted #999;
+}
+td + td { width: 300px; }

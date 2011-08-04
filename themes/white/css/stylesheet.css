@@ -1,6 +1,5 @@
 html {
-	background: url('../img/html_bkg.jpg') repeat top left;
-	background: #eee;
+	background: #fff;
 }
 
 body {
@@ -9,7 +8,8 @@ body {
 	text-align: center;
 	color:#333;
 }
-a:link, a:visited { color: #00aa00; }
+a:link, a:visited { color: #c9201c; }
+.link { #c9201c; }
 h1 { color: #000; font-weight: bold; }
 section { padding: 10px; margin:0 10px; }
 .container {
@@ -18,10 +18,14 @@ section { padding: 10px; margin:0 10px; }
 	position:relative;
 	width: 1000px;
 	text-align:left;
+	border-left: 1px dotted #3399ff;
 }
 .box {
-	background: #ccffcc;
+	background: #e6e9d8;
 	-moz-border-radius: 8px 8px;
+	-webkit-border-radius: 8px 8px;
+	-a-border-radius: 8px 8px;
+	border-radius: 8px 8px;
 	margin-bottom:10px;
 }
 /*
@@ -33,9 +37,9 @@ div.doctop {
 
 div.header_logo {
 
-	background: url('../img/logo.png') no-repeat top left;
-	height: 100px;
-	margin: 0;
+	background: url('../img/logo.png') no-repeat 20px top;
+	height: 150px;
+	margin: 10px 0;
 
 }
 div.header_lng {
@@ -61,16 +65,23 @@ div.header_bottom {
 	background-color:#fff;
 }
 .credits {
-	background: url('../img/menu_bkg.png') repeat top left;
 	width:1000px;
 	margin:auto;
-	color: #fff;
 	height:30px;
 	padding-top:10px;
 }
+.credits div {
+	height:1px;
+	background: #ef3125;
+	background: -moz-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
+	background: -webkit-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
+	background: -o-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
+	background: radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
+	margin-bottom: 10px;
+}
 
 .credits a:link, .credits a:visited {
-	color: #004400;
+	color: #c9201c;
 }
 
 #footer {
@@ -106,4 +117,8 @@ input[type=submit], input[type=button] {
 	font-weight: bold;
 	height: 20px;
 	padding: 2px 5px;
+}
+table.generic tr.selected td {
+	background-color: #f99391;
+	color: #fff;
 }
