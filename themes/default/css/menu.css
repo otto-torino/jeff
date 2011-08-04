@@ -9,7 +9,8 @@
 #nav a, #subMenusContainer a{
 	text-decoration:none;
 	display:block;
-	padding:10px 20px;
+	padding:0px 20px;
+	line-height: 28px;
 }
 #nav a {
 }
@@ -31,8 +32,8 @@
 
 /* All menu links on hover or focus */
 #nav a:hover, #nav a:focus, #subMenusContainer a:hover, #subMenusContainer a:focus, #nav a.mainMenuParentBtnFocused, #subMenusContainer a.subMenuParentBtnFocused{
-	background-color:#c7c7c7 ;
-	color:#000;
+	background-color:#ef3125 ;
+	color:#fff;
 }
 
 /* sub menu links on hover or focus */
@@ -42,8 +43,8 @@
 #subMenusContainer a.subMenuParentBtnFocused,
 #nav li a:hover,
 #nav li a:focus {
-	background-color:#c7c7c7 ;
-	color:#000;
+	background-color:#ef3125 ;
+	color:#fff;
 }
 
 /* Parent Sub Menu Links ---[javascript users only]*/
@@ -77,6 +78,7 @@
 	  on the ul or ol inside since overflow is set to hidden*/
 	padding:0 2px;
 	margin:0 0 0 -2px;
+	font-size: 0.9em;
 }
 
 
@@ -91,7 +93,7 @@
 /* All submenu OLs and ULs */
 #nav ol, #nav ul, #subMenusContainer ul, #subMenusContainer ol {	
 	/*border around submenu goes here*/	 
-	background:#333;	
+	background:#999b8e;	
 	left:0;
 }
 
@@ -104,12 +106,13 @@
 	position:relative;
 	float:left;
 	margin-right: 0px;
-	border-right: 1px solid #8b9d8f;
-	height:32px;
+	border-right: 1px solid #fff;
+	height:28px;
 }
 
 #subMenusContainer li{
 	list-style: none;
+	min-width: 160px;
 }
 
 /* main menu ul or ol elment */
@@ -121,7 +124,7 @@
 	z-index:5;
 	text-align: center;
 	display:block;
-	height:32px;
+	height:28px;
 }
 
 #subMenusContainer{	display:block; 	position:absolute;	top:0;	left:0;	width:100%;	height:0;	overflow:visible;	z-index:1000000000; }

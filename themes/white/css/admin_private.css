@@ -14,11 +14,11 @@ table.generic {
 	margin:10px 0;
 }
 table.generic th {
-	border: 1px solid #666;
-	background-color: #ddd;
+	border: 1px solid #ccc;
+	background-color: #eee;
 }
 table.generic td {
-	border: 1px solid #666;
+	border: 1px solid #ccc;
 	background-color: #fff;
 }
 
