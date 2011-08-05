@@ -206,10 +206,13 @@ class form {
 		$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
 		$buffer .= gOpt($opts, 'class') ? "class=\"".gOpt($opts, 'class')."\" ":"";
 		$buffer .= gOpt($opts, 'pattern') ? "pattern=\"".gOpt($opts, 'pattern')."\" ":"";
-		$buffer .= gOpt($opts, 'hint') ? "placeholder=\"".gOpt($opts, 'hint')."\" ":"";
+		$buffer .= gOpt($opts, 'hint') ? "data-hint=\"".gOpt($opts, 'hint')."\" ":"";
+		$buffer .= gOpt($opts, 'placeholder') ? "placeholder=\"".gOpt($opts, 'placeholder')."\" ":"";
 		$buffer .= gOpt($opts, 'size') ? "size=\"".gOpt($opts, 'size')."\" ":"";
 		$buffer .= gOpt($opts, 'maxlength') ? "maxlength=\"".gOpt($opts, 'maxlength')."\" ":"";
 		$buffer .= gOpt($opts, 'readonly') ? "readonly=\"".gOpt($opts, 'readonly')."\" ":"";
+		$buffer .= gOpt($opts, 'required') ? "required=\"required\" ":"";
+		$buffer .= gOpt($opts, 'formnovalidate') ? "formnovalidate ":"";
 		$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
 		$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
 	
@@ -313,10 +316,12 @@ class form {
 			$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
 			$buffer .= gOpt($opts, 'class') ? "class=\"".gOpt($opts, 'class')."\" ":"";
 			$buffer .= gOpt($opts, 'pattern') ? "pattern=\"".gOpt($opts, 'pattern')."\" ":"";
-			$buffer .= gOpt($opts, 'hint') ? "placeholder=\"".gOpt($opts, 'hint')."\" ":"";
+			$buffer .= gOpt($opts, 'hint') ? "data-hint=\"".gOpt($opts, 'hint')."\" ":"";
+			$buffer .= gOpt($opts, 'placeholder') ? "placeholder=\"".gOpt($opts, 'placeholder')."\" ":"";
 			$buffer .= gOpt($opts, 'cols') ? "cols=\"".gOpt($opts, 'cols')."\" ":"";
 			$buffer .= gOpt($opts, 'rows') ? "rows=\"".gOpt($opts, 'rows')."\" ":"";
 			$buffer .= gOpt($opts, 'readonly') ? "readonly=\"".gOpt($opts, 'readonly')."\" ":"";
+			$buffer .= gOpt($opts, 'required') ? "required=\"required\" ":"";
 			$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
 			$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
 			$buffer .= ">";
@@ -374,6 +379,7 @@ class form {
 		$buffer .= gOpt($opts, 'classField') ? "class=\"".gOpt($opts, 'classField')."\" ":"";
 		$buffer .= gOpt($opts, 'size') ? "size=\"".gOpt($opts, 'size')."\" ":"";
 		$buffer .= gOpt($opts, 'multiple') ? "multiple=\"multiple\" ":"";
+		$buffer .= gOpt($opts, 'required') ? "required=\"required\" ":"";
 		$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
 		$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
 		$buffer .= ">\n";
@@ -416,6 +422,7 @@ class form {
 		$buffer = "<input type=\"checkbox\" name=\"$name\" value=\"$value\" ".($checked?"checked=\"checked\"":"")." ";
 		$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
 		$buffer .= gOpt($opts, 'classField') ? "class=\"".gOpt($opts, 'classField')."\" ":"";
+		$buffer .= gOpt($opts, 'required') ? "required=\"required\" ":"";
 		$buffer .= gOpt($opts, 'js') ? gOpt($opts, 'js')." ":"";
 		$buffer .= gOpt($opts, 'other') ? gOpt($opts, 'other')." ":"";
 		$buffer .= "/>\n";

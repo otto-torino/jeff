@@ -68,7 +68,7 @@ class captcha {
 		$_SESSION['captcha_code'] = $s1.$s2;
 
 		$buffer = "<img src=\"data:image/jpeg;base64,".base64_encode($img)."\" /><br />";
-		$buffer .= "<input name=\"$this->_name\" type=\"text\" size=\"10\" maxlength=\"20\" />";
+		$buffer .= "<input name=\"$this->_name\" type=\"text\" size=\"10\" maxlength=\"20\" required=\"required\" />";
 
 		return $buffer;
 
