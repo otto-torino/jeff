@@ -129,6 +129,8 @@ class export {
 			$csv .= implode($this->_s, $cell)."\r\n";
 		}
 
+		ob_clean();
+
 		if($output=='stream') { 
 			header("Content-Type: plain/text");
 			header("Content-Disposition: Attachment; filename=$filename");
