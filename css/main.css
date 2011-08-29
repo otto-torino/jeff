@@ -105,9 +105,16 @@ section {
 	height:292px;
 	background:url('../img/noaccess.png') no-repeat center center;
 }
+
 .help {
 	color: #ff0000;
 	cursor: help; 
+}
+
+.loading {
+	background: url('../img/loading.gif') no-repeat center center;
+	height: 32px;
+	width: 32px;
 }
 
 /*

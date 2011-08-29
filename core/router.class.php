@@ -83,7 +83,7 @@ class router {
 	
 	public function linkAjax($module, $method, $params=array()) {
 
-		$href = $this->_base_path."/pointer.php?module=$module&method=$method";
+		$href = ROOT."/pointer.php?module=$module&method=$method";
 		if(count($params)) {
 			foreach($params as $k=>$v) {
 				$href .= "&".$k."=".$v;
