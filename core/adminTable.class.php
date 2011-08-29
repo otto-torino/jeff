@@ -124,15 +124,17 @@ class adminTable {
 		$field_order = isset($matches[1]) ? $matches[1] : null;
 		$order_dir = isset($matches[2]) ? $matches[2] : null;
 
-		$fields_names = $this->_registry->db->getFieldsName($this->_table);
+		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
 
 		$pag = new pagination($this->_registry, $this->_efp, $this->_registry->db->getNumRecords($this->_table, null, $this->_primary_key));
 
 		$limit = array($pag->start(), $this->_efp);
 
 		if(count($this->_changelist_fields)) {
-			if(!in_array($this->_primary_key, $this->_changelist_fields)) 
+			if(!in_array($this->_primary_key, $this->_changelist_fields)) { 
 				array_unshift($this->_changelist_fields, $this->_primary_key);
+				array_unshift($fields_names, $this->_primary_key);
+			}
 			$field_selection = isset($this->_fkeys[$field_order]) 
 					? 'a.'.implode(', a.', $this->_changelist_fields)
 					: implode(',', $this->_changelist_fields);
