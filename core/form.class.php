@@ -40,13 +40,13 @@ class form {
   		return true;
 	}
 
-	public function load() {
+	public function load($noerror=false) {
 		
 		$this->_registry->fvars = array();
 		$vars = array();
 
 		if(isset($_SESSION["formvars_".$this->_name])) {
-			if(isset($_SESSION['ERRORMSG']) AND !empty($_SESSION['ERRORMSG'])) 
+			if($noerror || (isset($_SESSION['ERRORMSG']) AND !empty($_SESSION['ERRORMSG'])))
 				foreach($_SESSION['formvars_'.$this->_name] as $k=>$v)
 						$vars[$k] = $v;
 			$this->_registry->fvars = $vars;
