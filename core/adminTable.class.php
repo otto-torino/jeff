@@ -283,6 +283,7 @@ class adminTable {
 	public function parseSpecialFields($row, $opts=null) {
 
 		$res = array();
+		$i = 0;
 		foreach($row as $k=>$v) {
 			if(isset($this->_sfields[$k])) {
 				if($this->_sfields[$k]['type']=='password') $res[$k] = $v ? (gOpt($opts, 'show_pwd', false) ? $v : "**************") : '';
@@ -304,11 +305,12 @@ class adminTable {
 				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
 					if($sf['preview'] && $v)
-						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
+						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</a><script>var box_".$k."_".$row[$this->_primary_key]." = new CeraBox(); box_".$k."_".$row[$this->_primary_key].".addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
 					else $res[$k] = $v;
 				}
 			}
 			else $res[$k] = $v;
+			$i++;
 		}
 
 		return $res;
