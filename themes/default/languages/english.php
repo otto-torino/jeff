@@ -115,7 +115,9 @@ return array(
 	"CantLoadThemeError"=>"Can't find the %s theme class",
 	"SecureCode"=>"Secure code",
 	"SecureCodeExp"=>"Insert the string represented in the image",
-	"errorCaptcha"=>"The secure code inserted is wrong"
+	"errorCaptcha"=>"The secure code inserted is wrong",
+	"useDotSeparator"=>"use the dot character as decimal separator"
+
 
 )
 

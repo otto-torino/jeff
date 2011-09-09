@@ -115,7 +115,8 @@ return array(
 	"CantLoadThemeError"=>"Impossibile caricare la classe del tema %s",
 	"SecureCode"=>"Codice di sicurezza",
 	"SecureCodeExp"=>"Inserire i caratteri visualizzati nell'immagine",
-	"errorCaptcha"=>"Il codice di sicurezza inserito non è corretto"
+	"errorCaptcha"=>"Il codice di sicurezza inserito non è corretto",
+	"useDotSeparator"=>"usare il punto come separatore dei decimali"
 
 )
 

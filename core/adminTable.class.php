@@ -515,7 +515,7 @@ class adminTable {
 		elseif($field['type'] == 'int') 
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
 		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal')
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1-$field['n_precision']), "maxlength"=>($field['n_int']+1-$field['n_precision']), "pattern"=>"^\d*\.?\d+", "hint"=>__("useDotSeparator")));
 		elseif($field['type'] == 'varchar')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['max_length']<40 ? $field['max_length'] : 40, "maxlength"=>$field['max_length']));
 		elseif($field['type'] == 'text')
