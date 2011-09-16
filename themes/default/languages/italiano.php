@@ -116,8 +116,8 @@ return array(
 	"SecureCode"=>"Codice di sicurezza",
 	"SecureCodeExp"=>"Inserire i caratteri visualizzati nell'immagine",
 	"errorCaptcha"=>"Il codice di sicurezza inserito non è corretto",
-	"useDotSeparator"=>"usare il punto come separatore dei decimali"
-
+	"useDotSeparator"=>"usare il punto come separatore dei decimali",
+	"duplicateKeyEntryError"=>"il valore '%s' del campo '%s' è già presente"
 )
 
 ?>

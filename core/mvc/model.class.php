@@ -81,8 +81,14 @@ class model {
 		$data = array();
 		foreach($this->_chgP as $f) $data[$f] = $this->_p[$f];
 
-		if(!$this->_p[$this->_id_name] || $insert) $this->_p[$this->_id_name] = $this->_registry->db->insert($this->_tbl_data, $data);
-		else $this->_registry->db->update($this->_tbl_data, $data, $this->_id_name."='".$this->_p[$this->_id_name]."'");
+		if(!$this->_p[$this->_id_name] || $insert) {
+			$res = $this->_registry->db->insert($this->_tbl_data, $data);
+			if($res) $this->_p[$this->_id_name] = $res;
+		}
+		else 
+			$res = $this->_registry->db->update($this->_tbl_data, $data, $this->_id_name."='".$this->_p[$this->_id_name]."'");
+
+		return $res;
 	}
 
 	public function deleteData() {

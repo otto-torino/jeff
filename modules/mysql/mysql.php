@@ -64,6 +64,15 @@ class mysql implements DbManager {
 
 	}
 
+	public function getError() {
+		
+		$error = mysql_error();
+
+		// duplicate
+		if(preg_match("#^Duplicate entry '(.*?)' .*? key (\d+)$#", $error, $matches)) return array("error"=>1001, "key"=>$matches[2], "value"=>$matches[1]);
+
+	}
+
 	public function autoSelect($fields, $tables, $where, $order=null, $limit=null) {
 	
 		$results = array();
@@ -124,7 +133,7 @@ class mysql implements DbManager {
 
 	public function getTableStructure($table) {
 
-		$structure = array("primary_key"=>null);
+		$structure = array("primary_key"=>null, "keys"=>array());
 		$fields = array();
 
 		$query = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".$this->_db_dbname."' AND TABLE_NAME = '$table'";
@@ -144,6 +153,7 @@ class mysql implements DbManager {
 				"extra"=>$row['EXTRA']
 			);
 			if($row['COLUMN_KEY']=='PRI') $structure['primary_key'] = $row['COLUMN_NAME'];
+			if($row['COLUMN_KEY']!='') $structure['keys'][] = $row['COLUMN_NAME'];
 		}
 		$structure['fields'] = $fields;
 
@@ -185,6 +195,8 @@ class mysql implements DbManager {
 
 	public function update($table, $data, $where) {
 	
+		if(!$data) return true;
+
 		$sets = array();
 		foreach($data as $f=>$v) $sets[] = is_null($v) ? "$f=NULL" : "$f='$v'";
 		$query = "UPDATE ".$table." SET ".implode(",", $sets)." ".($where ? "WHERE $where":"");

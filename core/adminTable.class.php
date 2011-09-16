@@ -271,7 +271,7 @@ class adminTable {
 			if(isset($this->_fkeys[$k])) {
 				$fkts = $this->_registry->db->getTableStructure($this->_fkeys[$k]['table']);
 				$fk = $this->_registry->db->autoSelect($this->_fkeys[$k]['field'], $this->_fkeys[$k]['table'], $this->_fkeys[$k]['key']."='$v'" , null);
-				$res[$k] = isset($fk[0][$this->_fkeys[$k]['field']]) ? $fk[0][$this->_fkeys[$k]['field']] : null;
+				$res[$k] = $fk[0][$this->_fkeys[$k]['field']];
 			}
 			else $res[$k] = $v;
 		}
@@ -283,7 +283,6 @@ class adminTable {
 	public function parseSpecialFields($row, $opts=null) {
 
 		$res = array();
-		$i = 0;
 		foreach($row as $k=>$v) {
 			if(isset($this->_sfields[$k])) {
 				if($this->_sfields[$k]['type']=='password') $res[$k] = $v ? (gOpt($opts, 'show_pwd', false) ? $v : "**************") : '';
@@ -305,12 +304,11 @@ class adminTable {
 				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
 					if($sf['preview'] && $v)
-						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</a><script>var box_".$k."_".$row[$this->_primary_key]." = new CeraBox(); box_".$k."_".$row[$this->_primary_key].".addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
+						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$sf['rel_path']."/$v]')[0]);</script>";
 					else $res[$k] = $v;
 				}
 			}
 			else $res[$k] = $v;
-			$i++;
 		}
 
 		return $res;
@@ -380,6 +378,7 @@ class adminTable {
 
 		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
 		$myform->load();
+
 		$buffer = $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
 		$buffer .= $myform->hidden('order', $order);
 
@@ -485,17 +484,17 @@ class adminTable {
 				$t_l = 	$this->_sfields[$fname]['true_label'];
 				$f_l = 	$this->_sfields[$fname]['false_label'];
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
-				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname, $value), array(1=>$t_l,0=>$f_l), $dft, $fname, array("required"=>$required));
+				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, htmlVar($fname), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
 				$pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
 				$hint = "mario.rossi@example.com";
-				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("pattern"=>$pattern, "required"=>$required)); 
+				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("pattern"=>$pattern, "required"=>$required)); 
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
 				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
-				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname, explode(",", $value)), $options, $fname, array("required"=>$required));
+				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, htmlVar($fname), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
 				$sf = $this->_sfields[$fname];
@@ -510,24 +509,27 @@ class adminTable {
 			$data = array();
 			foreach($options as $rec) 
 				$data[htmlInput($rec[$fk['key']])] = htmlVar($rec[$fk['field']]);
-			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname, $value), $data, htmlVar($fname), array("required"=>$required));
+			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, htmlVar($fname), array("required"=>$required));
 		}
 		elseif($field['type'] == 'int') 
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
 		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal')
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1-$field['n_precision']), "maxlength"=>($field['n_int']+1-$field['n_precision']), "pattern"=>"^\d*\.?\d+", "hint"=>__("useDotSeparator")));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
 		elseif($field['type'] == 'varchar')
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['max_length']<40 ? $field['max_length'] : 40, "maxlength"=>$field['max_length']));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['max_length']<40 ? $field['max_length'] : 40, "maxlength"=>$field['max_length']));
 		elseif($field['type'] == 'text')
-                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
+                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
 		elseif($field['type'] == 'date')
-                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required));
+                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required));
 		elseif($field['type'] == 'datetime')
-			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required));
+			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required));
 
 	}
 
 	public function saveFields() {
+
+		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+		$myform->save();
 
 		// save and continue editing clear session
 		if(isset($_SESSION['adminTable_f_s_'.$this->_table])) unset($_SESSION['adminTable_f_s_'.$this->_table]);
@@ -552,7 +554,7 @@ class adminTable {
 
 		if(count($pkeys)) {
 			foreach($pkeys as $pk) {
-				$res[] = $this->saveRecord($pk);
+				$res[] = $this->saveRecord($pk, $pkeys);
 			}
 		}
 
@@ -560,7 +562,7 @@ class adminTable {
 
 	}
 
-	private function saveRecord($pk) {
+	private function saveRecord($pk, $pkeys) {
 		
 		if(!in_array($pk, $this->_edit_deny)) {
 			$res = array();
@@ -569,25 +571,50 @@ class adminTable {
 				foreach($fields as $f) $res[$f] = null;	
 				$data = $res;
 				$pkf = $pk;
+				$insert = true;
 			}
 			else {
 				$pkf = preg_replace("#\s#", "_", $pk); // POST replaces spaces with '_'
 				$res = $this->_registry->db->autoSelect(array("*"), array($this->_table), $this->_primary_key."='$pk'", null);
 				$data = $res[0];
+				$insert = false;
 			}
 			$model = new model($data);
 			$model->setRegistry($this->_registry);
 			$model->setIdName($this->_primary_key);
 			$model->setTable($this->_table);
 
+			$structure = $this->_registry->db->getTableStructure($this->_table);
+
 			foreach($this->_fields as $fname=>$field) 
-			if(array_key_exists($fname, $this->_sfields)) 
-				$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
-			elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment' && in_array($fname, $this->_html_fields)) 
-				$model->{$fname} = $this->cleanField($fname."_".$pkf, 'html');
-			elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
-				$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
-			$model->saveData(is_null($pk) ? true : false);
+				if(array_key_exists($fname, $this->_sfields)) 
+					$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
+				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment' && in_array($fname, $this->_html_fields)) 
+					$model->{$fname} = $this->cleanField($fname."_".$pkf, 'html');
+				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
+					$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
+			
+			$res = $model->saveData($insert);
+
+			if(!$res) {
+				if(!$insert) $_SESSION['adminTable_f_s_'.$this->_table] = $pkeys;
+				$link_error = preg_replace("#\?.*$#", "?".($insert ? "insert" : "edit"), $_SERVER['REQUEST_URI']);
+				$error = $this->_registry->db->getError();
+
+				if($error['error']==1001) {
+					$field = $structure['keys'][$error['key']-1];
+					if(isset($this->_fkeys[$field])) {
+						$fk = $this->_fkeys[$field];
+						$er_values = $this->_registry->db->autoSelect(array($fk['field']), $fk['table'], $fk['key']."='".$error['value']."'", null);
+						$er_value = substr($er_values[0][$fk['field']], 0, 50);
+					}
+					else $er_value = substr($error['value'], 0, 50);
+
+					$errormsg = sprintf(__('duplicateKeyEntryError'), $error['value'], $field);
+				}
+				exit(error::errorMessage(array('error'=>$errormsg), $link_error));
+				
+			}
 
 			return $model->{$this->_primary_key};
 		}
