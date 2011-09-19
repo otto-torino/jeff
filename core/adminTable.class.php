@@ -562,7 +562,7 @@ class adminTable {
 
 	}
 
-	private function saveRecord($pk, $pkeys) {
+	protected function saveRecord($pk, $pkeys) {
 		
 		if(!in_array($pk, $this->_edit_deny)) {
 			$res = array();
@@ -620,7 +620,7 @@ class adminTable {
 		}
 	}
 
-	private function cleanField($name, $type) {
+	protected function cleanField($name, $type) {
 	
 		if($type=='int') return cleanInput('post', $name, 'int');
 		elseif($type=='float' || $type=='double' || $type=='decimal') return cleanInput('post', $name, 'float');
@@ -631,7 +631,7 @@ class adminTable {
 
 	}
 
-	private function cleanSpecialField($model, $fname, $pk, $type, $insert) {
+	protected function cleanSpecialField($model, $fname, $pk, $type, $insert) {
 	
 		if($this->_sfields[$fname]['type']=='password') {
 			if(!$insert && !cleanInput('post', $fname.'_'.$pk, 'string')) return 0;
@@ -671,7 +671,7 @@ class adminTable {
 
 	}
 
-	private function export($f_s, $where='') {
+	protected function export($f_s, $where='') {
 
 		if(!is_array($f_s) && $f_s!='all') {
 			header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
