@@ -1,6 +1,6 @@
 <form class="noBkg noBorder login" action="<?= $form_action ?>" method="post">
 	<fieldset>
-	<legend>Area riservata</legend>
+	<legend><?= __("ReservedArea") ?></legend>
 	<label for="user">Username</label>
 	<input type="text" name="user" value="" />
 	<br class="formRowBreak"/>

@@ -117,7 +117,8 @@ return array(
 	"SecureCodeExp"=>"Insert the string represented in the image",
 	"errorCaptcha"=>"The secure code inserted is wrong",
 	"useDotSeparator"=>"use the dot character as decimal separator",
-	"duplicateKeyEntryError"=>"duplicate entry '%s' for the field '%s'"
+	"duplicateKeyEntryError"=>"duplicate entry '%s' for the field '%s'",
+	"ReservedArea"=>"Reserved area"
 
 )
 
