@@ -480,6 +480,9 @@ class form {
 
 	public function input_file($name, $value, $opts=null) {
 
+		$required = $opts['required'];
+		if($value) $opts['required'] = false;
+
 		$buffer = $this->input($name, 'file', $value, $opts);
 
 		$rel_path = gOpt($opts, 'rel_path') ? (substr(gOpt($opts, 'rel_path'), -1)=='/' ? gOpt($opts, 'rel_path') : gOpt($opts, 'rel_path').'/') : null;
@@ -487,7 +490,7 @@ class form {
 		if($value) {
 			$buffer .= "<input type=\"hidden\" name=\"old_$name\" value=\"$value\" />\n";
 			$buffer .= "<div style=\"margin-top:5px;\">";
-			$buffer .= $this->checkbox("del_".$name, false, 1)." ".__("elimina")." ";
+			if(!$required) $buffer .= $this->checkbox("del_".$name, false, 1)." ".__("elimina")." ";
 			if(gOpt($opts, 'preview') && $rel_path) 
 				$value = "<a title=\"$value\" href=\"".$rel_path.$value."\">$value</a><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$rel_path.$value."]')[0]);</script>";
 			$buffer .= sprintf(__("chargedFileForm"), $value);
