@@ -57,13 +57,13 @@ class template {
 		elseif($m == 'FAVICON') return $this->_registry->favicon;
 		elseif($m == 'CSS') {
 			$r = '';
-			foreach($this->_registry->css as $css) 
+			foreach(array_unique($this->_registry->css) as $css) 
 				$r .= "<link rel=\"stylesheet\" href=\"$css\" type=\"text/css\" />\n";
 			return $r;
 		}
 		elseif($m == 'JAVASCRIPT') {
 			$r = '';
-			foreach($this->_registry->js as $js) 
+			foreach(array_unique($this->_registry->js) as $js) 
 				$r .= "<script type=\"text/javascript\" src=\"$js\"></script>\n";
 			return $r;
 		}
