@@ -8,6 +8,7 @@
 <link rel="shortcut icon" href="{FAVICON}" />
 {CSS}
 {JAVASCRIPT}
+</head>
 <body>
 <div class="container">
 	<div class="doctop">
