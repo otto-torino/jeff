@@ -289,7 +289,7 @@ class adminTable {
 				elseif($this->_sfields[$k]['type']=='bool')
 					$res[$k] = $v ? $this->_sfields[$k]['true_label'] : $this->_sfields[$k]['false_label'];
 				elseif($this->_sfields[$k]['type']=='email') {
-					$mailto = isset($this->_sfields[$k]['list_mailto']) && $this->_sfields[$k]['list_mailto'] ? true : false;
+					$mailto = isset($this->_sfields[$k]['list_mailto']) && $this->_sfields[$k]['list_mailto'] && gOpt($opts, 'mailto', true) ? true : false;
 					$res[$k] = $v ? ($mailto ? anchor('mailto:'.$v, $v) : $v) : '';
 				}
 				elseif($this->_sfields[$k]['type']=='multicheck') {

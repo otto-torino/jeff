@@ -174,7 +174,7 @@ class export {
 		$results = $this->_registry->db->autoSelect($head_fields, $this->_table, $where, $order);
 		foreach($results as $r) { 
 			if($tot_fk) $r = $at->parseForeignKeys($r);
-			if($tot_sf) $r = $at->parseSpecialFields($r, array("show_pwd"=>true));
+			if($tot_sf) $r = $at->parseSpecialFields($r, array("show_pwd"=>true, "mailto"=>false));
 			$data[] = $r;
 		}
 
