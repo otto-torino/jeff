@@ -20,7 +20,7 @@ RewriteRule ^(\w+)/edit/([0-9]+)/$ admin.php?module=$1&method=manage$1&id=$2 [L]
 RewriteRule ^(\w+)/(\w+)/$ admin.php?module=$1&method=$2&%{QUERY_STRING} [L]
 RewriteRule ^(\w+)/(\w+)/([^/]+)/$ admin.php?module=$1&method=$2&id=$3&%{QUERY_STRING} [L]
 RewriteRule ^(\w+)/(\w+)/([^/]+)/([^/]+)/([^/]+)/$ admin.php?module=$1&method=$2&id=$3&$4=$5&%{QUERY_STRING} [L]
-RewriteRule ^(\w+)/(\w+)/([^/]+)/([^/]+)/$ admin.php?module=$1&method=$2&$3=$4 [L]
+RewriteRule ^(\w+)/(\w+)/([^/]+)/([^/]+)/$ admin.php?module=$1&method=$2&$3=$4&%{QUERY_STRING} [L]
 
 RewriteRule ^event/$ admin.php
 
