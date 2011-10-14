@@ -2,15 +2,17 @@
 
 function __($id) {
 	
-	if(is_readable(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php'))
-		$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php');
+	$language = isset($_SESSION['lng']) ? $_SESSION['lng'] : 'english';
+
+	if(is_readable(ABS_THEMES.DS.'default'.DS.'languages'.DS.$language.'.php'))
+		$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$language.'.php');
 	else $lng = array();
 
-	if(!isset($_SESSION['theme'])) {
+	if(isset($_SESSION['theme'])) {
 		$theme = $_SESSION['theme'];
 		if(get_class($theme)!= 'defaultTheme')
-			if(is_readable($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'))
-				$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'));
+			if(is_readable($theme->path().DS.'languages'.DS.$language.'.php'))
+				$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$language.'.php'));
 	}
 
 	return isset($lng[$id]) ? $lng[$id] : $id;
