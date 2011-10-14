@@ -118,7 +118,9 @@ return array(
 	"errorCaptcha"=>"The secure code inserted is wrong",
 	"useDotSeparator"=>"use the dot character as decimal separator",
 	"duplicateKeyEntryError"=>"duplicate entry '%s' for the field '%s'",
-	"ReservedArea"=>"Reserved area"
+	"ReservedArea"=>"Reserved area",
+	"cantFindPlugin"=>"the plugin %s is not installed",
+	"cantFindPluginSource"=>"the %s plugin source was not found"
 
 )
 

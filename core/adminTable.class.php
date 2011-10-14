@@ -73,6 +73,10 @@ class adminTable {
 	
 	public function setPluginFields($pfields) {
 
+		foreach($pfields as $k=>$v) {
+			if(!isset($this->_registry->plugins[$v['plugin']]))
+				exit(error::syserrorMessage(get_class($this), 'setPluginFields', sprintf(__("cantFindPlugin"), $v['plugin']), __LINE__));
+		}
 		$this->_pfields = $pfields;
 
 	}

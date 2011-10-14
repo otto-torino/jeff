@@ -27,8 +27,12 @@ class core {
 		if(is_readable(ABS_ROOT.DS.'plugins.php')) {
 			require_once(ABS_ROOT.DS.'plugins.php');
 			foreach($plugins as $k=>$v) { 
-				require_once(ABS_PLUGINS.DS.$k.".php");
-				$plugins_objs[$k] = new $k($this->_registry, $v);
+				if(is_readable(ABS_PLUGINS.DS.$k.".php")) {
+					require_once(ABS_PLUGINS.DS.$k.".php");
+					$plugins_objs[$k] = new $k($this->_registry, $v);
+				}
+				else 
+					exit(error::syserrorMessage(get_class($this), '__construct', sprintf(__("cantFindPluginSource"), $k), __LINE__));
 			}
 		}
 		$this->_registry->plugins = $plugins_objs;

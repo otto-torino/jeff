@@ -118,7 +118,9 @@ return array(
 	"errorCaptcha"=>"Il codice di sicurezza inserito non è corretto",
 	"useDotSeparator"=>"usare il punto come separatore dei decimali",
 	"duplicateKeyEntryError"=>"il valore '%s' del campo '%s' è già presente",
-	"ReservedArea"=>"Area riservata"
+	"ReservedArea"=>"Area riservata",
+	"cantFindPlugin"=>"il plugin %s non è installato",
+	"cantFindPluginSource"=>"impossibile trovare il sorgente del plugin %s"
 )
 
 ?>
