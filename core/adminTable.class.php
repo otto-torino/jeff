@@ -3,7 +3,7 @@
 class adminTable {
 
 	protected $_registry, $_table;
-	protected $_primary_key, $_fields, $_fkeys, $_sfields, $_html_fields;
+	protected $_primary_key, $_fields, $_fkeys, $_sfields, $_pfields, $_html_fields;
 	protected $_efp;
 	protected $_cls_cbk_edit, $_mth_cbk_edit;
 	protected $_cls_cbk_del, $_mth_cbk_del;
@@ -70,6 +70,12 @@ class adminTable {
 			}
 		}
 	}
+	
+	public function setPluginFields($pfields) {
+
+		$this->_pfields = $pfields;
+
+	}
 
 	public function setChangelistFields($fields) {
 		
@@ -118,6 +124,7 @@ class adminTable {
 
 		$tot_fk = count($this->_fkeys);
 		$tot_sf = count($this->_sfields);
+		$tot_pf = count($this->_pfields);
 
 		// get order field and direction
 		preg_match("#^([^ ,]*)\s?((ASC)|(DESC))?.*$#", $order, $matches);
@@ -189,6 +196,7 @@ class adminTable {
 			$input = "<input type=\"checkbox\" name=\"f[]\" value=\"".$r[$this->_primary_key]."\" />";
 			if($tot_fk) $r = $this->parseForeignKeys($r);
 			if($tot_sf) $r = $this->parseSpecialFields($r);
+			if($tot_pf) $r = $this->parsePluginFields($r);
 			$r = $this->parseDateFields($r);
 			if($this->_edit_deny=='all' && !$this->_export) $rows[] = $r;
 			elseif(is_array($this->_edit_deny) && in_array($r[$this->_primary_key], $this->_edit_deny)) $rows[] = array_merge(array(""), $r);
@@ -314,6 +322,21 @@ class adminTable {
 		return $res;
 
 	}
+
+	public function parsePluginFields($row) {
+
+		$res = array();
+
+		foreach($row as $k=>$v) {
+			if(isset($this->_pfields[$k])) {
+				$plugin = $this->_pfields[$k]['plugin'];
+				$res[$k] = $this->_registry->plugins[$plugin]->adminList($this->_pfields[$k], $v);
+			}
+			else $res[$k] = $v;	
+		}	
+
+		return $res;
+	}
 	
 	public function parseDateFields($row) {
 
@@ -331,7 +354,7 @@ class adminTable {
 
 	}
 
-	private function checkUpload() {
+	protected function checkUpload() {
 		
 		foreach($this->_sfields as $fname=>$finfo) if($finfo['type']=='file' || $finfo['type']=='image') return true;
 		return false;
@@ -368,6 +391,11 @@ class adminTable {
 				else {
 					if(is_array($this->_edit_deny) && count($this->_edit_deny)) $f_s = array_diff($f_s, $this->_edit_deny);
 					$this->deleteFiles($f_s);
+					if(count($this->_pfields)) {
+						foreach($this->_pfields as $k=>$v) {
+							$this->_registry->plugins[$v['plugin']]->adminDelete($v, $f_s);
+						}
+					}
 					$where = $this->_primary_key."='".implode("' OR ".$this->_primary_key."='", $f_s)."'";
 					$this->_registry->db->delete($this->_table, $where);
 				}
@@ -511,6 +539,9 @@ class adminTable {
 				$data[htmlInput($rec[$fk['key']])] = htmlVar($rec[$fk['field']]);
 			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, htmlVar($fname), array("required"=>$required));
 		}
+		elseif(array_key_exists($fname, $this->_pfields)) {
+			return $this->_registry->plugins[$this->_pfields[$fname]['plugin']]->formAdmin($this->_pfields[$fname], $fname."_".$id_f, $field, $myform, $myform->retvar($fname."_".$id_f, $value));
+		}
 		elseif($field['type'] == 'int') 
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
 		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal')
@@ -589,6 +620,8 @@ class adminTable {
 			foreach($this->_fields as $fname=>$field) 
 				if(array_key_exists($fname, $this->_sfields)) 
 					$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
+				elseif(array_key_exists($fname, $this->_pfields)) 					
+					$this->_registry->plugins[$this->_pfields[$fname]['plugin']]->cleanField($this->_pfields[$fname], $model, $fname, $pkf, $insert);
 				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment' && in_array($fname, $this->_html_fields)) 
 					$model->{$fname} = $this->cleanField($fname."_".$pkf, 'html');
 				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 

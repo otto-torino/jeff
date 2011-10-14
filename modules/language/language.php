@@ -1,5 +1,4 @@
 <?php
-
 class language extends model {
 
 
@@ -58,24 +57,7 @@ class language extends model {
 			$language = $rows[0]['language'];
 			$_SESSION['lng'] = $language;
 		}
-
-		function __($id) {
-			
-			$core = new core();
-			$theme = $core->getTheme();
-			
-			if(is_readable(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php'))
-				$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php');
-			else $lng = array();
-
-			if(get_class($theme)!= 'defaultTheme')
-				if(is_readable($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'))
-					$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'));
-
-			return isset($lng[$id]) ? $lng[$id] : $id;
-
-		}
-
+	
 		return $language;
 	}
 

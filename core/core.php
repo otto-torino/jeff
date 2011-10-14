@@ -5,7 +5,10 @@ class core {
 	private $_registry, $_base_path, $_site;
 
 	function __construct() {
-	
+
+		session_name(SESSIONNAME);
+		session_start();
+
 		require_once(ABS_CORE.DS.'tables.php');
 		require_once(ABS_CORE.DS.'include.php');
 
@@ -20,21 +23,25 @@ class core {
 		$this->_registry->private_view_privilege = 4;
 
 		// extra plugins
+		$plugins_objs = array();
 		if(is_readable(ABS_ROOT.DS.'plugins.php')) {
 			require_once(ABS_ROOT.DS.'plugins.php');
-			$this->_registry->plugins = $plugins;
+			foreach($plugins as $k=>$v) { 
+				require_once(ABS_PLUGINS.DS.$k.".php");
+				$plugins_objs[$k] = new $k($this->_registry, $v);
+			}
 		}
+		$this->_registry->plugins = $plugins_objs;
 
 	}
 
 	public function renderApp($site=null) {
 		
-		session_name(SESSIONNAME);
-		session_start();
 		ob_start();
 
 		// some other registry properties
 		$this->_registry->theme = $this->getTheme();
+		$_SESSION['theme'] = $this->_registry->theme; // translations
 		$this->_registry->lng = language::setLanguage($this->_registry);
 		$this->_registry->site_settings = new siteSettings($this->_registry);
 		$this->_registry->dtime = new dtime($this->_registry);

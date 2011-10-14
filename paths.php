@@ -10,6 +10,7 @@ define('ABS_THEMES', ABS_ROOT.DS.'themes');
 define('ABS_MDL', ABS_ROOT.DS.'modules');
 define('ABS_DB', ABS_CORE.DS.'db');
 define('ABS_THEME', ABS_CORE.DS.'theme');
+define('ABS_PLUGINS', ABS_ROOT.DS.'plugins');
 
 if(strrpos(php_uname(), "Windows")!==false) {
 	define('OS', 'win');

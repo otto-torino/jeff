@@ -1,5 +1,22 @@
 <?php
 
+function __($id) {
+	
+	if(is_readable(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php'))
+		$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$_SESSION['lng'].'.php');
+	else $lng = array();
+
+	if(!isset($_SESSION['theme'])) {
+		$theme = $_SESSION['theme'];
+		if(get_class($theme)!= 'defaultTheme')
+			if(is_readable($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'))
+				$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$_SESSION['lng'].'.php'));
+	}
+
+	return isset($lng[$id]) ? $lng[$id] : $id;
+
+};
+
 function anchor($link, $text, $opts=null) {
 
 	$buffer = "<a href=\"$link\"";
