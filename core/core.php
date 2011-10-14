@@ -19,6 +19,12 @@ class core {
 		$this->_registry->public_view_privilege = 3;
 		$this->_registry->private_view_privilege = 4;
 
+		// extra plugins
+		if(is_readable(ABS_ROOT.DS.'plugins.php')) {
+			require_once(ABS_ROOT.DS.'plugins.php');
+			$this->_registry->plugins = $plugins;
+		}
+
 	}
 
 	public function renderApp($site=null) {
