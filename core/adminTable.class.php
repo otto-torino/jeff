@@ -636,7 +636,7 @@ class adminTable {
 			if(count($this->_pfields)) 
 				foreach($this->_pfields as $fname=>$pf) 
 					if(method_exists($this->_registry->plugins[$pf['plugin']], 'afterModelSaved'))
-							$this->_registry->plugins[$pf['plugin']]->afterModelSaved($pf, $model, $fname, $pkf, $insert);
+							$this->_registry->plugins[$pf['plugin']]->afterModelSaved($pf, $model, $fname, $this->_primary_key, $insert);
 
 			if(!$res) {
 				if(!$insert) $_SESSION['adminTable_f_s_'.$this->_table] = $pkeys;
