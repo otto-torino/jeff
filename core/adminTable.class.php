@@ -41,6 +41,7 @@ class adminTable {
 		$this->_fields = $structure['fields'];
 		$this->_fkeys = array();
 		$this->_sfields = array();
+		$this->_pfields = array();
 		$this->_html_fields = array();
 
 		$this->_arrow_down_path = ROOT."/img/down_arrow-black.png";
