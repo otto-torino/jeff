@@ -187,7 +187,7 @@ class mysql implements DbManager {
 			$values[] = "'$v'";
 		}
 
-		$query = "INSERT INTO ".$table." (".implode(",", $fields).") VALUES (".implode(",", $values).")"; 
+		$query = "INSERT INTO ".$table." (`".implode("`,`", $fields)."`) VALUES (".implode(",", $values).")"; 
 		$result = $this->executeQuery($query);
 
 		return $result ? $this->lastInsertedId() : false;
@@ -198,7 +198,7 @@ class mysql implements DbManager {
 		if(!$data) return true;
 
 		$sets = array();
-		foreach($data as $f=>$v) $sets[] = is_null($v) ? "$f=NULL" : "$f='$v'";
+		foreach($data as $f=>$v) $sets[] = is_null($v) ? "`$f`=NULL" : "`$f`='$v'";
 		$query = "UPDATE ".$table." SET ".implode(",", $sets)." ".($where ? "WHERE $where":"");
 
 		$result = $this->executeQuery($query);
