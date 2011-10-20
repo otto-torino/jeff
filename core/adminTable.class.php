@@ -544,7 +544,7 @@ class adminTable {
 			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, htmlVar($fname), array("required"=>$required));
 		}
 		elseif(array_key_exists($fname, $this->_pfields)) {
-			return $this->_registry->plugins[$this->_pfields[$fname]['plugin']]->formAdmin($this->_pfields[$fname], $fname."_".$id_f, $field, $myform, $myform->retvar($fname."_".$id_f, $value));
+			return $this->_registry->plugins[$this->_pfields[$fname]['plugin']]->formAdmin($this->_pfields[$fname], $fname."_".$id_f, $fname, $field, $myform, $myform->retvar($fname."_".$id_f, $value));
 		}
 		elseif($field['type'] == 'int') 
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
