@@ -633,6 +633,11 @@ class adminTable {
 			
 			$res = $model->saveData($insert);
 
+			if(count($this->_pfields)) 
+				foreach($this->_pfields as $fname=>$pf) 
+					if(method_exists($this->_registry->plugins[$pf['plugin']], 'afterModelSaved'))
+							$this->_registry->plugins[$pf['plugin']]->afterModelSaved($pf, $model, $fname, $pkf, $insert);
+
 			if(!$res) {
 				if(!$insert) $_SESSION['adminTable_f_s_'.$this->_table] = $pkeys;
 				$link_error = preg_replace("#\?.*$#", "?".($insert ? "insert" : "edit"), $_SERVER['REQUEST_URI']);
