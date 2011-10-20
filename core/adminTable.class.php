@@ -351,6 +351,7 @@ class adminTable {
 		foreach($row as $k=>$v) {
 			if($structure['fields'][$k]['type']=='date') $res[$k] = $this->_registry->dtime->view($v, 'date');
 			elseif($structure['fields'][$k]['type']=='datetime') $res[$k] = $this->_registry->dtime->view($v);
+			elseif($structure['fields'][$k]['type']=='timestamp') $res[$k] = $this->_registry->dtime->view($v);
 			else $res[$k] = $v;
 		}
 
