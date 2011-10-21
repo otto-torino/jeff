@@ -28,6 +28,8 @@ class core {
 		$this->_registry->dtime = new dtime($this->_registry);
 		$this->_registry->router = new router($this->_registry, $this->_base_path);
 		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
+		$this->_registry->css = array();
+		$this->_registry->js = array();
 
 		// extra plugins
 		$plugins_objs = array();
