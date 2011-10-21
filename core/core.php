@@ -21,6 +21,13 @@ class core {
 		$this->_registry->admin_view_privilege = 2;
 		$this->_registry->public_view_privilege = 3;
 		$this->_registry->private_view_privilege = 4;
+		$this->_registry->theme = $this->getTheme();
+		$_SESSION['theme'] = $this->_registry->theme; // translations
+		$this->_registry->lng = language::setLanguage($this->_registry);
+		$this->_registry->site_settings = new siteSettings($this->_registry);
+		$this->_registry->dtime = new dtime($this->_registry);
+		$this->_registry->router = new router($this->_registry, $this->_base_path);
+		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 
 		// extra plugins
 		$plugins_objs = array();
@@ -42,16 +49,10 @@ class core {
 	public function renderApp($site=null) {
 		
 		ob_start();
-
+		
 		// some other registry properties
-		$this->_registry->theme = $this->getTheme();
-		$_SESSION['theme'] = $this->_registry->theme; // translations
-		$this->_registry->lng = language::setLanguage($this->_registry);
-		$this->_registry->site_settings = new siteSettings($this->_registry);
-		$this->_registry->dtime = new dtime($this->_registry);
-		$this->_registry->router = new router($this->_registry, $this->_base_path);
 		$this->_registry->site = $site=='admin' ? 'admin':'main';
-		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
+
 		/*
 		 * check login/logout
 		 */
@@ -69,18 +70,8 @@ class core {
 
 	public function methodPointer() {
 
-		session_name(SESSIONNAME);
-		session_start();
-
 		ob_start();
 
-		$this->_registry->db = db::getInstance();
-		$this->_registry->router = new router($this->_registry, $this->_base_path);
-		$this->_registry->theme = $this->getTheme();
-		$this->_registry->lng = language::setLanguage($this->_registry);
-		$this->_registry->site_settings = new siteSettings($this->_registry);
-		$this->_registry->dtime = new dtime($this->_registry);
-		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 		/*
 		 * check login/logout
 		 */
