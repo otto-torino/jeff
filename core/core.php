@@ -36,8 +36,8 @@ class core {
 		if(is_readable(ABS_ROOT.DS.'plugins.php')) {
 			require_once(ABS_ROOT.DS.'plugins.php');
 			foreach($plugins as $k=>$v) { 
-				if(is_readable(ABS_PLUGINS.DS.$k.".php")) {
-					require_once(ABS_PLUGINS.DS.$k.".php");
+				if(is_readable(ABS_PLUGINS.DS.$k.DS.$k.".php")) {
+					require_once(ABS_PLUGINS.DS.$k.DS.$k.".php");
 					$plugins_objs[$k] = new $k($this->_registry, $v);
 				}
 				else 
