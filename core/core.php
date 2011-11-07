@@ -8,7 +8,6 @@ class core {
 
 		session_name(SESSIONNAME);
 		session_start();
-
 		require_once(ABS_CORE.DS.'tables.php');
 		require_once(ABS_CORE.DS.'include.php');
 
@@ -31,13 +30,22 @@ class core {
 		$this->_registry->css = array();
 		$this->_registry->js = array();
 
+		//set session timeout
+		if($this->_registry->site_settings->session_timeout) {
+			if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $this->_registry->site_settings->session_timeout)) {
+				// last request was more than timeout seconds ago
+				session_regenerate_id(true);
+			}
+			$_SESSION['last_activity'] = time(); // update last activity time stamp
+		}
+
 		// extra plugins
 		$plugins_objs = array();
 		if(is_readable(ABS_ROOT.DS.'plugins.php')) {
 			require_once(ABS_ROOT.DS.'plugins.php');
 			foreach($plugins as $k=>$v) { 
-				if(is_readable(ABS_PLUGINS.DS.$k.DS.$k.".php")) {
-					require_once(ABS_PLUGINS.DS.$k.DS.$k.".php");
+				if(is_readable(ABS_PLUGINS.DS.$k.".php")) {
+					require_once(ABS_PLUGINS.DS.$k.".php");
 					$plugins_objs[$k] = new $k($this->_registry, $v);
 				}
 				else 

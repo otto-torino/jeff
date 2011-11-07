@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `sys_site_settings` (
   `app_title` varchar(64) NOT NULL,
   `app_description` text NOT NULL,
   `app_keywords` varchar(256) NOT NULL,
+  `session_timeout` int(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
