@@ -42,9 +42,12 @@ function layerWindow($title, $url, $text, $opts=null) {
 function layerWindowCall($title, $url, $opts=null) {
 
 	$width = gOpt($opts, 'width', 800);
+	$height = gOpt($opts, 'height', null);
 	$bodyId = gOpt($opts, 'bodyId', 'bid');
 
-	$onclick = "window.myWin = new layerWindow({'title':'$title', 'url':'$url', 'bodyId':'$bodyId', 'width':$width, 'destroyOnClose':true, closeButtonUrl: '".ROOT."/img/icons/ico_close.gif', 'overlay':true});window.myWin.display();";
+	$height_opt = $height ? " 'height':$height," : '';
+
+	$onclick = "window.myWin = new layerWindow({'title':'$title', 'url':'$url', 'bodyId':'$bodyId', 'width':$width,$height_opt 'destroyOnClose':true, closeButtonUrl: '".ROOT."/img/icons/ico_close.gif', 'overlay':true});window.myWin.display();";
 
 	return $onclick;
 
@@ -111,7 +114,8 @@ function chargeEditor($registry, $selector) {
   			if(textareas && textareas.length){
     				dojo.addClass(dojo.body(), \"claro\");
 				for(var i=0; i<textareas.length; i++) {
-					var key = textareas[i].getParents('form')[0].get('name')+'_'+textareas[i].get('id');
+					var textarea = textareas[i];
+					var key = $(textarea).getParents('form')[0].get('name')+'_'+$(textarea).get('id');
 					dojo_textareas[key] = new dijit.Editor({
       					styleSheets: \"$stylesheets\",
       					plugins: [
