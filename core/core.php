@@ -35,6 +35,9 @@ class core {
 			if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $this->_registry->site_settings->session_timeout)) {
 				// last request was more than timeout seconds ago
 				session_regenerate_id(true);
+				session_destroy();
+				unset($_SESSION);
+				session_start();
 			}
 			$_SESSION['last_activity'] = time(); // update last activity time stamp
 		}
