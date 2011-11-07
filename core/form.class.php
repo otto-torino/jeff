@@ -490,10 +490,11 @@ class form {
 		if($value) {
 			$buffer .= "<input type=\"hidden\" name=\"old_$name\" value=\"$value\" />\n";
 			$buffer .= "<div style=\"margin-top:5px;\">";
-			if(!$required) $buffer .= $this->checkbox("del_".$name, false, 1)." ".__("elimina")." ";
+			if(!$required) $buffer .= $this->checkbox("del_".$name, false, 1)." ".__("delete")." ";
+			$file_size = $rel_path ? filesize(ABS_ROOT.preg_replace("#/#", DS, $rel_path.$value)) : null;
 			if(gOpt($opts, 'preview') && $rel_path) 
-				$value = "<a title=\"$value\" href=\"".$rel_path.$value."\">$value</a><script>var box_$name = new CeraBox(); box_$name.addItems($$('a[href=".$rel_path.$value."]')[0]);</script>";
-			$buffer .= sprintf(__("chargedFileForm"), $value);
+				$value = "<a title=\"$value\" href=\"".$rel_path.$value."\">$value</a><script>$$('a[href=".$rel_path.$value."]')[0].cerabox();</script>";
+			$buffer .= $file_size ? sprintf(__("chargedFileFormWithSize"), $value, round($file_size/1024, 1)." Kb") : sprintf(__("chargedFileForm"), $value);
 			$buffer .= "</div>\n";
 		}
 

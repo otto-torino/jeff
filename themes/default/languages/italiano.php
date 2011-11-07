@@ -103,6 +103,7 @@ return array(
 	"CantDeleteUploadedFileError"=>"Impossibile eliminare il file caricato",
 	"CantUploadError"=>"Impossibile eseguire l'upload del file",
 	"chargedFileForm"=>"file caricato: %s",
+	"chargedFileFormWithSize"=>"file caricato: %s (%s)",
 	"MaxSizeError"=>"Il file supera le dimensioni massime consentite",
 	"FileConsistentError"=>"Il file non è conforme alle specifiche",
 	"TplNotFound"=>"Impossibile trovare il template, %s",
