@@ -44,10 +44,11 @@ function layerWindowCall($title, $url, $opts=null) {
 	$width = gOpt($opts, 'width', 800);
 	$height = gOpt($opts, 'height', null);
 	$bodyId = gOpt($opts, 'bodyId', 'bid');
+	$reloadZindex = gOpt($opts, 'reloadZindex', false) ? "true" : "false";
 
 	$height_opt = $height ? " 'height':$height," : '';
 
-	$onclick = "window.myWin = new layerWindow({'title':'$title', 'url':'$url', 'bodyId':'$bodyId', 'width':$width,$height_opt 'destroyOnClose':true, closeButtonUrl: '".ROOT."/img/icons/ico_close.gif', 'overlay':true});window.myWin.display();";
+	$onclick = "window.myWin = new layerWindow({'title':'$title', 'url':'$url', 'bodyId':'$bodyId', 'width':$width,$height_opt 'destroyOnClose':true, reloadZindex: $reloadZindex, closeButtonUrl: '".ROOT."/img/icons/ico_close.gif', 'overlay':true});window.myWin.display();";
 
 	return $onclick;
 
