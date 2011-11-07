@@ -36,8 +36,8 @@ class document {
 		$this->_registry->addCss(REL_CSS."/cerabox.css");
 		foreach($this->_registry->theme->getCss() as $csspath) $this->_registry->addCss($csspath);
 		foreach($this->_registry->theme->getJs() as $jspath) $this->_registry->addJs($jspath);
-		$this->_registry->addJs(REL_JSLIB."/mootools-core-1.3.1-yc.js");
-		$this->_registry->addJs(REL_JSLIB."/mootools-more-1.3.1.1-yc.js");
+		$this->_registry->addJs(REL_JSLIB."/mootools-core-yc.js");
+		$this->_registry->addJs(REL_JSLIB."/mootools-more-yc.js");
 		$this->_registry->addJs(REL_JSLIB."/ajax.js");
 		$this->_registry->addJs(REL_JSLIB."/abitools.js");
 		$this->_registry->addJs(REL_JSLIB."/html5.js");
