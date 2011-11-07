@@ -22,5 +22,5 @@
 <?php endwhile ?>
 </ul>
 <script>
-var myMenu = new MenuMatic();
+window.addEvent('domready', function() { var myMenu = new MenuMatic(); });
 </script>
