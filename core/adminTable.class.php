@@ -11,6 +11,7 @@ class adminTable {
 	protected $_insertion, $_edit_deny;
 	protected $_changelist_fields;
 	protected $_editor;
+	protected $_custom_tpl;
 
 	protected $_view;
 	protected $_arrow_down_path, $_arrow_up_path;
@@ -31,8 +32,11 @@ class adminTable {
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
 		// dojo editor for html fields
 		$this->_editor = gOpt($opts, 'editor', false);
-
+		// export items
 		$this->_export = gOpt($opts, 'export', false);
+		// set custom views (i.e. array('view'=>'myview', 'edit'=>'otherview'))
+		// views that may be set: view, insert, edit
+		$this->_custom_tpl = gOpt($opts, 'custom_tpl', array());
 
 		$this->_efp = gOpt($opts, "efp", 20);
 
@@ -259,8 +263,10 @@ class adminTable {
 		}
 
 		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord")) : null;
+		
+		$tpl_name = isset($this->_custom_tpl['view']) ? $this->_custom_tpl['view'] : 'admin_table';
 
-		$this->_view->setTpl('admin_table');
+		$this->_view->setTpl($tpl_name);
 		$this->_view->assign('table', $table);
 		$this->_view->assign('link_insert', $link_insert);
 		$this->_view->assign('formstart', $formstart);
@@ -444,7 +450,19 @@ class adminTable {
 		
 		if($this->_editor) $buffer .= chargeEditor($this->_registry, "#atbl_form div[class=html]");
 
-		return $buffer;
+		if($insert && isset($this->_custom_tpl['insert'])) {
+			$this->_view->setTpl($this->_custom_tpl['insert']);
+			$this->_view->assign('form', $buffer);
+			return $this->_view->render();
+		}
+		elseif(isset($this->_custom_tpl['edit'])) {
+			$this->_view->setTpl($this->_custom_tpl['edit']);
+			$this->_view->assign('form', $buffer);
+			return $this->_view->render();
+		}	
+		else {
+			return $buffer;
+		}
 
 	}
 
