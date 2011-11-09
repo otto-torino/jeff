@@ -287,7 +287,7 @@ class adminTable {
 		$res = array();
 
 		foreach($row as $k=>$v) {
-			if(isset($this->_fkeys[$k])) {
+			if(isset($this->_fkeys[$k]) && !is_null($v)) {
 				$fkts = $this->_registry->db->getTableStructure($this->_fkeys[$k]['table']);
 				$fk = $this->_registry->db->autoSelect($this->_fkeys[$k]['field'], $this->_fkeys[$k]['table'], $this->_fkeys[$k]['key']."='$v'" , null);
 				$res[$k] = $fk[0][$this->_fkeys[$k]['field']];
