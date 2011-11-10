@@ -15,9 +15,9 @@ http://www.github.com/otto-torino
 
 REQUIREMENTS
 ------------
-php >= 5   
-mysql >= 5 (may be easily extended to use other DBMS)   
-apache >= 2   
+- php >= 5   
+- mysql >= 5 (may be easily extended to use other DBMS)   
+- apache >= 2   
 
 the following apache modules have to be enabled   
 - mod_expires   
@@ -32,8 +32,8 @@ INSTALL
 --------
 
 * copy all files into a directory under the web server root.   
-* Adjust the RewriteBase Rule in .htaccess and admin/.htaccess to   
+* Adjust the RewriteBase Rule in **.htaccess** and **admin/.htaccess** to   
 fit your path situation.
-* create the db using the jeff_[lng].sql file (english and italian version availables)
-* configure the db connection paramethers in configuration.php
+* create the db using the **jeff_[lng].sql** file (english and italian version availables)
+* configure the db connection parameters in **configuration.php**
 * surf your install directory and oila
