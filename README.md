@@ -33,6 +33,6 @@ INSTALL
 - copy all files into a directory under the web server root.
 - Adjust the RewriteBase Rule in .htaccess and admin/.htaccess to
 fit your path situation.
-- create the db using the jeff.sql file
+- create the db using the jeff_[lng].sql file (english and italian version availables)
 - configure the db connection paramethers in configuration.php
 - surf your install directory and oila
