@@ -399,7 +399,6 @@ class form {
 					$buffer .= "<option value=\"$key\" ".(in_array($key, $selected)?"selected=\"selected\"":"")." ".($title ? "title=\"$title\"":"").">".$label."</option>\n";
 				}
 			}
-			else return __("noAvailableOptions");
 		}
 
 		$buffer .= "</select>\n";
