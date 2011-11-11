@@ -1,6 +1,8 @@
 JEFF PHP FRAMEWORK by Otto srl, MIT license
 ===================================================================
 
+Version 0.92
+
 Jeff is a light php framework design to help the programmer in the 
 developement of a web site or web application. It's written
 following the MVC pattern. Other patterns are used in the
