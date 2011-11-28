@@ -94,9 +94,9 @@ class adminTable {
 
 	}
 
-	public function setFilterFields($search_fields) {
+	public function setFilterFields($filter_fields) {
 		
-		$this->_filter_fields = $search_fields;
+		$this->_filter_fields = $filter_fields;
 
 	}
 
@@ -265,7 +265,7 @@ class adminTable {
 				    if(!checked) {alert('".jsVar(__("SelectAtleastRecord"))."'); return false;}";
 			$input_export_selected = $myform->input('submit_export_selected', 'submit', __("exportSelected"), array("js"=>"onclick=\"$onclick \""));
 			$input_export_all = $myform->input('submit_export_all', 'submit', __("exportAll"), array());
-			$input_where_query = $myform->hidden('where_query', '');
+			$input_where_query = $myform->hidden('where_query', $where);
 		
 		}
 		else {
@@ -375,7 +375,7 @@ class adminTable {
 
 		$myform = new form($this->_registry, 'post', 'atbl_filter_form', array("validation"=>false));
 		$myform->load();
-var_dump($_GET);
+
 		$order_param = isset($_GET['order']) ? "?order=".cleanInput('get', 'order', 'string') : '';
 		$form = $myform->sform($this->_registry->router->linkHref(cleanInput('get', 'module', 'string'), cleanInput('get', 'method', 'string')).$order_param, null);
 
