@@ -121,7 +121,11 @@ return array(
 	"duplicateKeyEntryError"=>"duplicate entry '%s' for the field '%s'",
 	"ReservedArea"=>"Reserved area",
 	"cantFindPlugin"=>"the plugin %s is not installed",
-	"cantFindPluginSource"=>"the %s plugin source was not found"
+	"cantFindPluginSource"=>"the %s plugin source was not found",
+	"Filters"=>"Filters",
+	"FiltersTooltip"=>"Text fields search::the following rules are valid:<br />- <b>value</b>: search fields which contains value<br />- <b>&#34;value</b>: search fields which begin with value<br />- <b>&#34;value&#34;</b>: search fields equal to value",
+	"filter"=>"filter",
+	"reset"=>"reset",
 
 )
 

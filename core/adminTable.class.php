@@ -10,6 +10,7 @@ class adminTable {
 
 	protected $_insertion, $_edit_deny;
 	protected $_changelist_fields;
+	protected $_filter_fields;
 	protected $_editor;
 	protected $_custom_tpl;
 
@@ -93,6 +94,12 @@ class adminTable {
 
 	}
 
+	public function setFilterFields($filter_fields) {
+		
+		$this->_filter_fields = $filter_fields;
+
+	}
+
 	// fields which allow html insertion, only char and text type
 	public function setHtmlFields($fields) {
 		
@@ -134,6 +141,9 @@ class adminTable {
 		$tot_fk = count($this->_fkeys);
 		$tot_sf = count($this->_sfields);
 		$tot_pf = count($this->_pfields);
+		$tot_ff = count($this->_filter_fields);
+
+		if($tot_ff) $this->setSessionSearch();
 
 		// get order field and direction
 		preg_match("#^([^ ,]*)\s?((ASC)|(DESC))?.*$#", $order, $matches);
@@ -141,9 +151,9 @@ class adminTable {
 		$order_dir = isset($matches[2]) ? $matches[2] : null;
 
 		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
-
-		$pag = new pagination($this->_registry, $this->_efp, $this->_registry->db->getNumRecords($this->_table, null, $this->_primary_key));
-
+		
+		$where_pag = $tot_ff ? $this->setWhereClause(false) : null;
+		$pag = new pagination($this->_registry, $this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
 		if(count($this->_changelist_fields)) {
@@ -158,12 +168,14 @@ class adminTable {
 		else 
 			$field_selection = isset($this->_fkeys[$field_order]) ? "a.*" : "*"; 
 
+		$where = $tot_ff ? $this->setWhereClause(isset($this->_fkeys[$field_order])) : null;
+
 		// different queries if the order field is a foreign key
 		if(isset($this->_fkeys[$field_order])) {
-			$records = $this->_registry->db->autoSelect($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), "a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
+			$records = $this->_registry->db->autoSelect($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), ($where ? $where." AND " : "")."a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
 		}
 		else 
-			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, null, $order, $limit);
+			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, $where, $order, $limit);
 
 		$all = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').setProperty('checked', 'checked');\">".__("all")."</span>";
 		$none = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').removeProperty('checked');\">".__("none")."</span>";
@@ -253,7 +265,7 @@ class adminTable {
 				    if(!checked) {alert('".jsVar(__("SelectAtleastRecord"))."'); return false;}";
 			$input_export_selected = $myform->input('submit_export_selected', 'submit', __("exportSelected"), array("js"=>"onclick=\"$onclick \""));
 			$input_export_all = $myform->input('submit_export_all', 'submit', __("exportAll"), array());
-			$input_where_query = $myform->hidden('where_query', '');
+			$input_where_query = $myform->hidden('where_query', $where);
 		
 		}
 		else {
@@ -264,7 +276,18 @@ class adminTable {
 
 		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord")) : null;
 		
-		$tpl_name = isset($this->_custom_tpl['view']) ? $this->_custom_tpl['view'] : 'admin_table';
+
+		if(isset($this->_custom_tpl['view'])) {
+			$tpl_name = $this->_custom_tpl['view'];
+		}
+		elseif($tot_ff) {
+			$tpl_name = 'admin_table_filter';
+			$this->_view->assign('form_filters_title', __("Filters"));
+			$this->_view->assign('form_filters', $this->formFilters());
+		}
+		else {
+			$tpl_name = 'admin_table';
+		}
 
 		$this->_view->setTpl($tpl_name);
 		$this->_view->assign('table', $table);
@@ -280,6 +303,99 @@ class adminTable {
 		$this->_view->assign('pnavigation', $pag->navigation());
 
 		return $this->_view->render();
+	}
+
+	protected function setSessionSearch() {
+
+		foreach($this->_filter_fields as $fname) {
+
+			if(!isset($_SESSION[$this->_table.'_'.$fname.'_filter'])) $_SESSION[$this->_table.'_'.$fname.'_filter'] = null;
+
+		}
+
+		if(isset($_POST['ats_submit'])) {
+
+			foreach($this->_filter_fields as $fname) {
+
+				$type = $this->_fields[$fname]['type'];
+
+				if(isset($_POST[$fname.'_filter'])) {
+					if($type=='int' || $type=='float') {
+						if($_POST[$fname.'_filter']==='') {
+							$_SESSION[$this->_table.'_'.$fname.'_filter'] = null;
+						}
+						else {
+							$_SESSION[$this->_table.'_'.$fname.'_filter'] = $this->cleanField($fname."_filter", $type);
+						}
+					}
+					else {
+						$_SESSION[$this->_table.'_'.$fname.'_filter'] = $this->cleanField($fname."_filter", $type, array("escape"=>false));
+					}
+				
+				}
+				else {
+					$_SESSION[$this->_table.'_'.$fname.'_filter'] = null; 
+				}
+			}
+			
+		}
+
+	}
+	
+	protected function setWhereClause($fkeysorder) {
+
+		$where_a = array();
+		$prefix = $fkeysorder ? "a." : "";
+
+		foreach($this->_filter_fields as $fname) {
+			if($this->_fields[$fname]['type']=='varchar' || $this->_fields[$fname]['type']=='text') {
+				if(isset($_SESSION[$this->_table.'_'.$fname.'_filter']) && $_SESSION[$this->_table.'_'.$fname.'_filter']) {
+					$value = $_SESSION[$this->_table.'_'.$fname.'_filter'];
+					if(preg_match("#^\"([^\"]*)\"$#", $value, $matches))
+						$where_a[] = $prefix.$fname."='".$matches[1]."'"; 
+					elseif(preg_match("#^\"([^\"]*)$#", $value, $matches))
+						$where_a[] = $prefix.$fname." LIKE '".$matches[1]."%'"; 
+					else
+						$where_a[] = $prefix.$fname." LIKE '%".$value."%'"; 
+				}
+			}
+			else {
+				if(isset($_SESSION[$this->_table.'_'.$fname.'_filter']) && !is_null($_SESSION[$this->_table.'_'.$fname.'_filter'])) {
+					$value = $_SESSION[$this->_table.'_'.$fname.'_filter'];
+					$where_a[] = $prefix.$fname."='".$value."'";
+				}
+			}
+		}
+
+		return implode(" AND ", $where_a);
+
+	}
+
+	protected function formFilters() {
+
+		$myform = new form($this->_registry, 'post', 'atbl_filter_form', array("validation"=>false));
+		$myform->load();
+
+		$order_param = isset($_GET['order']) ? "?order=".cleanInput('get', 'order', 'string') : '';
+		$form = $myform->sform($this->_registry->router->linkHref(cleanInput('get', 'module', 'string'), cleanInput('get', 'method', 'string')).$order_param, null);
+
+		foreach($this->_filter_fields as $fname) {
+			$field = $this->_fields[$fname];
+			$field['null'] = '';
+			$form .= $this->formElement($myform, $fname, $field, 'filter', array("size"=>20, "value"=>htmlInput($_SESSION[$this->_table.'_'.$fname.'_filter'])));
+		}
+
+		$onclick = "onclick=\"$$('#atbl_filter_form *[name$=_filter]').each(function(el) { 
+			if(el.get('type')==='text') el.value='';
+			else if(el.get('type')==='radio') el.removeProperty('checked');
+			else if(el.get('tag')=='select') el.getChildren('option').removeProperty('selected');
+			});\"";
+		$input_reset = $myform->input('ats_reset', 'button', __("reset"), array("js"=>$onclick)); 
+		$form .= $myform->cinput('ats_submit', 'submit', __("filter"), '', array("text_add"=>' '.$input_reset)); 
+		$form .= $myform->cform();
+
+		return $form;
+
 	}
 
 	public function parseForeignKeys($row) {
@@ -515,14 +631,19 @@ class adminTable {
 
 	}
 
-	 protected function formElement($myform, $fname, $field, $id) {
+	 protected function formElement($myform, $fname, $field, $id, $opts=null) {
 	
 		$id_f = preg_replace("#\s#", "_", $id); // replace spaces with '_' in form names as POST do itself
 
 		$required = $field['null']=='NO' ? true : false;
 
-		$records = $this->_registry->db->autoSelect("*", $this->_table, $this->_primary_key."='$id'", null);
-		$value = count($records) ? $records[0][$fname] : null;
+		if(isset($opts['value'])) {
+			$value = gOpt($opts, 'value', '');
+		}
+		else {
+			$records = $this->_registry->db->autoSelect("*", $this->_table, $this->_primary_key."='$id'", null);
+			$value = count($records) ? $records[0][$fname] : null;
+		}
 
 		if(array_key_exists($fname, $this->_sfields)) {
 			if($this->_sfields[$fname]['type']=='password') { 
@@ -530,7 +651,7 @@ class adminTable {
 					? $this->_sfields[$fname]['edit_lable'] 
 					: (isset($this->_sfields[$fname]['insert_label']) ? $this->_sfields[$fname]['insert_label']:'');
 				$req = $id ? false : true;
-				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar($fname), $label), array("required"=>$req, "size"=>40, "maxlength"=>$field['max_length']));
+				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar($fname), $label), array("required"=>$req, "size"=>gOpt($opts, 'size', 40), "maxlength"=>$field['max_length']));
 			}
 			elseif($this->_sfields[$fname]['type']=='bool') {
 				$t_l = 	$this->_sfields[$fname]['true_label'];
@@ -570,8 +691,10 @@ class adminTable {
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
 		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal')
 			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
-		elseif($field['type'] == 'varchar')
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['max_length']<40 ? $field['max_length'] : 40, "maxlength"=>$field['max_length']));
+		elseif($field['type'] == 'varchar') {
+			$size = gOpt($opts, 'size', null) ? gOpt($opts, 'size') : ($field['max_length']<40 ? $field['max_length'] : 40);
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
+		}
 		elseif($field['type'] == 'text')
                 	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
 		elseif($field['type'] == 'date')
@@ -682,19 +805,26 @@ class adminTable {
 		}
 	}
 
-	protected function cleanField($name, $type) {
+	protected function cleanField($name, $type, $opts=null) {
+
+		if(isset($opts['escape'])) {
+			$options = array("escape"=>gOpt($opts, 'escape', true));
+		}
+		else {
+			$options = array();
+		}
 	
 		if($type=='int') return cleanInput('post', $name, 'int');
 		elseif($type=='float' || $type=='double' || $type=='decimal') return cleanInput('post', $name, 'float');
-		elseif($type=='varchar' || $type=='text') return cleanInput('post', $name, 'string');
-		elseif($type=='html') return cleanInput('post', $name, 'html');
+		elseif($type=='varchar' || $type=='text') return cleanInput('post', $name, 'string', $options);
+		elseif($type=='html') return cleanInput('post', $name, 'html', $options);
 		elseif($type=='date') return cleanInput('post', $name, 'date');
 		elseif($type=='datetime') return cleanInput('post', $name, 'datetime');
 
 	}
 
 	protected function cleanSpecialField($model, $fname, $pk, $type, $insert) {
-	
+		
 		if($this->_sfields[$fname]['type']=='password') {
 			if(!$insert && !cleanInput('post', $fname.'_'.$pk, 'string')) return 0;
 
@@ -703,7 +833,7 @@ class adminTable {
 			else $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'string');	
 		}
 		elseif($this->_sfields[$fname]['type']=='bool') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'int');
-		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email');
+		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email', $options);
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
 			$model->{$fname} = implode(",", $checked);

@@ -16,5 +16,5 @@
 <? endforeach ?>
 </table>
 <script>
-var ll_cerabox = new CeraBox(); ll_cerabox.addItems($$('a[rel=lightbox]'), {group: false});
+$$('a[rel=lightbox]').cerabox({group: false});
 </script>
