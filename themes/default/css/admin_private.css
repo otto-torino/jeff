@@ -29,3 +29,16 @@ table.generic td {
 .section_title {
 	}
 
+/* FORM FILTERS */
+#atbl_filter_form {
+	background: #e7e7e7;
+}
+#atbl_filter_form label {
+	display: block;
+	margin-left: 0px;
+	float: none;
+}
+
+#atbl_filter_form input {
+	float: none;
+}
