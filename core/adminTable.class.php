@@ -376,8 +376,7 @@ class adminTable {
 		$myform = new form($this->_registry, 'post', 'atbl_filter_form', array("validation"=>false));
 		$myform->load();
 
-		$order_param = isset($_GET['order']) ? "?order=".cleanInput('get', 'order', 'string') : '';
-		$form = $myform->sform($this->_registry->router->linkHref(cleanInput('get', 'module', 'string'), cleanInput('get', 'method', 'string')).$order_param, null);
+		$form = $myform->sform('', null);
 
 		foreach($this->_filter_fields as $fname) {
 			$field = $this->_fields[$fname];
@@ -390,6 +389,7 @@ class adminTable {
 			else if(el.get('type')==='radio') el.removeProperty('checked');
 			else if(el.get('tag')=='select') el.getChildren('option').removeProperty('selected');
 			});\"";
+
 		$input_reset = $myform->input('ats_reset', 'button', __("reset"), array("js"=>$onclick)); 
 		$form .= $myform->cinput('ats_submit', 'submit', __("filter"), '', array("text_add"=>' '.$input_reset)); 
 		$form .= $myform->cform();
@@ -666,7 +666,7 @@ class adminTable {
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
-				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
+				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
 				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, htmlVar($fname), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
