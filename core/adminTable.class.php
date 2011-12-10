@@ -427,6 +427,9 @@ class adminTable {
 					$mailto = isset($this->_sfields[$k]['list_mailto']) && $this->_sfields[$k]['list_mailto'] && gOpt($opts, 'mailto', true) ? true : false;
 					$res[$k] = $v ? ($mailto ? anchor('mailto:'.$v, $v) : $v) : '';
 				}
+				elseif($this->_sfields[$k]['type']=='enum') {
+					$res[$k] = $v ? $this->_sfields[$k]['data'][$v] : '';
+				}
 				elseif($this->_sfields[$k]['type']=='multicheck') {
 					$vf = array();
 					foreach(explode(",", $v) as $vp) {
@@ -659,6 +662,9 @@ class adminTable {
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
 				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, htmlVar($fname), array("required"=>$required));
 			}
+			elseif($this->_sfields[$fname]['type']=='enum') {
+				return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $this->_sfields[$fname]['data'], htmlVar($fname), array("required"=>$required));
+			}
 			elseif($this->_sfields[$fname]['type']=='email') {
 				$pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
 				$hint = "mario.rossi@example.com";
@@ -833,6 +839,7 @@ class adminTable {
 			else $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'string');	
 		}
 		elseif($this->_sfields[$fname]['type']=='bool') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'int');
+		elseif($this->_sfields[$fname]['type']=='enum') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, $this->_sfields[$fname]['key_type']);
 		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email', $options);
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
