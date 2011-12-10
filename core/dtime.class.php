@@ -37,7 +37,7 @@ class dtime {
 		elseif($format) $string = $format;
 		else $string = $this->_settings->datetime_format;
 
-		$chars = array("#%(Y)#", "#%(m)#", "#%(d)#", "#%(H)#", "#%(i)#", "#%(s)#");
+		$chars = array("#%(Y)#", "#%(m)#", "#%(d)#", "#%(H)#", "#%(i)#", "#%(s)#", "#%(F)#");
 
 		$result = preg_replace_callback($chars, array($this, 'applyFormat'), $string);
 
