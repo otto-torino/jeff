@@ -386,8 +386,8 @@ class form {
 
 		if(!is_array($selected)) $selected = array($selected);
 
-		if(!gOpt($opts, 'noFirst')) $buffer .= "<option value=\"\"></option>\n";
-		elseif(gOpt($opts, 'firstVoice')) $buffer .= "<option value=\"".gOpt($opts, 'firstValue')."\">".gOpt($opts, "firstVoice")."</option>";
+		if(gOpt($opts, 'firstVoice')) $buffer .= "<option value=\"".gOpt($opts, 'firstValue')."\">".gOpt($opts, "firstVoice")."</option>";
+		elseif(!gOpt($opts, 'noFirst')) $buffer .= "<option value=\"\"></option>\n";
 		
 		if(is_array($data)) {
 			if(sizeof($data) > 0) {
