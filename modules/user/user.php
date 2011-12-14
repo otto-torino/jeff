@@ -28,8 +28,12 @@ class user extends model {
 	}
 
 	public static function getFromAuth($registry, $user, $pwd) {
-	
-		$qr = $registry->db->autoSelect(array("id"), array(TBL_USERS), "username='$user' AND password='".md5($pwd)."'", null);
+		
+		if(PWD_HASH=='md5') $pwd_check = md5($pwd);	
+		elseif(PWD_HASH=='sha1') $pwd_check = sha1($pwd);	
+		else $pwd_check = $pwd;
+
+		$qr = $registry->db->autoSelect(array("id"), array(TBL_USERS), "username='$user' AND password='".$pwd_check."'", null);
 
 		return count($qr) ? new user($registry, $qr[0]['id']):null;
 

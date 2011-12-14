@@ -37,7 +37,19 @@ class dtime {
 		elseif($format) $string = $format;
 		else $string = $this->_settings->datetime_format;
 
-		$chars = array("#%(Y)#", "#%(m)#", "#%(d)#", "#%(H)#", "#%(i)#", "#%(s)#");
+		$chars = array(
+			"#%(Y)#", // 4 digits year 
+			"#%(m)#", // 2 digits month
+			"#%(d)#", // 2 digits day
+			"#%(H)#", // 2 digits hour
+			"#%(i)#", // 2 digits minute
+			"#%(s)#", // 2 digits second
+			"#%(F)#", // full month name (January, ..., December)
+			"#%(M)#", // 3 digits month name (Jan, ..., Dec)
+			"#%(D)#", // 3 digits day name (Mon, ..., Sun)
+			"#%(y)#", // 2 digits year
+			"#%(U)#"  // Unix Timestamp
+		);
 
 		$result = preg_replace_callback($chars, array($this, 'applyFormat'), $string);
 
