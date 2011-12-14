@@ -35,7 +35,7 @@ return array(
 	"no"=>"no",
 	"userEditPwdLabel"=>"lasciare il campo vuoto se non si intende modificare la password",
 	"ManageGroups"=>"Gestione gruppi",
-	"ManageGroupsExp"=>"I 5 gruppi di sistema (<b>SysAdmin</b>, <b>Admin</b>, <b>Power</b>, <b>User</b> e <b>Guest</b>) non possono essere modificati e/o eliminato. Il gruppo <b>SysAdmin</b> è il gruppo dell'amministratore di sistema che possiede tutti i privilegi. Il gruppo <b>Guest</b> è associato all'utente non autenticato. E' possibile definire i privilegi per tutti i gruppi (escluso <b>SysAdmin</b>).",
+	"ManageGroupsExp"=>"I 5 gruppi di sistema (<b>SysAdmin</b>, <b>Admin</b>, <b>Power</b>, <b>User</b> e <b>Guest</b>) non possono essere modificati e/o eliminati. Il gruppo <b>SysAdmin</b> è il gruppo dell'amministratore di sistema che possiede tutti i privilegi. Il gruppo <b>Guest</b> è associato all'utente non autenticato. E' possibile definire i privilegi per tutti i gruppi (escluso <b>SysAdmin</b>).",
 	"GroupsInSystem"=>"Gruppi presenti nel sistema",
 	"NewGroup"=>"Nuovo gruppo",
 	"GeneralData"=>"Dati generali",
