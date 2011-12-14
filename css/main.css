@@ -1,5 +1,5 @@
 body {
-	font: normal normal 14px/1.5em Times New Roman, Times, serif;
+	font: normal normal 14px/1.5em Times Verdana, Tahoma, Arial;
 	margin:0;
 	padding:0;
 }
@@ -101,9 +101,13 @@ section {
 
 .noaccess {
 	margin:auto;
-	width:267px;
-	height:292px;
+	width:382px;
+	height:313px;
 	background:url('../img/noaccess.png') no-repeat center center;
+}
+
+.noaccess + p {
+	font-size: 1.4em;
 }
 
 .help {

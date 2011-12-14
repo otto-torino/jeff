@@ -666,7 +666,7 @@ class adminTable {
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
-				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
+				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
 				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, htmlVar($fname), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
