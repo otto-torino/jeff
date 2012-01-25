@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{LANGUAGE}" xml:lang="{LANGUAGE}">
+<html lang="{LANGUAGE}">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta name="description" content="{DESCRIPTION}" />
