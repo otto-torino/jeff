@@ -4,8 +4,10 @@
 <meta charset="utf-8" />
 <meta name="description" content="{DESCRIPTION}" />
 <meta name="keywords" content="{KEYWORDS}" />
+{META}
 <title>{TITLE}</title>
 <link rel="shortcut icon" href="{FAVICON}" />
+{HEAD_LINKS}
 {CSS}
 {JAVASCRIPT}
 </head>

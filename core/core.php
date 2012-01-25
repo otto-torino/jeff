@@ -29,6 +29,8 @@ class core {
 		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 		$this->_registry->css = array();
 		$this->_registry->js = array();
+		$this->_registry->meta = array();
+		$this->_registry->head_links = array();
 
 		//set session timeout
 		if($this->_registry->site_settings->session_timeout) {

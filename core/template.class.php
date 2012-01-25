@@ -35,7 +35,7 @@ class template {
 		$buffer = preg_replace_callback($regexp, array($this, 'chargeModules'), $tplContent);
 
 		/* parse template sobstituting variables charged in the registry */
-		$regexp = "/\{([A-Z]+)\}/";
+		$regexp = "/\{([A-Z_]+)\}/";
 		$buffer = preg_replace_callback($regexp, array($this, 'parseVariables'), $buffer);
 
 		/* insert modules methods contents */	
@@ -55,10 +55,31 @@ class template {
 		elseif($m == 'LANGUAGE') return $this->_registry->language;
 		elseif($m == 'KEYWORDS') return $this->_registry->keywords;
 		elseif($m == 'FAVICON') return $this->_registry->favicon;
+		elseif($m == 'META') {
+			$r = '';
+			foreach(array_unique($this->_registry->meta) as $meta) { 
+				$r .= "<meta"
+					.(isset($meta['name']) ? " name=\"".$meta['name']."\"" : '')
+					.(isset($meta['property']) ? " property=\"".$meta['property']."\"" : '')
+					." content=\"".$meta['content']."\" />\n";
+			}
+			return $r;
+		}
 		elseif($m == 'CSS') {
 			$r = '';
 			foreach(array_unique($this->_registry->css) as $css) 
 				$r .= "<link rel=\"stylesheet\" href=\"$css\" type=\"text/css\" />\n";
+			return $r;
+		}
+		elseif($m == 'HEAD-LINKS') {
+			$r = '';
+			foreach(array_unique($this->_registry->head_links) as $hlink) { 
+				$r .= "<link"
+					.(isset($hlink['rel']) ? " rel=\"".$hlink['rel']."\"" : '')
+					.(isset($hlink['type']) ? " type=\"".$hlink['type']."\"" : '')
+					.(isset($hlink['title']) ? " title=\"".$hlink['title']."\"" : '')
+					." href=\"".$hlink['href']."\" />\n";
+			}
 			return $r;
 		}
 		elseif($m == 'JAVASCRIPT') {
@@ -67,6 +88,7 @@ class template {
 				$r .= "<script type=\"text/javascript\" src=\"$js\"></script>\n";
 			return $r;
 		}
+
 		elseif($m == 'ERRORS') return document::errorMessages();
 
 	}
