@@ -1,4 +1,4 @@
-<label class="<?= (isset($label_class) ? $label_class : '').($required ? " required" : ""); ?>" for="<?= $name ?>">
+<label class="<?= (isset($label_class) ? $label_class : '').($required ? " required" : ""); ?>" for="<?= $name ?>"<?= isset($label_form) ? " form=\"".$label_form."\"" : '' ?>>
 <span class="formlabel"><?= $label ?></span>
 <?php
 if($required) echo "<span class=\"form_star\">&#160;*</span>";

@@ -181,6 +181,8 @@ class form {
 		$this->_view->assign('label', $l);
 		if(gOpt($opts, 'label_class')) 
 			$this->_view->assign('label_class', gOpt($opts, 'label_class'));
+		if(gOpt($opts, 'label_form', true)) 
+			$this->_view->assign('label_form', $this->_name);
 		$this->_view->assign('required', $req);
 		$this->_view->assign('description', $d);
 		$this->_view->assign('textadd', $tadd);
