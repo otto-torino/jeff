@@ -203,12 +203,19 @@ class form {
 
 	public function input($name, $type, $value, $opts=null){
 
+		$dft_pattern = $dft_hint = null;
+
 		$buffer = "<input type=\"$type\" name=\"$name\" value=\"$value\" ";
+
+		if($type == 'email') {
+			$dft_pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
+			$dft_hint = __("insertValidEmail");	
+		}
 		
 		$buffer .= gOpt($opts, 'id') ? "id=\"".gOpt($opts, 'id')."\" ":"";
 		$buffer .= gOpt($opts, 'class') ? "class=\"".gOpt($opts, 'class')."\" ":"";
-		$buffer .= gOpt($opts, 'pattern') ? "pattern=\"".gOpt($opts, 'pattern')."\" ":"";
-		$buffer .= gOpt($opts, 'hint') ? "data-hint=\"".gOpt($opts, 'hint')."\" ":"";
+		$buffer .= gOpt($opts, 'pattern', $dft_pattern) ? "pattern=\"".gOpt($opts, 'pattern', $dft_pattern)."\" ":"";
+		$buffer .= gOpt($opts, 'hint', $dft_hint) ? "data-hint=\"".gOpt($opts, 'hint', $dft_hint)."\" ":"";
 		$buffer .= gOpt($opts, 'placeholder') ? "placeholder=\"".gOpt($opts, 'placeholder')."\" ":"";
 		$buffer .= gOpt($opts, 'size') ? "size=\"".gOpt($opts, 'size')."\" ":"";
 		$buffer .= gOpt($opts, 'maxlength') ? "maxlength=\"".gOpt($opts, 'maxlength')."\" ":"";

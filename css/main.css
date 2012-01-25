@@ -237,7 +237,7 @@ br.formRowBreak {
 	font-style: italic;
 	font-weight: normal;
 }
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
 	border:1px solid #aaa;
 }
 textarea {
