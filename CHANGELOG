@@ -5,6 +5,7 @@
 
     New features:
     --------------------
+    - added modernizr (http://www.modernizr.com) js library and removed html5.js one.
     - added label form attribute
     - mandatory fields styled bold (the star was removed)
     - added email field support in the form class (pattern is automatically set)
