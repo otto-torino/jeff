@@ -1,0 +1,14 @@
+2012-01-26  abidibo  <abidibo@gmail.com>
+
+    New version: v0.98
+    Brief description: a dive into html5
+
+    New features:
+    --------------------
+    - added label form attribute
+    - mandatory fields styled bold (the star was removed)
+    - added email field support in the form class (pattern is automatically set)
+    - updated doctype, root element and meta character accordingly to html5 specifications
+    - added the possibility to change/add meta tags and link tags inside head at runtime (social, feed, ...)
+    - creation of this changelog
+
