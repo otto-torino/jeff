@@ -376,8 +376,7 @@ class adminTable {
 		$myform = new form($this->_registry, 'post', 'atbl_filter_form', array("validation"=>false));
 		$myform->load();
 
-		$order_param = isset($_GET['order']) ? "?order=".cleanInput('get', 'order', 'string') : '';
-		$form = $myform->sform($this->_registry->router->linkHref(cleanInput('get', 'module', 'string'), cleanInput('get', 'method', 'string')).$order_param, null);
+		$form = $myform->sform('', null);
 
 		foreach($this->_filter_fields as $fname) {
 			$field = $this->_fields[$fname];
@@ -390,6 +389,7 @@ class adminTable {
 			else if(el.get('type')==='radio') el.removeProperty('checked');
 			else if(el.get('tag')=='select') el.getChildren('option').removeProperty('selected');
 			});\"";
+
 		$input_reset = $myform->input('ats_reset', 'button', __("reset"), array("js"=>$onclick)); 
 		$form .= $myform->cinput('ats_submit', 'submit', __("filter"), '', array("text_add"=>' '.$input_reset)); 
 		$form .= $myform->cform();
@@ -426,6 +426,9 @@ class adminTable {
 				elseif($this->_sfields[$k]['type']=='email') {
 					$mailto = isset($this->_sfields[$k]['list_mailto']) && $this->_sfields[$k]['list_mailto'] && gOpt($opts, 'mailto', true) ? true : false;
 					$res[$k] = $v ? ($mailto ? anchor('mailto:'.$v, $v) : $v) : '';
+				}
+				elseif($this->_sfields[$k]['type']=='enum') {
+					$res[$k] = $v ? $this->_sfields[$k]['data'][$v] : '';
 				}
 				elseif($this->_sfields[$k]['type']=='multicheck') {
 					$vf = array();
@@ -651,23 +654,24 @@ class adminTable {
 					? $this->_sfields[$fname]['edit_lable'] 
 					: (isset($this->_sfields[$fname]['insert_label']) ? $this->_sfields[$fname]['insert_label']:'');
 				$req = $id ? false : true;
-				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar($fname), $label), array("required"=>$req, "size"=>gOpt($opts, 'size', 40), "maxlength"=>$field['max_length']));
+				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar(__($fname)), $label), array("required"=>$req, "size"=>gOpt($opts, 'size', 40), "maxlength"=>$field['max_length']));
 			}
 			elseif($this->_sfields[$fname]['type']=='bool') {
 				$t_l = 	$this->_sfields[$fname]['true_label'];
 				$f_l = 	$this->_sfields[$fname]['false_label'];
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
-				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, htmlVar($fname), array("required"=>$required));
+				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, htmlVar(__($fname)), array("required"=>$required));
+			}
+			elseif($this->_sfields[$fname]['type']=='enum') {
+				return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $this->_sfields[$fname]['data'], htmlVar(__($fname)), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
-				$pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
-				$hint = "mario.rossi@example.com";
-				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("pattern"=>$pattern, "required"=>$required)); 
+				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required)); 
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
-				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']), $sf['table'], $sf['where'], $sf['order']);
-				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, htmlVar($fname), array("required"=>$required));
+				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
+				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, htmlVar(__($fname)), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
 				$sf = $this->_sfields[$fname];
@@ -682,25 +686,30 @@ class adminTable {
 			$data = array();
 			foreach($options as $rec) 
 				$data[htmlInput($rec[$fk['key']])] = htmlVar($rec[$fk['field']]);
-			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, htmlVar($fname), array("required"=>$required));
+			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, htmlVar(__($fname)), array("required"=>$required));
 		}
 		elseif(array_key_exists($fname, $this->_pfields)) {
 			return $this->_registry->plugins[$this->_pfields[$fname]['plugin']]->formAdmin($this->_pfields[$fname], $fname."_".$id_f, $fname, $field, $myform, $myform->retvar($fname."_".$id_f, $value));
 		}
-		elseif($field['type'] == 'int') 
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar($fname), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
-		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal')
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
+		elseif($field['type'] == 'int') {
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar(__($fname)), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
+		}
+		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal') {
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
+		}
 		elseif($field['type'] == 'varchar') {
 			$size = gOpt($opts, 'size', null) ? gOpt($opts, 'size') : ($field['max_length']<40 ? $field['max_length'] : 40);
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
 		}
-		elseif($field['type'] == 'text')
-                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
-		elseif($field['type'] == 'date')
-                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required));
-		elseif($field['type'] == 'datetime')
-			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar($fname), array("required"=>$required));
+		elseif($field['type'] == 'text') {
+                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
+		}
+		elseif($field['type'] == 'date') {
+                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required));
+		}
+		elseif($field['type'] == 'datetime') {
+			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required));
+		}
 
 	}
 
@@ -833,6 +842,7 @@ class adminTable {
 			else $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'string');	
 		}
 		elseif($this->_sfields[$fname]['type']=='bool') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'int');
+		elseif($this->_sfields[$fname]['type']=='enum') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, $this->_sfields[$fname]['key_type']);
 		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email', $options);
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);

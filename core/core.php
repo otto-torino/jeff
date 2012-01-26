@@ -29,6 +29,8 @@ class core {
 		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 		$this->_registry->css = array();
 		$this->_registry->js = array();
+		$this->_registry->meta = array();
+		$this->_registry->head_links = array();
 
 		//set session timeout
 		if($this->_registry->site_settings->session_timeout) {
@@ -47,8 +49,8 @@ class core {
 		if(is_readable(ABS_ROOT.DS.'plugins.php')) {
 			require_once(ABS_ROOT.DS.'plugins.php');
 			foreach($plugins as $k=>$v) { 
-				if(is_readable(ABS_PLUGINS.DS.$k.".php")) {
-					require_once(ABS_PLUGINS.DS.$k.".php");
+				if(is_readable(ABS_PLUGINS.DS.$k.DS.$k.".php")) {
+					require_once(ABS_PLUGINS.DS.$k.DS.$k.".php");
 					$plugins_objs[$k] = new $k($this->_registry, $v);
 				}
 				else 

@@ -32,6 +32,14 @@ Class Registry {
  	$this->vars['js'][] = $js;
  }
 
+ public function addMeta($meta) {
+ 	$this->vars['meta'][] = $meta;
+ }
+
+ public function addHeadLink($link) {
+ 	$this->vars['head_links'][] = $link;
+ }
+
  /**
  *
  * @get variables

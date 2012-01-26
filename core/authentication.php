@@ -5,16 +5,19 @@ class authentication {
 	public static function check($registry) {
 
 		if(isset($_GET['login'])) {
+
+		    	$redirect = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : $registry->router->linkHref(null, null);
+
 			if(($username=cleanInput('post', 'user', 'string')) && ($password=cleanInput('post', 'password', 'string'))) {
 				$user = user::getFromAuth($registry, $username, $password);	
 				if(self::checkUser($registry, $user)) {
 					$_SESSION['userid'] = $user->id;
-					header('Location: '.$registry->router->linkHref(null, null));
+					header('Location: '.$redirect);
 					exit;
 				}
 			}	
 			
-			Error::errorMessage(array("error"=>__("authError")), $registry->router->linkHref(null, null));
+			Error::errorMessage(array("error"=>__("authError")), $redirect);
 		}
 		elseif(isset($_GET['logout'])) {
 			unset($_SESSION);
