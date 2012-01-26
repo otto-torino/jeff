@@ -126,6 +126,7 @@ return array(
 	"FiltersTooltip"=>"Ricerca su campi di testo::vigono le seguenti regole:<br />- <b>valore</b>: cerca campi che contengano valore<br />- <b>&#34;valore</b>: cerca campi che inizino con valore<br />- <b>&#34;valore&#34;</b>: cerca campi esattamente uguali a valore",
 	"filter"=>"filtra",
 	"reset"=>"azzera",
+	"insertValidEmail"=>"inserisci un indirizzo email valido",
 )
 
 ?>

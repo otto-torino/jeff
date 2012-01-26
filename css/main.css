@@ -222,6 +222,9 @@ label {
 	margin:2px 5px 10px 5px;
 	width:250px;
 }
+label.required {
+	font-weight: bold;
+}
 label.empty {
 	background: url('../img/icons/ico_alert.png') no-repeat;
 	padding: 2px 0 2px 26px;
@@ -230,17 +233,11 @@ label.empty {
 br.formRowBreak {
 	clear:both;
 }
-.formlabel {
-	font-weight: bold;
-}
 .formlabel_exp {
 	font-style: italic;
+	font-weight: normal;
 }
-.form_star {
-	color: #ff0000;
-	font-weight: bold;
-}
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
 	border:1px solid #aaa;
 }
 textarea {

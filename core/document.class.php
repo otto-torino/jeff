@@ -38,9 +38,9 @@ class document {
 		foreach($this->_registry->theme->getJs() as $jspath) $this->_registry->addJs($jspath);
 		$this->_registry->addJs(REL_JSLIB."/mootools-core-yc.js");
 		$this->_registry->addJs(REL_JSLIB."/mootools-more-yc.js");
+		$this->_registry->addJs(REL_JSLIB."/modernizr.js");
 		$this->_registry->addJs(REL_JSLIB."/ajax.js");
 		$this->_registry->addJs(REL_JSLIB."/abitools.js");
-		$this->_registry->addJs(REL_JSLIB."/html5.js");
 		$this->_registry->addJs(REL_JSLIB."/form.js");
 		$this->_registry->addJs(REL_JSLIB."/datepicker.js");
 		$this->_registry->addJs(REL_JSLIB."/tooltip.js");

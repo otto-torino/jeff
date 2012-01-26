@@ -666,9 +666,7 @@ class adminTable {
 				return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $this->_sfields[$fname]['data'], htmlVar(__($fname)), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
-				$pattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$";
-				$hint = "mario.rossi@example.com";
-				return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("pattern"=>$pattern, "required"=>$required)); 
+				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required)); 
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];

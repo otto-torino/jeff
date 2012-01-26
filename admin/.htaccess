@@ -1,6 +1,6 @@
 RewriteEngine on
 
-RewriteBase /git/jeff/admin/
+RewriteBase /jeff.git/admin/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
