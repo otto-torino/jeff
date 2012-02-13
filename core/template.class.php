@@ -57,7 +57,7 @@ class template {
 		elseif($m == 'FAVICON') return $this->_registry->favicon;
 		elseif($m == 'META') {
 			$r = '';
-			foreach(array_unique($this->_registry->meta) as $meta) { 
+			foreach($this->_registry->meta as $meta) { 
 				$r .= "<meta"
 					.(isset($meta['name']) ? " name=\"".$meta['name']."\"" : '')
 					.(isset($meta['property']) ? " property=\"".$meta['property']."\"" : '')
@@ -73,7 +73,7 @@ class template {
 		}
 		elseif($m == 'HEAD-LINKS') {
 			$r = '';
-			foreach(array_unique($this->_registry->head_links) as $hlink) { 
+			foreach($this->_registry->head_links as $hlink) { 
 				$r .= "<link"
 					.(isset($hlink['rel']) ? " rel=\"".$hlink['rel']."\"" : '')
 					.(isset($hlink['type']) ? " type=\"".$hlink['type']."\"" : '')
