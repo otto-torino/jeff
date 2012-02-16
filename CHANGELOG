@@ -1,9 +1,24 @@
 2012-01-26  abidibo  <abidibo@gmail.com>
 
     Preparing version: v0.99
+    Brief description: added a full text search class
+
+    Changes:
+    --------------------
+    - added core/search.class.php (notice: query to execute in order to use replace_ci function)
+    - edited core/include.php
+    - edited modules/mysql/mysql.php
+      * added queryResult method
+      * edited autoSelect method
+    - edited core/db/interface.db.php
+    - added cutHtmlText function to lib/php/functions.php
+
+2012-01-26  abidibo  <abidibo@gmail.com>
+
+    Preparing version: v0.99
     Brief description: added share function (social networks)
 	
-    New features:
+    Changes:
     --------------------
     - added share function to lib/php/functions.php.
 

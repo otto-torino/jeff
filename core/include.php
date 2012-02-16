@@ -13,6 +13,7 @@ include(ABS_CORE.DS.'router.class.php');
 include(ABS_CORE.DS.'document.class.php');
 include(ABS_CORE.DS.'adminTable.class.php');
 include(ABS_CORE.DS.'export.class.php');
+include(ABS_CORE.DS.'search.class.php');
 include(ABS_CORE.DS.'form.class.php');
 include(ABS_CORE.DS.'image.class.php');
 include(ABS_CORE.DS.'template.class.php');

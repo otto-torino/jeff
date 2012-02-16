@@ -64,6 +64,23 @@ class mysql implements DbManager {
 
 	}
 
+	public function queryResult($query) {
+
+		$results = array();
+
+		$res = $this->executeQuery($query);
+
+		if($res) {
+			while($row = mysql_fetch_assoc($res)) {
+				$results[] = $row;
+			}
+			mysql_free_result($res);
+		}
+
+		return $results;
+
+	}
+
 	public function getError() {
 		
 		$error = mysql_error();
@@ -75,8 +92,6 @@ class mysql implements DbManager {
 
 	public function autoSelect($fields, $tables, $where, $order=null, $limit=null) {
 	
-		$results = array();
-
 		$qfields = is_array($fields) ? implode(",", $fields):$fields;
 		$qtables = is_array($tables) ? implode(",", $tables):$tables;
 		$qwhere = $where ? "WHERE ".$where : "";
@@ -84,15 +99,8 @@ class mysql implements DbManager {
 		$qlimit = count($limit) ? "LIMIT ".$limit[0].",".$limit[1]:"";
 
 		$query = "SELECT $qfields FROM $qtables $qwhere $qorder $qlimit";
-		$res = $this->executeQuery($query);
-		if($res) {
-			while($row = mysql_fetch_assoc($res)) {
-				$results[] = $row;
-			}
-			mysql_free_result($res);
-		}
 
-		return $results;
+		return $this->queryResult($query);
 
 	}
 
