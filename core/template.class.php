@@ -71,7 +71,7 @@ class template {
 				$r .= "<link rel=\"stylesheet\" href=\"$css\" type=\"text/css\" />\n";
 			return $r;
 		}
-		elseif($m == 'HEAD-LINKS') {
+		elseif($m == 'HEAD_LINKS') {
 			$r = '';
 			foreach($this->_registry->head_links as $hlink) { 
 				$r .= "<link"
