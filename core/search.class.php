@@ -129,10 +129,14 @@ class search {
 					$res[$i]['occurrences'] = $row['occurrences'];
 					if(is_array($f) && isset($f['highlight']) && $f['highlight']) {
 						$fp = $weight_clauses[$f['field']];
-						$search_keywords = $this->getKeywords($fp['value']);
+						$get_search_keywords = $this->getKeywords($fp['value']);
+						$search_keywords = array();
+						foreach($get_search_keywords as $kw) {
+							$search_keywords[] = preg_quote($kw);
+						}
 						$rexp = (isset($fp['inside']) && $fp['inside']) 
-							? preg_quote(implode("|", $search_keywords)) 
-							: "\b".preg_quote(implode("\b|\b", $search_keywords))."\b";
+							? implode("|", $search_keywords) 
+							: "\b".implode("\b|\b", $search_keywords)."\b";
 						if(preg_match("#(.){0,$this->_highlight_range}($rexp)(.){0,$this->_highlight_range}#sui", cutHtmlText($row[preg_replace("#.*?\.#", "", $f['field'])], 50000000, '', true, false, true), $matches)) {
 							$res[$i][$f['field']] = preg_replace("#".$rexp."#i", "<span class=\"evidence\">$0</span>", $matches[0]);
 						}
