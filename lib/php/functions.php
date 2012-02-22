@@ -8,8 +8,10 @@ function __($id) {
 		$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$language.'.php');
 	else $lng = array();
 
-	if(isset($_SESSION['theme'])) {
-		$theme = $_SESSION['theme'];
+	// registry singleton
+	$registry = registry::instance();
+	if(isset($registry->theme)) {
+		$theme = $registry->theme;
 		if(get_class($theme)!= 'defaultTheme')
 			if(is_readable($theme->path().DS.'languages'.DS.$language.'.php'))
 				$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$language.'.php'));

@@ -9,7 +9,7 @@ function cleanVar($var, $type, $opts=array()) {
 
 function cleanInput($method, $name, $type, $opts=array()) {
 
-	$db = db::getInstance();
+	$db = db::instance();
 
 	$flags = array();
 	$filter_opts = null;
@@ -67,7 +67,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
 
 function cleanInputArray($method, $name, $type=null, $opts=array()) {
 	
-	$db = db::getInstance();
+	$db = db::instance();
 
 	$flags = array(FILTER_REQUIRE_ARRAY);
 

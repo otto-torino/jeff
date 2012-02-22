@@ -127,6 +127,8 @@ return array(
 	"filter"=>"filter",
 	"reset"=>"reset",
 	"insertValidEmail"=>"insert a valid email address",
+	"CannotCloneSingleton"=>"Singleton instance can not be cloned",
+	"CannotSerializeSingleton"=>"Singleton instance can not be serialized",
 
 )
 

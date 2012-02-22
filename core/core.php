@@ -14,14 +14,13 @@ class core {
 		$this->_base_path = BASE_PATH;
 		
 		// initializing registry variable
-		$this->_registry = new registry();
-		$this->_registry->db = db::getInstance();
+		$this->_registry = registry::instance();
+		$this->_registry->db = db::instance();
 		$this->_registry->admin_privilege = 1;
 		$this->_registry->admin_view_privilege = 2;
 		$this->_registry->public_view_privilege = 3;
 		$this->_registry->private_view_privilege = 4;
 		$this->_registry->theme = $this->getTheme();
-		$_SESSION['theme'] = $this->_registry->theme; // translations
 		$this->_registry->lng = language::setLanguage($this->_registry);
 		$this->_registry->site_settings = new siteSettings($this->_registry);
 		$this->_registry->dtime = new dtime($this->_registry);
@@ -64,7 +63,7 @@ class core {
 	public function renderApp($site=null) {
 		
 		ob_start();
-		
+
 		// some other registry properties
 		$this->_registry->site = $site=='admin' ? 'admin':'main';
 

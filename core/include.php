@@ -1,5 +1,6 @@
 <?php
 
+include(ABS_CORE.DS.'singleton.class.php');
 include(ABS_CORE.DS.'registry.class.php');
 include(ABS_PHPLIB.DS.'functions.php');
 include(ABS_CORE.DS.'dtime.class.php');
@@ -21,6 +22,7 @@ include(ABS_CORE.DS.'template.factory.php');
 include(ABS_CORE.DS.'pagination.class.php');
 include(ABS_THEME.DS.'theme.class.php');
 include(ABS_DB.DS.'db.factory.php');
+include(ABS_DB.DS.'mysql.php');
 
 function __autoload($class)
 {

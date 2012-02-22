@@ -12,7 +12,7 @@ class Error {
 
 	public static function syserrorMessage($class, $function, $message, $line, $noDebugMsg=null) {
 
-		ob_clean();
+		@ob_clean();
 		ob_start();
 		$buffer = "<html>\n";
 		$buffer .= "<head>\n";
