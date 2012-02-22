@@ -1,6 +1,6 @@
 <?php
 
-Class Registry {
+class registry extends singleton {
 
  /*
  * @the vars array

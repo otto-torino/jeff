@@ -17,7 +17,6 @@ define('ABS_ROOT', realpath(dirname(__FILE__)));
  * operating system directory separator 
  */
 define( 'DS', DIRECTORY_SEPARATOR );
-
 /**
  * include system paths 
  */

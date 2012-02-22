@@ -127,6 +127,8 @@ return array(
 	"filter"=>"filtra",
 	"reset"=>"azzera",
 	"insertValidEmail"=>"inserisci un indirizzo email valido",
+	"CannotCloneSingleton"=>"Impossibile clonare un'istanza di singleton",
+	"CannotSerializeSingleton"=>"Impossibile serializzare un'istanza di singleton",
 )
 
 ?>
