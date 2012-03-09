@@ -857,8 +857,10 @@ class adminTable {
 		elseif($this->_sfields[$fname]['type']=='file') {
 			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
 			$sf = $this->_sfields[$fname];
+			$opts['check_content'] = isset($sf['check_content']) ? $sf['check_content'] : true;
+			$opts['contents'] = isset($sf['contents_allowed']) ? $sf['contents_allowed'] : null;
 			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
-			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, null);
+			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
 		}
 		elseif($this->_sfields[$fname]['type']=='image') {
 			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
