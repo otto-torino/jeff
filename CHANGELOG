@@ -1,4 +1,29 @@
-2012-01-26  abidibo  <abidibo@gmail.com>
+2012-03-05  abidibo  <abidibo@gmail.com>
+
+    Preparing version: v0.99
+    Brief description: Bug fixed in datepicjer js library
+
+    Changes:
+    --------------------
+    - lib/js/datepicker.js
+
+2012-02-21  abidibo  <abidibo@gmail.com>
+
+    Preparing version: v0.99
+    Brief description: singleton rulez. Registry and Db classes inherits from singleton, so the existence of only one instance is granted.
+
+    Changes:
+    --------------------
+    - added core/singleton.class.php
+    - class core/registry.class.php now extends singleton (not needed anymore to pass registry everywhere)
+    - class core/db/db.factory.php now extends singleton (added instance method and removed getInstance)
+    - include.php
+    - removed mysql folder inside modules and added mysql.php in core/db
+    - core/core.php
+      * added singleton calls
+      * removed $_SESSION['theme'] used for translations, now __() function can get its registry singleton instance, which contains the theme property
+
+2012-02-16  abidibo  <abidibo@gmail.com>
 
     Preparing version: v0.99
     Brief description: added a full text search class
