@@ -103,7 +103,7 @@ caption { font-style: italic; }
 .subtitle { font-size: 1.1em; font-style:italic; color: #880000;  }
 .evidence { color: #ef3125; }
 
-input[type=submit], input[type=button] {
+input[type=submit], input[type=button], .submit {
 	cursor: pointer;
 	background: url('../img/genericBtn_bkg.jpg') repeat-x;
 	background-position: top left;
@@ -111,6 +111,9 @@ input[type=submit], input[type=button] {
 	font-weight: bold;
 	height: 20px;
 	padding: 2px 5px;
+	color: #000 !important;
+	text-decoration: none !important; 
+	border: 2px outset #cdcdcd;
 }
 table.generic tr.selected td {
 	background-color: #f99391;

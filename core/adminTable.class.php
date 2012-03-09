@@ -274,7 +274,7 @@ class adminTable {
 			$input_where_query = '';	
 		}
 
-		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord")) : null;
+		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord"), array('class'=>'submit')) : null;
 		
 
 		if(isset($this->_custom_tpl['view'])) {

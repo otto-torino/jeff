@@ -51,7 +51,7 @@ class groupController extends controller {
 
 		$table = $this->_view->render();
 
-		$link_insert = anchor($this->_router->linkHref($this->_mdl_name, 'manage', array("action"=>"new")), __("insertNewRecord"));
+		$link_insert = anchor($this->_router->linkHref($this->_mdl_name, 'manage', array("action"=>"new")), __("insertNewRecord"), array('class'=>'submit'));
 
 		$this->_view->setTpl('group_manage_list');
 		$this->_view->assign('title', __("ManageGroups"));

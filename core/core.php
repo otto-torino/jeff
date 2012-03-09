@@ -16,6 +16,7 @@ class core {
 		// initializing registry variable
 		$this->_registry = registry::instance();
 		$this->_registry->db = db::instance();
+		$this->_registry->url = $_SERVER['REQUEST_URI'];
 		$this->_registry->admin_privilege = 1;
 		$this->_registry->admin_view_privilege = 2;
 		$this->_registry->public_view_privilege = 3;

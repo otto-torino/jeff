@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `sys_groups` (
   `description` text,
   `privileges` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `sys_groups`
@@ -82,9 +82,7 @@ INSERT INTO `sys_groups` (`id`, `label`, `description`, `privileges`) VALUES
 (2, 'Admin', 'System group to be intended with administrative tasks', '2,3,5'),
 (3, 'Power', 'System group to be intended with advanced functionalities', ''),
 (4, 'User', 'System gorup to be intended with basic functionalities', ''),
-(5, 'Guest', 'System group associated to the non authenticated user', '3'),
-(6, 'User defined', '', ''),
-(7, 'user defined 2', '', '3');
+(5, 'Guest', 'System group associated to the non authenticated user', '3');
 
 -- --------------------------------------------------------
 
