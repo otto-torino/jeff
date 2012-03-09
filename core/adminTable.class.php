@@ -441,8 +441,14 @@ class adminTable {
 				}
 				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
-					if($sf['preview'] && $v)
-						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>$$('a[href=".$sf['rel_path']."/$v]')[0].cerabox();</script>";
+					if($sf['preview'] && $v) {
+						if($this->_sfields[$k]['type']=='image') {
+							$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>$$('a[href=".$sf['rel_path']."/$v]')[0].cerabox();</script>";
+						}
+						else {
+							$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span>";
+						}
+					}
 					else $res[$k] = $v;
 				}
 			}
