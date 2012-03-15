@@ -1,13 +1,22 @@
 <?php
+/**
+ * \file modules/index/index.php
+ * \brief Index module's model.
+ *
+ * \author abidibo abidibo@gmail.com
+ * \version 0.98
+ * \date 2011-2012
+ * Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
 class index extends model {
 
 	public $title,$text,$image;
 
-	function __construct($registry, $id) {
+	function __construct($id) {
 
-		$this->_registry = $registry;
-	
+		parent::__construct();
+
 		$this->init($id);
 	}
 
@@ -18,6 +27,7 @@ class index extends model {
 		$this->image = null;
 
 	}
+
 }
  
 ?>

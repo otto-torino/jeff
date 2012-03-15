@@ -2,9 +2,9 @@
 
 class defaultTheme extends theme implements Itheme {
 
-	function __construct($registry) {
+	function __construct() {
 		
-		parent::__construct($registry, 'default');
+		parent::__construct('default');
 
 	}
 	

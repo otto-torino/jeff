@@ -4,9 +4,9 @@ require_once('login.php');
 
 class loginController extends controller {
 
-	function __construct($registry) {
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 
@@ -34,7 +34,7 @@ class loginController extends controller {
 	
 	public function login() {
 	
-		$obj = new login($this->_registry, 'in');
+		$obj = new login('in');
 		$this->_view->setTpl('login', array('css'=>'login'));
 		$this->_view->assign('form_action', $obj->actionform);
 
@@ -44,7 +44,7 @@ class loginController extends controller {
 
 	public function logout() {
 		
-		$obj = new login($this->_registry, 'out');
+		$obj = new login('out');
 		$this->_view->setTpl('logout');
 		$this->_view->assign('link', $obj->link);
 

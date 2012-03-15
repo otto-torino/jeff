@@ -1,18 +1,85 @@
 <?php
+/**
+ * @file pagination.class.php
+ * @brief Contains the pagination class.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @ingroup core
+ * @brief class used to manage paging of lists or content 
+ * 
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class pagination {
 
+	/**
+	 * @brief A \ref view instance 
+	 */
 	private $_view;
-	private $_range, $_urlp;
 
-	private $_actual, $_last;
-	private $_start, $_end, $_tot;
+	/**
+	 * @brief elements for page 
+	 */
+	private $_range;
+
+	/**
+	 * @brief get parameter used to pass page number 
+	 */
+	private $_urlp;
+
+	/**
+	 * @brief current page number
+	 */
+	private $_actual;
 	
+	/**
+	 * @brief last page number
+	 */
+	private $_last;
+
+	/**
+	 * @brief first element index of the current page
+	 */
+	private $_start;
+
+	/**
+	 * @brief last element index of the current page
+	 */
+	private $_end;
+	
+	/**
+	 * @brief total number of items
+	 */
+	private $_tot;
+	
+	/**
+	 * @brief number of pages displayed next to the current page in the page navigation  
+	 */
 	private $_npages;
 	
-	function __construct($registry, $ifp, $tot, $opts=null) {
+	/**
+	 * Constructs a pagination instance 
+	 * 
+	 * @param int $ifp items for page 
+	 * @param int $tot total number of items
+	 * @param array $opts 
+	 *   Asociative array of options:
+	 *   - <b>urlp</b>: string default 'p'. The get parameter used to pass page values
+	 *   - <b>npages</b>: int default 2. number of pages displayed next to the current page in the page navigation
+	 *   - <b>permalink</b>: bool default true. Whether to use permalinks whene generating the page navigation links
+	 * @return void
+	 */
+	function __construct($ifp, $tot, $opts=null) {
 
-		$this->_view = new view($registry);
+		$this->_view = new view();
 
 		$this->_urlp = gOpt($opts, 'urlp', 'p');
 		$this->_npages = gOpt($opts, 'npages', 2);
@@ -29,13 +96,23 @@ class pagination {
 
 	}
 	
+	/**
+	 * @brief Returns the current page number
+	 * 
+	 * @return int current page number
+	 */
 	public function actual() {
 	
 		$actual = isset($_REQUEST[$this->_urlp]) ? cleanVar($_REQUEST[$this->_urlp], 'int') : 1;
 
 		return $actual < 1 ? 1 : ($actual > $this->_last ? $this->_last : $actual);
 	}
-
+	
+	/**
+	 * @brief Returns the key of the first item of the current page
+	 * 
+	 * @return int first item key
+	 */
 	public function start() {
 
 		$start = ($this->_actual - 1) * $this->_range;
@@ -43,18 +120,36 @@ class pagination {
 		return $start;
 	}
 	
+	/**
+	 * @brief Returns the total number of items
+	 * 
+	 * @return int total number of items
+	 */
 	public function total() {
 
 		return $this->_tot;
 
 	}
-
+	
+	/**
+	 * @brief Returns the key of the last item of the current page
+	 * 
+	 * @return int last item key
+	 */
 	public function limit() {
 
 		return ($this->start() + $this->_range) > $this->_tot ? $this->_tot : $this->start() + $this->_range;
 
 	}
 	
+	/**
+	 * @brief Pagination summary 
+	 * 
+	 * Returns something like 'items 5-20 of 200'
+	 *
+	 * @access public
+	 * @return string pagination summary
+	 */
 	public function summary() {
 
 		if(!$this->_last) return null;
@@ -67,6 +162,12 @@ class pagination {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Navigation links
+	 *
+	 * @access public
+	 * @return string page navigation
+	 */
 	public function navigation() {
 		
 		if($this->_last == 1) return "";

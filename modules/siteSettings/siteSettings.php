@@ -2,22 +2,14 @@
 
 class siteSettings extends model {
 
-
-	function __construct($registry) {
+	function __construct() {
 	
 		$id = 1;
-		$this->_registry = $registry;
 		$this->_tbl_data = TBL_SYS_SETTINGS;
-		parent::__construct($this->initP($id));
+
+		parent::__construct($id);
 
 	}
-
-	private function initP($id) {
-
-		return $this->initDbProp($id);
-
-	}
-	
 
 }
 

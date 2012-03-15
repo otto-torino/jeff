@@ -2,17 +2,10 @@
 
 class layout extends model {
 
-	function __construct($registry, $id) {
+	function __construct($id) {
 	
-		$this->_registry = $registry;
 		$this->_tbl_data = TBL_THEMES;
-		parent::__construct($this->initP($id));
-
-	}
-
-	private function initP($id) {
-
-		return $this->initDbProp($id);
+		parent::__construct($id);
 
 	}
 
@@ -20,7 +13,7 @@ class layout extends model {
 	
 		$objs = array();
 		$rows = $registry->db->autoSelect("id", TBL_THEMES, '', 'active DESC,name');
-		foreach($rows as $row) $objs[] = new layout($registry, $row['id']);
+		foreach($rows as $row) $objs[] = new layout($row['id']);
 
 		return $objs;
 	

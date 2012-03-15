@@ -4,14 +4,10 @@ class page extends model {
 
 	function __construct($id) {
 	
-		parent::__construct($this->initP());
+		parent::__construct($id);
 	
 	}
 
-	private function initP() {
-
-		return array();
-
-	}
-
 }
+
+?>

@@ -6,9 +6,9 @@ class pageController extends controller {
 	
 	private $_white_list = array("credits");
 
-	function __construct($registry) {
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 

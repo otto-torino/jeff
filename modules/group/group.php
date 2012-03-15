@@ -2,18 +2,11 @@
 
 class group extends model {
 
-
-	function __construct($registry, $id) {
+	function __construct($id) {
 	
-		$this->_registry = $registry;
 		$this->_tbl_data = TBL_SYS_GROUPS;
-		parent::__construct($this->initP($id));
 
-	}
-
-	private function initP($id) {
-
-		return $this->initDbProp($id);
+		parent::__construct($id);
 
 	}
 

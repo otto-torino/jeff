@@ -39,15 +39,17 @@ class router {
 		include_once(ABS_MDL.DS.$this->_module.DS.$this->_module.'.controller.php');
 
 		if($route == null) $this->_registry->urlModule = $this->_module;
+
 		/*** a new controller class instance ***/
 		$class = $this->_module."Controller";
-		$controller = new $class($this->_registry);
+		$controller = new $class();
 
 		/*** check if the method is callable ***/
 		$method = is_callable(array($controller, $this->_method)) ? $this->_method : 'index';
 
 		$params = gOpt($route, 'params');
 		/*** run the action ***/
+
 		return $controller->$method($params);
  	}
 
@@ -94,3 +96,5 @@ class router {
 	}
 
 }
+
+?>

@@ -3,25 +3,19 @@
 class user extends model {
 
 
-	function __construct($registry, $id) {
+	function __construct($id) {
 	
-		$this->_registry = $registry;
 		$this->_tbl_data = TBL_USERS;
-		parent::__construct($this->initP($id));
+
+		parent::__construct($id);
 
 	}
 
-	private function initP($id) {
-
-		return $this->initDbProp($id);
-
-	}
-	
 	public static function getAll($registry, $opts=null) {
 	
 		$objs = array();
 		$rows = $registry->db->autoSelect("id", TBL_USERS, '', 'lastname');
-		foreach($rows as $row) $objs[] = new user($registry, $row['id']);
+		foreach($rows as $row) $objs[] = new user($row['id']);
 
 		return $objs;
 	
@@ -35,7 +29,7 @@ class user extends model {
 
 		$qr = $registry->db->autoSelect(array("id"), array(TBL_USERS), "username='$user' AND password='".$pwd_check."'", null);
 
-		return count($qr) ? new user($registry, $qr[0]['id']):null;
+		return count($qr) ? new user($qr[0]['id']):null;
 
 	
 	}

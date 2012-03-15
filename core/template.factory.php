@@ -8,7 +8,7 @@ abstract class templateFactory {
 	public static function create($registry) {
 
 		if($registry->site == 'admin') {
-			$tpl = access::check($registry, 'main', $registry->admin_view_privilege) ? "admin_private" : "admin_public";
+			$tpl = access::check('main', $registry->admin_view_privilege) ? "admin_private" : "admin_public";
 		}
 		elseif($registry->site == 'main') {
 			if($registry->user->id) $tpl = $registry->isHome ? "home_private" : "page_private";

@@ -1,13 +1,69 @@
 <?php
+/**
+ * @file captcha.class.php
+ * @brief Contains the class used to generate captcha images.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @ingroup core forms
+ * @brief Class used to generate captcha images
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class captcha {
 
+	/**
+	 * @brief Name of the captcha field
+	 */
 	private $_name;
-	private $_width, $_height;
+
+	/**
+	 * @brief Captcha image width
+	 */
+	private $_width;
+	
+	/**
+	 * @brief Captcha image height
+	 */
+	private $_height;
+
+	/**
+	 * @brief Absolute path of the font ttf file
+	 */
 	private $_font_file;
-	private $_letters, $_numbers;
+	
+	/**
+	 * @brief Letters allowed for the captcha
+	 */
+	private $_letters;
+
+	/**
+	 * @brief Numbers allowed for the captcha
+	 */
+	private $_numbers;
+
+	/**
+	 * @brief Whether to allow number in captcha or not
+	 */
 	private $_allow_numbers;
 
+	/**
+	 * @brief Constructs a captcha instance 
+	 * 
+	 * @param string $name the name of the captcha field
+	 * @param array $opts
+	 *   Associative array of options
+	 *   - <b>allow_numbers</b>: bool default false. Whether to allow number in captcha or not 
+	 * @return void
+	 */
 	function __construct($name, $opts=null) {
 
 		$this->_name = $name;
@@ -23,6 +79,15 @@ class captcha {
 	
 	}
 
+	/**
+	 * @brief Renders the captcha image and input 
+	 * 
+	 * @param mixed $opts 
+	 *   Associative array of options
+	 *   - <b>bkg_color</b>: string default '#00ff00'. The hex code of the background color of the captcha 
+	 *   - <b>color</b>: string default '#000000'. The hex code of the color of the letters in the captcha image 
+	 * @return string the captcha image and input element
+	 */
 	public function render($opts=null) {
 	
 		$bkg_color = gOpt($opts, "bkg_color", "#00ff00");
@@ -74,6 +139,11 @@ class captcha {
 
 	}
 
+	/**
+	 * @brief Generates a random alphanumeric string 
+	 * 
+	 * @return void
+	 */
 	private function generateStrings() {
 	
 		$s1 = $s2 = '';
@@ -97,6 +167,12 @@ class captcha {
 
 	}
 
+	/**
+	 * @brief Converts a hex color string in a rgb array 
+	 * 
+	 * @param string $hexStr the hex string
+	 * @return the associative array containing the rgb values
+	 */
 	private function hex2RGB($hexStr) {
     
 		$hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $hexStr); // Gets a proper hex string
@@ -121,6 +197,11 @@ class captcha {
 		return $rgbArray; // returns the rgb string or the associative array
 	}
 
+	/**
+	 * @brief Cheks if the user inputs the right captcha code  
+	 * 
+	 * @return bool the check result
+	 */
 	public function check() {
 	
 		$string = preg_replace("#[ \s]#", "", $_POST[$this->_name]);

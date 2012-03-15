@@ -4,17 +4,11 @@ class privilege extends model {
 
 	private $_user;
 
-	function __construct($registry, $id) {
+	function __construct($id) {
 	
-		$this->_registry = $registry;
 		$this->_tbl_data = TBL_SYS_PRIVILEGES;
-		parent::__construct($this->initP($id));
 
-	}
-
-	private function initP($id) {
-
-		return $this->initDbProp($id);
+		parent::__construct($id);
 
 	}
 

@@ -1,11 +1,14 @@
 <?php
 /**
- * \file pointer.php
- * Entry point to call a specific class method.
+ * @file /var/www/jeff.git/pointer.php
+ * @ingroup entry_point
+ * @brief Front end entry point to call a specific class method.
+ * @details This file is used when performing ajax requests.
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com
+ * @date 2011-2012
+ * @copyright Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
  */
 
 /**
@@ -31,7 +34,7 @@ include(ABS_ROOT.DS.'configuration.php');
 /**
  * include core class  
  */
-include(ABS_CORE.DS.'core.php');
+include(ABS_CORE.DS.'core.class.php');
 
 /**
  * base path definition from which generate links 

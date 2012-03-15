@@ -4,9 +4,9 @@ class siteSettingsController extends controller {
 
 	private $_admin_privilege;
 
-	function __construct($registry) {
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "siteSettings";
@@ -19,9 +19,9 @@ class siteSettingsController extends controller {
 
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
-		$at = new adminTable($this->_registry, TBL_SYS_SETTINGS, array('insertion'=>false, 'deletion'=>false));
+		$at = new adminTable(TBL_SYS_SETTINGS, array('insertion'=>false, 'deletion'=>false));
 
 		$table = $at->manage();
 

@@ -1,44 +1,54 @@
 <?php
 /**
-* \file index.php
-* Jeff entry point.
-*
-* @version 0.98
-* @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
-* @authors abidibo abidibo@gmail.com
-*/
+ * @file /var/www/jeff.git/index.php
+ * @ingroup entry_point
+ * @brief Front end entry point.
+ * @details Every request passes from here, except from the ajax requests which points tio single class methods.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
 /**
- * absolute path to the ROOT directory 
+ * @defgroup entry_point Entry points
+ *
+ * <p>Group of file which are entry points for the application.<br />
+ * There are two kinds of entry point, one used to render the whole document and the other used to render only the output of a controller method</p>
+ */
+
+/**
+ * @brief absolute path to the ROOT directory 
  */
 define('ABS_ROOT', realpath(dirname(__FILE__)));
 
 /**
- * operating system directory separator 
+ * @brief operating system directory separator 
  */
 define( 'DS', DIRECTORY_SEPARATOR );
 /**
- * include system paths 
+ * @brief include system paths 
  */
 include(ABS_ROOT.DS.'paths.php');
 
 /**
- * include system configuration  
+ * @brief include system configuration  
  */
 include(ABS_ROOT.DS.'configuration.php');
 
 /**
- * include core class  
+ * @brief include core class  
  */
-include(ABS_CORE.DS.'core.php');
+include(ABS_CORE.DS.'core.class.php');
 
 /**
- * base path definition from which generate links 
+ * @brief base path definition from which generate links 
  */
 define('BASE_PATH', ROOT);
 
 /**
- * render the application  
+ * @brief render the application  
  */
 $core = new core();
 $core->renderApp();

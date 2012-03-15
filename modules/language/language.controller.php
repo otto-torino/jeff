@@ -1,11 +1,10 @@
 <?php
 
-
 class languageController extends controller {
 
-	function __construct($registry) {
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "language";
@@ -17,7 +16,7 @@ class languageController extends controller {
 
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$s_fields = array(
 			"main"=>array(
@@ -34,7 +33,7 @@ class languageController extends controller {
 			)
 		);
 
-		$at = new adminTable($this->_registry, TBL_LNG);
+		$at = new adminTable(TBL_LNG);
 		$at->setSpecialFields($s_fields);
 		$table = $at->manage();
 

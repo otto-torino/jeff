@@ -1,72 +1,73 @@
 <?php
 /**
-* \file paths.php
-* Jeff system paths definition.
-*
-* @version 0.98
-* @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
-* @authors abidibo abidibo@gmail.com
-*/
+ * @file paths.php
+ * @brief Jeff system paths definition.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
+ */
 
 /**
- *  absolute path to the ADMIN ROOT directory 
+ *  @brief absolute path to the ADMIN ROOT directory 
  */
 define('ABS_ADMIN', ABS_ROOT.DS.'admin');
 
 /**
- *  absolute path to the upload directory
+ *  @brief absolute path to the upload directory
  */
 define('ABS_UPLOAD', ABS_ROOT.DS.'upload');
 
 /**
- * absolute path to the cache directory 
+ * @brief absolute path to the cache directory 
  */
 define('ABS_CACHE', ABS_ROOT.DS.'cache');
 
 /**
- * absolute path to the core directory 
+ * @brief absolute path to the core directory 
  */
 define('ABS_CORE', ABS_ROOT.DS.'core');
 
 /**
- * absolute path to the MVC directory,
+ * @brief absolute path to the MVC directory,
  * 
  * Contains the primitive mvc classes
  */
 define('ABS_MVC', ABS_CORE.DS.'mvc');
 
 /**
- *  absolute path to the lib directory
+ *  @brief absolute path to the lib directory
  */
 define('ABS_LIB', ABS_ROOT.DS.'lib');
 
 /**
- * absolute path to the php libraries directory 
+ * @brief absolute path to the php libraries directory 
  */
 define('ABS_PHPLIB', ABS_LIB.DS.'php');
 
 /**
- * absolute path to the themes directory 
+ * @brief absolute path to the themes directory 
  */
 define('ABS_THEMES', ABS_ROOT.DS.'themes');
 
 /**
- * aboslute path to the modules directory 
+ * @brief aboslute path to the modules directory 
  */
 define('ABS_MDL', ABS_ROOT.DS.'modules');
 
 /**
- * absolute path to the core db directory 
+ * @brief absolute path to the core db directory 
  */
 define('ABS_DB', ABS_CORE.DS.'db');
 
 /**
- * absolute path to the theme db directory 
+ * @brief absolute path to the theme db directory 
  */
 define('ABS_THEME', ABS_CORE.DS.'theme');
 
 /**
- * absolute path to the plugins directory 
+ * @brief absolute path to the plugins directory 
  */
 define('ABS_PLUGINS', ABS_ROOT.DS.'plugins');
 
@@ -92,32 +93,32 @@ else {
 }
 
 /**
- * server operating system 
+ * @brief server operating system 
  */
 define('OS', $os);
 
 /**
- * relative path to ROOT directory  
+ * @brief relative path to ROOT directory  
  */
 define('ROOT', $root_const);
 
 /**
- * relative path to ADMIN ROOT dierctory  
+ * @brief relative path to ADMIN ROOT dierctory  
  */
 define('ROOT_ADMIN', ROOT.'/admin');
 
 /**
- * relative path to javascript libraries  
+ * @brief relative path to javascript libraries  
  */
 define('REL_JSLIB', ROOT.'/lib/js');
 
 /**
- * relative path to css directory  
+ * @brief relative path to css directory  
  */
 define('REL_CSS', ROOT.'/css');
 
 /**
- * relative path to upload directory  
+ * @brief relative path to upload directory  
  */
 define('REL_UPLOAD', ROOT.'/upload');
 

@@ -4,9 +4,9 @@ require_once('index.php');
 
 class indexController extends controller {
 
-	function __construct($registry) {
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 
@@ -15,15 +15,14 @@ class indexController extends controller {
 	public function index() {
 	
 		if($this->_registry->site=='admin') return $this->adminIndex();
-		//if($this->_registry->user) return $this->userIndex();
 		
 		return $this->publicIndex();
 
 	}
 
 	public function publicIndex() {
-		
-		access::check($this->_registry, 'public_view', null, array("exitOnFailure"=>true));
+
+		access::check('public_view', null, array("exitOnFailure"=>true));
 
 		$this->_view->setTpl('index_public', array('css', 'index'));
 
@@ -32,7 +31,7 @@ class indexController extends controller {
 
 	public function userIndex() {
 	
-		access::check($this->_registry, 'private_view');
+		access::check('private_view');
 
 		$this->_view->setTpl('index_user', array('css'=>'index'));
 		$this->_view->assign('summary', $summary);
@@ -42,7 +41,7 @@ class indexController extends controller {
 	
 	public function adminIndex() {
 	
-		access::check($this->_registry, 'admin_view');
+		access::check('admin_view');
 
 		$this->_view->setTpl('index_admin', array('css', 'index'));
 

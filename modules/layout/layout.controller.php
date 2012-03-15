@@ -4,9 +4,9 @@ require_once('layout.php');
 
 class layoutController extends controller {
 
-	function __construct($registry) {
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "layout";

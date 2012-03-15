@@ -1,27 +1,21 @@
 <?php
+
 class language extends model {
 
-
-	function __construct($registry, $id) {
+	function __construct($id) {
 	
-		$this->_registry = $registry;
 		$this->_tbl_data = TBL_LNG;
-		parent::__construct($this->initP($id));
+
+		parent::__construct($id);
 
 	}
 
-	private function initP($id) {
-
-		return $this->initDbProp($id);
-
-	}
-	
 	public static function get($registry, $opts=null) {
 	
 		$objs = array();
 		$where = gOpt($opts, "where", ''); 
 		$rows = $registry->db->autoSelect("id", TBL_LNG, $where, 'language');
-		foreach($rows as $row) $objs[] = new language($registry, $row['id']);
+		foreach($rows as $row) $objs[] = new language($row['id']);
 
 		return $objs;
 	
@@ -30,7 +24,7 @@ class language extends model {
 	public static function getFromLabel($registry, $label) {
 
 		$rows = $registry->db->autoSelect("id", TBL_LNG, "label='$label'", 'language');
-		if(count($rows)) return new language($registry, $rows[0]['id']);
+		if(count($rows)) return new language($rows[0]['id']);
 
 		return null;
 	

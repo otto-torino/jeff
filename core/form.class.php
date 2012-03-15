@@ -1,34 +1,110 @@
 <?php
+/**
+ * @file form.class.php
+ * @brief Contains the form class.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @defgroup forms Form management
+ * <p>Set of classes used to manage data forms. The \ref form class provides methods to create html form elements and upload files. 
+ * The \ref captcha class allows the generation of captcha images.</p>
+ * The \ref image class provides methods to manipulate images.</p>
+ */
+
+/**
+ * \ingroup core forms
+ * @brief Class used to manage forms
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class form {
+	
+	/**
+	 * @brief The registry singleton instance 
+	 */
+	private $_registry;
 
-	private $_registry, $_view;
-	private $_method, $_name, $_validation;
+	/**
+	 * @brief a \ref view instance
+	 */
+	private $_view;
 
-	function __construct($registry, $method, $name, $opts=null) {
+	/**
+	 * @brief form method (post or get)
+	 */
+	private $_method;
 
-		$this->_registry = $registry;
+	/**
+	 * @brief form name and id 
+	 */
+	private $_name;
+	
+	/**
+	 * @brief whether to add javascript validation or not 
+	 */
+	private $_validation;
+
+	/**
+	 * @brief Array containing the submitted data
+	 */
+	private $_requestVars;
+
+	/**
+	 * @brief Constructs a form instance 
+	 * 
+	 * @param string $method form method: post or get
+	 * @param string $name form name and id
+	 * @param array $opts 
+	 *   associative array of options:
+	 *   - <b>validation</b>: whether to perform javascript validation or not
+	 *   - <b>verifyToken</b>: whether to verify the token used to detect CSRF attacks or not
+	 * @return void
+	 */
+	function __construct($method, $name, $opts=null) {
+
+		$this->_registry = registry::instance();
+
 		$this->_method = $method;	
 		$this->_name = $name;
 
-		$this->_view = new view($registry);
+		$this->_view = new view();
 
 		$this->_validation = gOpt($opts, 'validation', false);
 
-		if(gOpt($opts, 'verifyToken'))
-			if(!$this->verifyFormToken($this->_name)) 
+		if(gOpt($opts, 'verifyToken')) {
+			if(!$this->verifyFormToken($this->_name)) {
 				exit(error::syserrorMessage("form", "construct", __("CSRFDetectError")));
+			}
+		}
 		
 		$this->_requestVars = $this->_method == 'post' ? $_POST : ($this->_method == 'get' ? $_GET : $_REQUEST);	
 	
 	}
 	
+	/**
+	 * @brief CSRF token generation 
+	 * 
+	 * @return string the generated token
+	 */
 	private function generateFormToken() {
   		$token = md5(uniqid(microtime(), true));
   		$_SESSION[$this->_name.'_token'] = $token;
   		return $token;
 	}
 
+	/**
+	 * @brief CSRF token verification 
+	 * 
+	 * @return bool the verification result
+	 */
 	private function verifyFormToken() {
   		$index = $this->_name.'_token';
 		// There must be a token in the session
@@ -40,6 +116,12 @@ class form {
   		return true;
 	}
 
+	/**
+	 * @brief Loads the submitted data previously saved to session 
+	 * 
+	 * @param bool $noerror whether to loads data even if no error occurs 
+	 * @return void
+	 */
 	public function load($noerror=false) {
 		
 		$this->_registry->fvars = array();
@@ -56,6 +138,11 @@ class form {
 
 	}
 
+	/**
+	 * @brief Saves submitted data to session 
+	 * 
+	 * @return void
+	 */
 	public function save() {
 		
 		$_SESSION["formvars_".$this->_name] = array();
@@ -64,36 +151,73 @@ class form {
 
 	}
 
+	/**
+	 * @brief Retrieves the value of a variable loaded from session (and so previously submitted) 
+	 * 
+	 * @param string $name the field name 
+	 * @param mixed $dft deafult value if variable was not loaded 
+	 * @return void
+	 */
 	public function retvar($name, $dft=null) {
 
 		return isset($this->_registry->fvars[$name]) ? $this->_registry->fvars[$name] : $dft;
 
 	}
 
+	/**
+	 * @brief Deletes the session array used to save and load submitted data 
+	 * 
+	 * @return void
+	 */
 	public function free() {
 	
 			unset($_SESSION['formvars_'.$this->_name]);
 
 	}
 
+	/**
+	 * @brief Sets the required fields 
+	 * 
+	 * @param string $required comma separated list of required fields
+	 * @return void
+	 */
 	public function setRequired($required) {
 		
 		return !empty($required) ? $this->hidden('required', $required) : '';
 
 	}
 
+	/**
+	 * @brief Checks if the required fields have been filled 
+	 * 
+	 * @return bool the check result, true if all required fields were filled, false otherwise
+	 */
 	public function checkRequired() {
 		
 		$error = false;
 		$required = isset($this->_requestVars['required']) ? cleanInput($this->_method, 'required', 'string') : '';
 		
-		if(!empty($required))
-			foreach(explode(",", $required) as $fieldname)
+		if(!empty($required)) {
+			foreach(explode(",", $required) as $fieldname) {
 				if($this->_requestVars[trim($fieldname)]=='') $error = true;
+			}
+		}
+
 		return $error;
 
 	}
 
+	/**
+	 * @brief Form open tag 
+	 * 
+	 * @param string $action form action attribute
+	 * @param string $required comma separated list of required fields
+	 * @param mixed $opts 
+	 *   Associative array:
+	 *   - <b>upload</b>: bool. Whether the form allows file upload or not
+	 *   - <b>generateToken</b>: bool. Whether the generate a CSRF token
+	 * @return string the form open tag
+	 */
 	public function sform($action, $required, $opts=null) {
 	
 		$buffer = "<form name=\"$this->_name\" id=\"".$this->_name."\" method=\"$this->_method\" action=\"$action\"";
@@ -108,12 +232,26 @@ class form {
 		return $buffer;
 	}
 
+	/**
+	 * @brief Form close tag 
+	 * 
+	 * @return string the form close tag
+	 */
 	public function cform() {
 
 		return "</form>";
 
 	}
 
+	/**
+	 * @brief Captcha complete field (label, image and input field) 
+	 * 
+	 * @param array $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field 
+	 *   - see \ref form::captcha
+	 * @return void
+	 */
 	public function ccaptcha($opts=null) {
 	
 		list($l, $d) = array(__("SecureCode"), __("SecureCodeExp"));
@@ -124,6 +262,14 @@ class form {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Captcha field (image and input field) 
+	 * 
+	 * @param array $opts 
+	 *   associative array of options:
+	 *   - <b>class</b>: css class of the div which contains the captcha 
+	 * @return void
+	 */
 	public function captcha($opts=null) {
 
 		$class = gOpt($opts, "class", "left captcha");
@@ -135,6 +281,11 @@ class form {
 
 	}
 
+	/**
+	 * @brief Captcha code check 
+	 * 
+	 * @return bool check result
+	 */
 	public function checkCaptcha() {
 	
 		require_once(ABS_CORE.DS.'captcha.class.php');
@@ -145,6 +296,16 @@ class form {
 
 	}
 	
+	/**
+	 * @brief Fieldset element 
+	 * 
+	 * @param string $legend the legend content
+	 * @param string $content the fieldset content 
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>id</b>: fieldset id 
+	 * @return string the fieldset element
+	 */
 	public function fieldset($legend, $content, $opts=null) {
 
 		$this->_view->setTpl('form_fieldset');
@@ -155,6 +316,14 @@ class form {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Label preparation 
+	 * 
+	 * @param mixed $text label text. Possible values are:
+	 *   - string: the label text
+	 *   - array: the first or 'label' element is the label text, the second or 'description' element is the description text
+	 * @return void
+	 */
 	public function label($text){
 
 		if(!$text) return array(null, null);
@@ -167,6 +336,16 @@ class form {
 		return array($label, $description);
 	}
 
+	/**
+	 * @brief Hidden field 
+	 * 
+	 * @param string $name field name
+	 * @param mixed $value field value
+	 * @param array $opts 
+	 *   associative array of options:
+	 *   - <b>id</b>: field id 
+	 * @return void
+	 */
 	public function hidden($name, $value, $opts=null) {
 
 		$buffer = "<input type=\"hidden\" name=\"$name\" value=\"$value\" ".(gOpt($opts, 'id')?"id=\"".gOpt($opts, 'id')."\"":"")."/>\n";
@@ -174,6 +353,21 @@ class form {
 		return $buffer;
 	}
 
+	/**
+	 * @brief Prepare the form element view 
+	 * 
+	 * @param string $name field name 
+	 * @param mixed $l field label
+	 * @param mixed $d field label description 
+	 * @param bool $req whether the field is required or not 
+	 * @param string $tadd text added after the input element
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>label_class</b>: string. css class for the label element 
+	 *   - <b>label_form</b>: string. form attribute of the label element 
+	 *   - <b>more</b>: string. Additional content after the input element and text added 
+	 * @return void
+	 */
 	private function prepareView($name, $l, $d, $req, $tadd, $opts=null) {
 		
 		$this->_view->setTpl('form_element');
@@ -190,17 +384,50 @@ class form {
 
 	}
 
+	/**
+	 * @brief Custom content formatted as a form element (label and field) 
+	 * 
+	 * @param string $cleft left content (as a label)
+	 * @param string $cright right content (as an input)
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>idLeft</b>: string. id attribute of the left content 
+	 *   - <b>idRight</b>: string. id attribute of the right content 
+	 * @return void
+	 */
 	public function freeInput($cleft, $cright, $opts=null) {
 	
 		$this->_view->setTpl('form_cell');
-		$this->_view->assign('idleft', gOpt($opts, 'idleft') ? gOpt($opts, 'idleft'):null);
+		$this->_view->assign('idleft', gOpt($opts, 'idleft', null));
 		$this->_view->assign('cleft', $cleft);
-		$this->_view->assign('idright', gOpt($opts, 'idright') ? gOpt($opts, 'idright'):null);
+		$this->_view->assign('idright', gOpt($opts, 'idright', null));
 		$this->_view->assign('cright', $cright);
 
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Form input element 
+	 * 
+	 * @param string $name the field name
+	 * @param string $type the input type (text, password, checkbox, ...)
+	 * @param mixed $value the input value
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>id</b>: string. id attribute of the input element 
+	 *   - <b>class</b>: string. css class of the input element 
+	 *   - <b>pattern</b>: string. pattern attribute of the input element 
+	 *   - <b>hint</b>: string. hint message shown when the specified pattern checks fails 
+	 *   - <b>placeholder</b>: string. placeholder attribute of the input element 
+	 *   - <b>size</b>: string. size attribute of the input element 
+	 *   - <b>maxlength</b>: string. maxlength attribute of the input element 
+	 *   - <b>readonly</b>: bool. whether the input element is readonly or not 
+	 *   - <b>required</b>: bool. whether the field is required or not 
+	 *   - <b>formnovalidate</b>: bool. whether the input element is not to be validated or not 
+	 *   - <b>js</b>: string. js event handler 
+	 *   - <b>other</b>: string. other element attributes 
+	 * @return string the input element
+	 */
 	public function input($name, $type, $value, $opts=null){
 
 		$dft_pattern = $dft_hint = null;
@@ -230,6 +457,19 @@ class form {
 		return $buffer;
 	}
 	
+	/**
+	 * @brief Complete form input element (label and input field) 
+	 * 
+	 * @param string $name field name 
+	 * @param string $type input type
+	 * @param mixed $value field value 
+	 * @param mixed $label field label
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field 
+	 *   - see \ref form::input
+	 * @return string the complete input element
+	 */
 	public function cinput($name, $type, $value, $label, $opts){
 
 		list($l, $d) = $this->label($label);
@@ -239,6 +479,18 @@ class form {
 		return $this->_view->render();
 	}
 	
+	/**
+	 * @brief Complete form date input element (label and input field) 
+	 * 
+	 * @param string $name field name 
+	 * @param string $value field value 
+	 * @param mixed $label field label
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field 
+	 *   - see \ref form::input except from options size, maxlength, pattern, hint which have default values
+	 * @return string the complete datetime element
+	 */
 	public function cinput_date($name, $value, $label, $opts){
 
 		$opts['size'] = 10;
@@ -271,6 +523,18 @@ class form {
 		return $this->_view->render();
 	}
 	
+	/**
+	 * @brief Complete form datetime input element (label and input field) 
+	 * 
+	 * @param string $name field name 
+	 * @param string $value field value 
+	 * @param mixed $label field label
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field 
+	 *   - see \ref form::input except from options size, maxlength, pattern, hint which have default values
+	 * @return string the datetime element
+	 */
 	public function cinput_datetime($name, $value, $label, $opts){
 
 		$opts['size'] = gOpt($opts, 'seconds')==true ? 19 : 16;
@@ -304,6 +568,18 @@ class form {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Complete form textarea element (label and textarea) 
+	 * 
+	 * @param string $name field name 
+	 * @param string $value field value 
+	 * @param mixed $label field label
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field 
+	 *   - see \ref form::textarea
+	 * @return string the complete textarea element
+	 */
 	public function ctextarea($name, $value, $label, $opts=null){
 
 		list($l, $d) = $this->label($label);
@@ -313,6 +589,27 @@ class form {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Textarea form element
+	 * 
+	 * @param string $name field name 
+	 * @param string $value field value 
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>editor</b>: whether to charge dojo editor or not 
+	 *   - <b>id</b>: string. id attribute of the textarea element 
+	 *   - <b>class</b>: string. css class of the textarea element 
+	 *   - <b>pattern</b>: string. pattern attribute of the textarea element 
+	 *   - <b>hint</b>: string. hint message shown when the specified pattern checks fails 
+	 *   - <b>placeholder</b>: string. placeholder attribute of the textarea element 
+	 *   - <b>cols</b>: int. cols attribute of the textarea element 
+	 *   - <b>rows</b>: int. rows attribute of the textarea element 
+	 *   - <b>readonly</b>: bool. whether the textarea element is readonly or not 
+	 *   - <b>required</b>: bool. whether the field is required or not 
+	 *   - <b>js</b>: string. js event handler 
+	 *   - <b>other</b>: string. other element attributes 
+	 * @return string the texarea element
+	 */
 	public function textarea($name, $value, $opts){
 		
 		if(gOpt($opts, 'editor', false)) {
@@ -340,6 +637,21 @@ class form {
 		return $buffer;
 	}
 
+	/**
+	 * @brief Complete form radio button (label and input element) 
+	 * 
+	 * @param string $name field name
+	 * @param mixed $value field value
+	 * @param array $data radio choices in the array form array('value'=>'label')
+	 * @param mixed $default default choice selected 
+	 * @param mixed $label field label 
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field 
+	 *   - <b>required</b>: bool. whether the field is required or not 
+	 *   - see \ref form::radio
+	 * @return string the complete radio button
+	 */
 	public function cradio($name, $value, $data, $default, $label, $opts=null){
 		
 		list($l, $d) = $this->label($label);
@@ -350,6 +662,21 @@ class form {
 
 	}
 
+	/**
+	 * @brief Form radio button
+	 * 
+	 * @param string $name field name
+	 * @param mixed $value field value
+	 * @param array $data radio choices in the array form array('value'=>'label')
+	 * @param mixed $default default choice selected 
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>aspect</b>: string. whether the choices should be vertically or horizontally listed 
+	 *   - <b>id</b>: string. id attribute of the element 
+	 *   - <b>js</b>: string. js event handler 
+	 *   - <b>other</b>: string. other element attributes 
+	 * @return string the radio button
+	 */
 	public function radio($name, $value, $data, $default, $opts){
 		
 		$buffer = '';
@@ -371,6 +698,19 @@ class form {
 		return $buffer;
 	}
 	
+	/**
+	 * @brief Complete form select element (label and select element) 
+	 * 
+	 * @param string $name field name
+	 * @param mixed $value field value
+	 * @param array $data select options in the array form array('value'=>'label')
+	 * @param mixed $label field label 
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field
+	 *   - see \ref form::select
+	 * @return string the complete select element
+	 */
 	public function cselect($name, $value, $data, $label, $opts=null) {
 		
 		list($l, $d) = $this->label($label);
@@ -381,6 +721,28 @@ class form {
 
 	}
 	
+	/**
+	 * @brief Select form element 
+	 * 
+	 * @param string $name field name
+	 * @param mixed $value field value
+	 * @param array $data select options in the array form array('value'=>'label')
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>id</b>: string. id attribute of the element 
+	 *   - <b>classField</b>: string. css class of the select element 
+	 *   - <b>size</b>: string. size attribute of the select element 
+	 *   - <b>multiple</b>: bool. whether to allow multiple selection or not 
+	 *   - <b>required</b>: bool. whether the field is required or not 
+	 *   - <b>js</b>: string. js event handler 
+	 *   - <b>other</b>: string. other element attributes 
+	 *   - <b>firstVoice</b>: string. custom first option label 
+	 *   - <b>firstValue</b>: string. custom first option value 
+	 *   - <b>noFirst</b>: bool. Whether to show or not an empty first option 
+	 *   - <b>maxChars</b>: int. If set the option labels are cut at the given number of characters 
+	 *   - <b>cutWords</b>: bool default false. Whether to allow cut of words when truncating labels or not 
+	 * @return string the select element
+	 */
 	public function select($name, $selected, $data, $opts) {
 		
 		$buffer = "<select name=\"$name\" ";
@@ -404,7 +766,7 @@ class form {
 					$title = null;
 					if(is_array($value)) { $label = $value['label']; $title = $value['title']; }
 					else $label = $value;
-					if(gOpt($opts, 'maxChars')) $label = cutHtmlText($label, gOpt($opts, 'maxChars'), '...', true, gOpt($opts, 'cutWords')?gOpt($opts, 'cutWords'):false, true);
+					if(gOpt($opts, 'maxChars')) $label = cutHtmlText($label, gOpt($opts, 'maxChars'), '...', true, gOpt($opts, 'cutWords', false), true);
 					$buffer .= "<option value=\"$key\" ".(in_array($key, $selected)?"selected=\"selected\"":"")." ".($title ? "title=\"$title\"":"").">".$label."</option>\n";
 				}
 			}
@@ -415,6 +777,19 @@ class form {
 		return $buffer;
 	}
 	
+	/**
+	 * @brief Complete checkbox form element (label and input element) 
+	 * 
+	 * @param string $name field name
+	 * @param  bool $checked whether to check the field or not
+	 * @param mixed $value field value
+	 * @param mixed $label field label
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>text_add</b>: text added after the field
+	 *   - see \ref form::checkbox
+	 * @return string the complete checkbox element
+	 */
 	public function ccheckbox($name, $checked, $value, $label, $opts=null){
 		
 		list($l, $d) = $this->label($label);
@@ -425,6 +800,21 @@ class form {
 
 	}
 	
+	/**
+	 * @brief Checkbox form element 
+	 * 
+	 * @param string $name field name
+	 * @param  bool $checked whether to check the field or not
+	 * @param mixed $value field value
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>id</b>: string. id attribute of the element 
+	 *   - <b>classField</b>: string. css class of the element
+	 *   - <b>required</b>: bool. whether the field is required or not 
+	 *   - <b>js</b>: string. js event handler 
+	 *   - <b>other</b>: string. other element attributes 
+	 * @return string the checkbox element
+	 */
 	public function checkbox($name, $checked, $value, $opts=null){
 		
 		$buffer = "<input type=\"checkbox\" name=\"$name\" value=\"$value\" ".($checked?"checked=\"checked\"":"")." ";
@@ -438,6 +828,20 @@ class form {
 		return $buffer;
 	}
 
+	/**
+	 * @brief Complete multi checkbox form elements (label and elements) 
+	 * 
+	 * @param string $name field name
+	 * @param array $checked array containing the checked items
+	 * @param array $values array of items in the form array(array('label'=>'item_label', 'value'=>'item_value'))
+	 * @param mixed $label form label 
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>label_class</b>: label css class
+	 *   - <b>text_add</b>: text added after the field
+	 *   - see \ref form::multiplecheckbox
+	 * @return string the complete multicheck element
+	 */
 	public function cmulticheckbox($name, $checked, $values, $label, $opts=null){
 		
 		$label_class = gOpt($opts, 'label_class', '');
@@ -449,6 +853,20 @@ class form {
 
 	}
 
+	/**
+	 * @brief Multi checkbox form elements 
+	 * 
+	 * @param string $name field name
+	 * @param array $checked array containing the checked items
+	 * @param array $values array of items in the form array(array('label'=>'item_label', 'value'=>'item_value'))
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>id</b>: string. id attribute of every single element 
+	 *   - <b>classField</b>: string. css class of every single element
+	 *   - <b>js</b>: string. js event handler of every single element
+	 *   - <b>other</b>: string. other element attributes of every single element
+	 * @return string the multicheck element
+	 */
 	public function multiplecheckbox($name, $checked, $values, $opts=null){
 
 		$rows = array();
@@ -474,6 +892,19 @@ class form {
 		return $view->render();
 	}
 
+	/**
+	 * @brief Complete form input file element 
+	 * 
+	 * @param string $name field name
+	 * @param string $value field value
+	 * @param mixed $label field label
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>extensions</b>: array. List of valid file extensions
+	 *   - <b>text_add</b>: text added after the field
+	 *   - see \ref form::input_file
+	 * @return string the complete input file element
+	 */
 	public function cinput_file($name, $value, $label, $opts=null){
 
 		$valid_extension = gOpt($opts, 'extensions', null);
@@ -486,9 +917,21 @@ class form {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Form input file element 
+	 * 
+	 * @param string $name field name
+	 * @param string $value field value
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>rel_path</b>: string. Relative path of the directory of upload
+	 *   - <b>preview</b>: whether to show a lightbox style file previwe or not (to use with images only)
+	 *   - see \ref form::input
+	 * @return string the input file element
+	 */
 	public function input_file($name, $value, $opts=null) {
 
-		$required = $opts['required'];
+		$required = gOpt($opts, 'required', false);
 		if($value) $opts['required'] = false;
 
 		$buffer = $this->input($name, 'file', $value, $opts);
