@@ -17,7 +17,7 @@
  */
 
 /**
- * \ingroup core forms
+ * @ingroup core forms
  * @brief Class used to manage forms
  *
  * @author abidibo abidibo@gmail.com
@@ -953,6 +953,26 @@ class form {
 
 	}
 
+	/**
+	 * @brief Management of form file uploads 
+	 *
+	 * Method for managing files via the upload form. If a new file is uploaded the old file is deleted.<br />
+	 * The old file can also be deleted without uploading a new one. If no file is uploaded and the 
+	 * deletion checkbox in the input file element is unchecked then all stands as is.
+	 * 
+	 * @param string $name field name 
+	 * @param array $valid_extension list of valid extensions
+	 * @param string $path absolute path to the upload directory
+	 * @param string $link_error redirection url in case of error
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>error_query</b>: string. Query to execute in case of file upload error
+	 *   - <b>check_content</b>: string. Whether to check file mime type or not
+	 *   - <b>contents</b>: array. List of allowed mime types, if not given the default one is taken
+	 *   - <b>prefix</b>: string. Filename prefix
+	 *   - <b>max_file_size</b>: int. Maximum size allowed for the file
+	 * @return string the name of the uploaded file or an empty string or the old file name 
+	 */
 	public function uploadFile($name, $valid_extension, $path, $link_error, $opts) {
 	
 		$path = substr($path, -1) == DS ? $path : $path.DS;
@@ -1034,6 +1054,35 @@ class form {
 
 	}
 	
+	/**
+	 * @brief Uploads the submitted image to the given directory 
+	 * 
+	 * Method for managing images via the upload form. If a new file is uploaded the old file is deleted.<br />
+	 * The old file can also be deleted without uploading a new one. If no file is uploaded and the 
+	 * deletion checkbox in the input file element is unchecked then all stands as is.
+	 *
+	 * @param string $name field name 
+	 * @param array $valid_extension list of valid extensions
+	 * @param string $path absolute path to the upload directory
+	 * @param string $link_error redirectino url in case of error
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - <b>error_query</b>: string. Query to execute in case of file upload error
+	 *   - <b>check_content</b>: string. Whether to check file mime type or not
+	 *   - <b>contents</b>: array. List of allowed mime types, if not given the default one is taken
+	 *   - <b>prefix</b>: string. Filename prefix
+	 *   - <b>prefix_thumb</b>: string default 'thumb_'. Thumbnail prefix
+	 *   - <b>make_thumb</b>: bool default false. Whether to create a thumbnail or not
+	 *   - <b>resize</b>: bool default false. Whether to resize the image or not
+	 *   - <b>scale</b>: bool default false. Whether to scale the image or not
+	 *   - <b>resize_enlarge</b>: bool default false. Whether to allow image enlargement during resizing or not
+	 *   - <b>resize_width</b>: int default null. With used to resize the image (if only width or height are given the proportions are maintained)
+	 *   - <b>resize_height</b>: int default null. Height used to resize the image
+	 *   - <b>thumb_width</b>: int default null. With of the thumbnail (if only width or height are given the proportions are maintained)
+	 *   - <b>thumb_height</b>: int default null. Height of the thumbnail
+	 *   - <b>max_file_size</b>: int. Maximum size allowed for the file
+	 * @return void
+	 */
 	public function uploadImage($name, $valid_extension, $path, $link_error, $opts) {
 	
 		$path = substr($path, -1) == DS ? $path : $path.DS;
@@ -1147,8 +1196,6 @@ class form {
 
 				$image->save($path.$nthumbfile, $image->type());
 			}
-
-			//if($resize || $scale) @unlink($path.$nfile);
 		}
 
 		if($upload) return $nfile;
@@ -1157,6 +1204,16 @@ class form {
 
 	}
 
+	/**
+	 * @brief Sets the upload file name
+	 *
+	 * If another file with the same name exists in the upload directory adds .1, .2, etc.. at the end of the name 
+	 * 
+	 * @param string $name file name
+	 * @param string $path absolute path of the upload directory
+	 * @param string $prefix file name prefix
+	 * @return string the file name
+	 */
 	private function setFileName($name, $path, $prefix) {
 	
 		$init_name = $_FILES[$name]['name'];
@@ -1171,6 +1228,13 @@ class form {
 
 	}
 
+	/**
+	 * @brief Checks if the file extension is allowed 
+	 * 
+	 * @param string $filename file name
+	 * @param array $valid_extension list of valid extensions
+	 * @return bool the check result
+	 */
 	private function checkExtension($filename, $valid_extension) {
 	
 		if(!$valid_extension) return true;
@@ -1183,6 +1247,14 @@ class form {
 	
 	} 
 
+	/**
+	 * @brief Upload a file to the given directory 
+	 * 
+	 * @param string $tmp_file name of the temporary file
+	 * @param string $filename name of the file saved to filesystem
+	 * @param string $path path of the saving directory
+	 * @return bool result of file uploading
+	 */
 	private function upload($tmp_file, $filename, $path) {
 	
 		$file = $path.$filename;

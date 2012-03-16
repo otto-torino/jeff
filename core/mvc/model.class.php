@@ -1,7 +1,7 @@
 <?php
 /**
- * \file model.class.php
- * \brief Contains the model primitive class.
+ * @file model.class.php
+ * @brief Contains the model primitive class.
  *
  * Defines the mvc model class
  *
@@ -20,8 +20,8 @@
  */
 
 /**
- * \ingroup mvc core
- * \brief Model class of the MVC pattern, is the class used to represent a database record object. 
+ * @ingroup mvc core
+ * @brief Model class of the MVC pattern, is the class used to represent a database record object. 
  *
  * This is the general model class extended by all specific module models. It acts like an interface to the database table which stores the module data and so has:
  * - the getter and setter methods to set and retrieve properties (field values)
@@ -33,20 +33,21 @@
  * i.e. $model->field is the same as  $model->_p['field'] and contains the value of 'field' for the represented record. 
  * 
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @author abidibo abidibo@gmail.com 
+ * @note 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
+ * @license MIT License http://www.opensource.org/licenses/mit-license.php
+ * @authors abidibo abidibo@gmail.com 
  */
 class model {
 
 	/**
-	 * \brief Model properties 
+	 * @brief Model properties 
 	 * 
 	 * an associative array containing the record fields name and their value
 	 */
 	protected $_p = array();
 
  	/**
- 	 * \brief Changed model properties 
+ 	 * @brief Changed model properties 
  	 * 
  	 * an array an array containing the list of changed model properties
  	 */
@@ -54,22 +55,22 @@ class model {
 
 
 	/**
-	 * \brief The database table of the model
+	 * @brief The database table of the model
 	 */
 	protected $_tbl_data = '';
 
 	/**
-	 * \brief The registry singleton instance 
+	 * @brief The registry singleton instance 
 	 */
 	protected $_registry;
 
 	/**
-	 * \brief The name of the primary key field 
+	 * @brief The name of the primary key field 
 	 */
 	protected $_id_name = 'id';
 
 	/**
-	 * Constructs a model instance 
+	 * @brief Constructs a model instance 
 	 * 
 	 * @param mixed $id the identifier of the record (the primary key value) 
 	 * @param mixed $table the model database table. Default null (may be set after object construction)
@@ -86,7 +87,7 @@ class model {
 	}
 
 	/**
-	 * Setter method for _id_name property 
+	 * @brief Setter method for _id_name property 
 	 * 
 	 * @param mixed $id_name the name of the primary key 
 	 * @return void
@@ -98,7 +99,7 @@ class model {
 	}
 
 	/**
-	 * Setter method for _tbl_data property 
+	 * @brief Setter method for _tbl_data property 
 	 * 
 	 * @param string $table the model database table
 	 * @return void
@@ -110,7 +111,7 @@ class model {
 	}
 
 	/**
-	 * Model initialization 
+	 * @brief Model initialization 
 	 * 
 	 * Initializes the model object retrieving data from the database. If the record still doesn't exist, returns an associative array with all null values. 
 	 * 
@@ -137,7 +138,7 @@ class model {
 	}
 
 	/**
-	 * initNullProp 
+	 * @brief Initialization of an empty model object 
 	 * 
 	 * @return
 	 *   an associative array with all model properties set to null in the form array("property_name" => null)
@@ -153,7 +154,7 @@ class model {
 	}
 
 	/**
-	 * Getter method 
+	 * @brief Getter method 
 	 * 
 	 * Returns the value of the given property. Calls the specific property getter method if exists, otherwise returns directly its value. 
 	 * 
@@ -169,7 +170,7 @@ class model {
 	}
 	
 	/**
-	 * Setter method 
+	 * @brief Setter method 
 	 * 
 	 * Sets the value of the given property. Calls a specific property setter method if exists.
 	 * 
@@ -190,7 +191,7 @@ class model {
 	}
 
 	/**
-	 * Saves the model object
+	 * @brief Saves the model object
 	 *
 	 * Stores the object properties in the database. 
 	 * 
@@ -214,7 +215,7 @@ class model {
 	}
 
 	/**
-	 * Deletes the object properties from database 
+	 * @brief Deletes the object properties from database 
 	 * 
 	 * @return
 	 *   the operation result, true on success, false on failure

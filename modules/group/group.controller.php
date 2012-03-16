@@ -1,19 +1,58 @@
 <?php
+/**
+ * @file group.controller.php
+ * @brief Contains the controller of the group module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @defgroup group_module User groups
+ * @ingroup modules security
+ *
+ * Modules for the management of user groups (the association of privileges and users is done through groups)
+ */
+
+/**
+ * @ingroup group_module
+ * @brief Group module controller
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class groupController extends controller {
 
-	function __construct($registry) {
+	/**
+	 * @brief Constructs a group controller instance 
+	 * 
+	 * @return group controller instance
+	 */
+	function __construct() {
 
-		parent::__construct($registry);
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "group";
 
 		// privileges
 		$this->_class_privilege = $this->_mdl_name;
+		/**
+ 		 * Module's administration privilege  
+ 		 */
 		$this->_admin_privilege = 1;
 	}
 
+	/**
+	 * @brief User groups backoffice 
+	 * 
+	 * @access public
+	 * @return the user groups table back office
+	 */
 	public function manage() {
 	
 		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
@@ -62,6 +101,12 @@ class groupController extends controller {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Group insertion or modification management 
+	 * 
+	 * @param group $g the group model instance 
+	 * @return group insertion or modification view
+	 */
 	private function manageGroup($g) {
 		
 		$form = $this->formGroup($g);
@@ -75,6 +120,12 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Group insertion, deletion and modification format 
+	 * 
+	 * @param group $g the group model instance 
+	 * @return group insertion or modification format
+	 */
 	private function formGroup($g) {
 
 		$myform = new form($this->_registry, 'post', 'group_form', array("validation"=>true));
@@ -102,6 +153,13 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Descriptive part of the insertion/modification group format
+	 * 
+	 * @param group $g group model instance 
+	 * @param form $myform form object instance 
+	 * @return descriptive form elements
+	 */
 	private function formGroupData($g, $myform) {
 
 		$content = $myform->cinput('label', 'text', $myform->retvar('label', htmlInput($g->label)), __("label"), array("required"=>true, "size"=>40, "maxlength"=>200));
@@ -111,6 +169,13 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Privileges selection part of the insertion/modification group format
+	 * 
+	 * @param group $g group model instance 
+	 * @param form $myform form object instance 
+	 * @return privileges selection form elements
+	 */
 	private function formPrivileges($g, $myform) {
 	
 		$buffer = '';
@@ -160,6 +225,11 @@ class groupController extends controller {
 			
 	}
 
+	/**
+	 * @brief Save group model after form submission 
+	 * 
+	 * @return void
+	 */
 	public function saveGroup() {
 	
 		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
@@ -182,6 +252,11 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Deletes submitted groups
+	 * 
+	 * @return void
+	 */
 	public function deleteGroup() {
 	
 		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));

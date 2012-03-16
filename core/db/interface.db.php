@@ -1,39 +1,40 @@
 <?php
 /**
- * \file interface.db.php
- * \brief Contains the database client interface.
+ * @file interface.db.php
+ * @brief Contains the database client interface.
  *
  * Defines a common interface for all db client classes
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
  */
 
 /**
- * \ingroup database core
- * \brief Database client interface. 
+ * @ingroup database core
+ * @brief Database client interface. 
  *
  * Defines a common interface for all db client classes.
  *
- * @abstract
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com 
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
  */
 interface DbManager {
 
 	function __construct($params);
 
 	/**
-	 * Opens the connection with the DB HOST, exits on error. 
+	 * @brief Opens the connection with the DB HOST, exits on error. 
 	 * 
 	 * @return void
 	 */
 	public function openConnection();
 
 	/**
-	 * Escapes the input string for safe database insertion 
+	 * @brief Escapes the input string for safe database insertion 
 	 * 
 	 * @param string $string 
 	 * @return string the input string escaped
@@ -41,7 +42,7 @@ interface DbManager {
 	public function escapeString($string);
 	
 	/**
-	 * Executes a query on the active database 
+	 * @brief Executes a query on the active database 
 	 * 
 	 * @param string $query the query to execute 
 	 * @return the query result as a resource or a bool value.
@@ -49,7 +50,7 @@ interface DbManager {
 	public function executeQuery($query);
 
 	/**
-	 * Returns the query result with accessible data. 
+	 * @brief Returns the query result with accessible data. 
 	 * 
 	 * @param string $query the query to execute
 	 * @return the query result
@@ -57,14 +58,14 @@ interface DbManager {
 	public function queryResult($query);
 	
 	/**
-	 * Returns the error from the last executed function in a custom format
+	 * @brief Returns the error from the last executed function in a custom format
 	 * 
 	 * @return associative array containing error information 
 	 */
 	public function getError();
 	
 	/**
-	 * Executes a select statement on the active database, and returns the result. 
+	 * @brief Executes a select statement on the active database, and returns the result. 
 	 * 
 	 * @param mixed $fields the fields to be selected. Possible values: array of fields or string.
 	 * @param mixed $tables the table/s from which retrieve records. Possible values: array of tables, string.
@@ -76,7 +77,7 @@ interface DbManager {
 	public function autoSelect($fields, $tables, $where, $order=null, $limit=null);
 	
 	/**
-	 * Returns the number of records in the given table selectyed by the given where clause 
+	 * @brief Returns the number of records in the given table selectyed by the given where clause 
 	 * 
 	 * @param string $table the database table
 	 * @param mixed $where the where clause
@@ -86,7 +87,7 @@ interface DbManager {
 	public function getNumRecords($table, $where=null, $field='id');
 
 	/**
-	 * Returns the name of the fields of the given table
+	 * @brief Returns the name of the fields of the given table
 	 * 
 	 * @param string $table the database table
 	 * @return array containing the name of the fields
@@ -94,7 +95,7 @@ interface DbManager {
 	public function getFieldsName($table);
 	
 	/**
-	 * Returns information about the structure of a table.
+	 * @brief Returns information about the structure of a table.
 	 *
 	 * @param string $table the database table
 	 * @return 
@@ -116,7 +117,7 @@ interface DbManager {
 	public function getTableStructure($table);
 	
 	/**
-	 * Returns the names of the tables found in the connected database 
+	 * @brief Returns the names of the tables found in the connected database 
 	 * 
 	 * @param string $like the like clause, defaut null. 
 	 * @return array of table names
@@ -124,7 +125,7 @@ interface DbManager {
 	public function getTables($like=null);
 	
 	/**
-	 * Inserts the given data in the given table
+	 * @brief Inserts the given data in the given table
 	 * 
 	 * @param string $table the database table
 	 * @param array $data the data to insert in the form array('field_name'=>'value')
@@ -133,7 +134,7 @@ interface DbManager {
 	public function insert($table, $data);
 	
 	/**
-	 * Updates the given table with the given data using the given where clause 
+	 * @brief Updates the given table with the given data using the given where clause 
 	 * 
 	 * @param string $table 
 	 * @param array $data the data to update in the form array('field_name'=>'value')
@@ -143,7 +144,7 @@ interface DbManager {
 	public function update($table, $data, $where);
 	
 	/**
-	 * Deletes records from the given table using the given where clause. 
+	 * @brief Deletes records from the given table using the given where clause. 
 	 * 
 	 * @param string $table the database table
 	 * @param mixed $where the where clause

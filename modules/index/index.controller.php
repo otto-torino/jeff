@@ -1,9 +1,37 @@
 <?php
+/**
+ * @file index.controller.php
+ * @brief Contains the controller of the index module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
-require_once('index.php');
+/**
+ * @defgroup index_module Index
+ * @ingroup modules
+ *
+ * Module which outputs the default index pages of Jeff framework
+ */
 
+/**
+ * @ingroup index_module
+ * @brief Index module controller
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class indexController extends controller {
-
+	
+	/**
+	 * @brief Constructs a index controller instance 
+	 * 
+	 * @return index controller instance
+	 */
 	function __construct() {
 
 		parent::__construct();
@@ -12,6 +40,12 @@ class indexController extends controller {
 
 	}
 
+	/**
+	 * @brief Jeff default index views (admin and public)
+	 *
+	 * @access public
+	 * @return index view
+	 */
 	public function index() {
 	
 		if($this->_registry->site=='admin') return $this->adminIndex();
@@ -20,6 +54,11 @@ class indexController extends controller {
 
 	}
 
+	/**
+	 * @brief public index view 
+	 * 
+	 * @return public index view
+	 */
 	public function publicIndex() {
 
 		access::check('public_view', null, array("exitOnFailure"=>true));
@@ -28,7 +67,12 @@ class indexController extends controller {
 
 		return $this->_view->render();
 	}
-
+	
+	/**
+	 * @brief user index view 
+	 * 	 
+	 * @return user index view
+	 */
 	public function userIndex() {
 	
 		access::check('private_view');
@@ -39,6 +83,11 @@ class indexController extends controller {
 		return $this->_view->render();	
 	}
 	
+	/**
+	 * @brief admin index view 
+	 * 	 
+	 * @return admin index view
+	 */
 	public function adminIndex() {
 	
 		access::check('admin_view');

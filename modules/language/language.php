@@ -1,7 +1,31 @@
 <?php
+/**
+ * @file language.php
+ * @brief Contains the model of the language module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @ingroup language_module
+ * @brief language model class
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class language extends model {
-
+	
+	/**
+	 * @brief Constructs a language model instance
+	 * 
+	 * @param mixed $id the object id (primary key value of the record)
+	 * @return language instance
+	 */
 	function __construct($id) {
 	
 		$this->_tbl_data = TBL_LNG;
@@ -10,6 +34,13 @@ class language extends model {
 
 	}
 
+	/**
+	 * @brief Get language objects 
+	 * 
+	 * @param array $opts associative array of options:
+	 * - <b>where</b>: where clause for the select statement
+	 * @return array language objects
+	 */
 	public static function get($registry, $opts=null) {
 	
 		$objs = array();
@@ -20,8 +51,16 @@ class language extends model {
 		return $objs;
 	
 	}
+	
+	/**
+	 * @brief Get language object from label 
+	 * 
+	 * @param string $label language label
+	 * @return mixed language object or null if not found
+	 */
+	public static function getFromLabel($label) {
 
-	public static function getFromLabel($registry, $label) {
+		$registry = registry::instance();
 
 		$rows = $registry->db->autoSelect("id", TBL_LNG, "label='$label'", 'language');
 		if(count($rows)) return new language($rows[0]['id']);
@@ -30,7 +69,16 @@ class language extends model {
 	
 	}
 
-	public static function setLanguage($registry) {
+	/**
+	 * @brief Set the active language 
+	 *
+	 * Looks for $_GET 'lng' parameter, existing session value or sets the default language
+	 * 
+	 * @return string language name
+	 */
+	public static function setLanguage() {
+
+		$registry = registry::instance();
 	
 		$language = null;
 		if($code = cleanInput('get', 'lng', 'string')) {

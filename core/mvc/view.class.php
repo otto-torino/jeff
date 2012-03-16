@@ -1,7 +1,7 @@
 <?php
 /**
- * \file view.class.php
- * \brief Contains the view primitive class.
+ * @file view.class.php
+ * @brief Contains the view primitive class.
  *
  * Defines the mvc view class
  *
@@ -11,8 +11,8 @@
  */
 
 /**
- * \ingroup mvc core
- * \brief View class of the MVC pattern, is the class used to manage the module's views. 
+ * @ingroup mvc core
+ * @brief View class of the MVC pattern, is the class used to manage the module's views. 
  * 
  * This is the general view class used by module controllers.<br />
  *  It acts like an template engine at module level. the module templates are evaluated using the context variables assigned by the controller.<br />
@@ -24,42 +24,42 @@
 class view {
 	
 	/**
-	 * \brief The standard class objects which contains the view context 
+	 * @brief The standard class objects which contains the view context 
 	 */
 	protected $_data;
 	
 	/**
-	 * \brief The registry singleton instance 
+	 * @brief The registry singleton instance 
 	 */
 	protected $_registry;
 
 	/**
-	 * \brief Associative array containing the js and css to include asynchronously in the document
+	 * @brief Associative array containing the js and css to include asynchronously in the document
 	 */
 	protected $_assets;
 
 	/**
-	 * \brief The path to the folder containing the view of the active theme
+	 * @brief The path to the folder containing the view of the active theme
 	 */
 	protected $_view_folder;
 
 	/**
-	 * \brief The path to the folder containing the view of the default theme (fallback purposes)
+	 * @brief The path to the folder containing the view of the default theme (fallback purposes)
 	 */
 	protected $_dft_view_folder;
 
 	/**
-	 * \brief The path to the folder containing the css of the active theme
+	 * @brief The path to the folder containing the css of the active theme
 	 */
 	protected $_css_folder;
 
 	/**
-	 * \brief The path to the folder containing the css of the default theme (fallback purposes)
+	 * @brief The path to the folder containing the css of the default theme (fallback purposes)
 	 */
 	protected $_dft_css_folder;
 
 	/**
-	 * Constructs a view instance
+	 * @brief Constructs a view instance
 	 *
 	 * Initializes some class members 
 	 * 
@@ -76,7 +76,7 @@ class view {
 	}
 
 	/**
-	 * Sets the view template
+	 * @brief Sets the view template
 	 * 
 	 * Searches for the given template in the active theme view folder, than in the deafult theme view folder. If can't find it returns an error.<br />
 	 * Adds a stylesheet if passed through the opts parameter. 
@@ -102,7 +102,7 @@ class view {
 	}
 
 	/**
-	 * Setter method for the $_asset property 
+	 * @brief Setter method for the $_asset property 
 	 * 
 	 * @param mixed $assets array in the form array('asset_path'=>'asset_type'). The 'asset_type' may be 'css' or 'js'. 
 	 * @return void
@@ -112,7 +112,7 @@ class view {
 	}
 
 	/**
-	 * Defines template variables with their values. 
+	 * @brief Defines template variables with their values. 
 	 * 
 	 * Prepares the context to use in the template.
 	 * 
@@ -125,7 +125,7 @@ class view {
 	}
 
 	/**
-	 * Generates the html output of the templates parsing all the template variables. Adds the asset calls if present. 
+	 * @brief Generates the html output of the templates parsing all the template variables. Adds the asset calls if present. 
 	 * 
 	 * @return the template output (html)
 	 */
@@ -148,7 +148,7 @@ class view {
 	}
 
 	/**
-	 * Returns the javascript code needed to asynchronously load the given css or js 
+	 * @brief Returns the javascript code needed to asynchronously load the given css or js 
 	 * 
 	 * @param string $path the relative file path 
 	 * @param string $type the file type (css | js)

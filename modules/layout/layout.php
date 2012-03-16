@@ -1,16 +1,47 @@
 <?php
+/**
+ * @file layout.php
+ * @brief Contains the model of the layout module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @ingroup layout_module
+ * @brief Layout model class
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class layout extends model {
-
+	
+	/**
+	 * @brief Constructs a layout instance
+	 * 
+	 * @param mixed $id the object id (primary key value of the record)
+	 * @return layout instance
+	 */
 	function __construct($id) {
 	
 		$this->_tbl_data = TBL_THEMES;
 		parent::__construct($id);
 
 	}
-
-	public static function getThemes($registry, $opts=null) {
 	
+	/**
+	 * @brief Gets all available themes 
+	 * 
+	 * @param array $opts: associative array of options (no one by now)
+	 * @return array layout objects
+	 */
+	public static function getThemes($opts=null) {
+	
+		$registry = registry::instance();
 		$objs = array();
 		$rows = $registry->db->autoSelect("id", TBL_THEMES, '', 'active DESC,name');
 		foreach($rows as $row) $objs[] = new layout($row['id']);
@@ -19,7 +50,15 @@ class layout extends model {
 	
 	}
 
-	public static function activateTheme($registry, $id) {
+	/**
+	 * @brief Sets theme as active from given id
+	 * 
+	 * @param int $id the theme id (primary key value) 
+	 * @return void
+	 */
+	public static function activateTheme($id) {
+
+		$registry = registry::instance();
 
 		foreach(self::getThemes($registry) as $theme) {
 			if($theme->id == $id && !$theme->active) {

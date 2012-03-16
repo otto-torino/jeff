@@ -1,15 +1,16 @@
 <?php
 /**
- * \file db.factory.php
- * \brief Contains the database factory implementation.
+ * @file db.factory.php
+ * @brief Contains the database factory implementation.
  *
- * The database instance is unique due to the use of the singleton pattern.<br />
+ * <p>The database instance is unique due to the use of the singleton pattern.<br />
  * The database instance returned depends on the DBMS configuration setting, so that it's easy to add support for other DBMS different from MySQL.<br />
- * Look the database interface definition to see which methods a specific DBMS class should implement.
+ * Look the database interface definition to see which methods a specific DBMS class should implement.</p>
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
  */
 
 /**
@@ -25,49 +26,48 @@ require_once('interface.db.php');
 
 /**
  * \ingroup database core
- * \brief Database factory, returns a database object instance depending on the DBMS configuration setting. 
+ * @brief Database factory, returns a database object instance depending on the DBMS configuration setting. 
  *
- * @abstract
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com 
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
  */
 abstract class db extends singleton {
 	
 	/**
-	 * \brief Database host
+	 * @brief Database host
  	 */
 	private static $_db_host = DB_HOST;
 
 	/**
-	 * \brief Database user
+	 * @brief Database user
 	 */
 	private static $_db_user = DB_USER;
 
 	/**
-	 * \brief Database password
+	 * @brief Database password
 	 */
 	private static $_db_pass = DB_PASSWORD;
 
 	/**
-	 * \brief Database name
+	 * @brief Database name
 	 */
 	private static $_db_dbname = DB_DBNAME;
 
 	/**
-	 * \brief Database charset
+	 * @brief Database charset
 	 */
 	private static $_db_charset = DB_CHARSET;
 
 	/**
-	 * \brief Database schema
+	 * @brief Database schema
 	 */
 	private static $_db_schema = DB_SCHEMA;
 
 	/**
-	 * Returns a singleton db instance 
+	 * @brief Returns a singleton db instance 
 	 * 
-	 * @static
 	 * @return 
 	 *   the singleton instance
 	 */

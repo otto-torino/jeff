@@ -62,9 +62,14 @@ define('ABS_MDL', ABS_ROOT.DS.'modules');
 define('ABS_DB', ABS_CORE.DS.'db');
 
 /**
- * @brief absolute path to the theme db directory 
+ * @brief absolute path to the core theme directory 
  */
 define('ABS_THEME', ABS_CORE.DS.'theme');
+
+/**
+ * @brief absolute path to the core template directory 
+ */
+define('ABS_TEMPLATE', ABS_CORE.DS.'template');
 
 /**
  * @brief absolute path to the plugins directory 

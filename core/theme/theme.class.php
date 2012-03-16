@@ -1,59 +1,61 @@
 <?php
 /**
- * \file theme.class.php
- * \brief Contains the theme primitive class.
+ * @file theme.class.php
+ * @brief Contains the theme primitive class.
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
  */
 
 require_once('interface.theme.php');
 
 /**
- * \ingroup themes core
- * |brief the primitive theme class
+ * @ingroup themes core
+ * @brief the primitive theme class
  * 
- * A Jeff theme is a module composed by views, css, img, locales, js, template files and a class file.<br />
- * The class which takes its name from the theme name extends this theme class (which then acts like a super class) and implements the theme interface.<br />
- * Jeff has a default and complete theme. It's the base theme that all others theme extends (not at class level). 
+ * <p>A Jeff theme is a module composed by views, css, img, locales, js, template files and a class file.<br />
+* The class which takes its name from the theme name extends this theme class (which then acts like a super class) and implements the theme interface.</p>
+ * <p>Jeff has a default and complete theme. It's the base theme that all others theme extends (not at class level). 
  * That is every template file, css, localized string, js, img which is not founded in the used theme module is taken from the default one, 
  * so that it's not necessary to overwrite every single aspect of the default theme to create a new custom one, 
- * but you may only overwrite that features that you want to change. 
+ * but you may only overwrite that features that you want to change.</p> 
  * 
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @author abidibo abidibo@gmail.com 
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
  */
 class theme {
 
 	/**
-	 * \brief The registry singleton instance 
+	 * @brief The registry singleton instance 
 	 */
 	protected $_registry;
 	
 	/**
-	 * \brief The theme name 
+	 * @brief The theme name 
 	 */
 	protected $_name;
 
 	/**
-	 * \brief The document template name 
+	 * @brief The document template name 
 	 */
 	protected $_tpl_name;
 	
 	/**
-	 * \brief The template object 
+	 * @brief The template object 
 	 */
 	protected $_tpl;
 
 	/**
-	 * \brief The name of the default theme 
+	 * @brief The name of the default theme 
 	 */
 	protected $_dft_theme = 'default';
 
 	/**
-	 * Constructs a theme object 
+	 * @brief Constructs a theme object 
 	 * 
 	 * @param string $theme_name the theme name
 	 * @return void
@@ -64,7 +66,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the theme name 
+	 * @brief Returns the theme name 
 	 * 
 	 * @return the theme name
 	 */
@@ -75,7 +77,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the theme absolute path 
+	 * @brief Returns the theme absolute path 
 	 * 
 	 * @return the theme absolute path
 	 */
@@ -86,7 +88,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the default theme absolute path 
+	 * @brief Returns the default theme absolute path 
 	 * 
 	 * @return the default theme absolute path
 	 */
@@ -97,7 +99,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the absolute path of the theme view folder
+	 * @brief Returns the absolute path of the theme view folder
 	 * 
 	 * @return the absolute path of the theme view folder
 	 */
@@ -108,7 +110,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the absolute path of the default theme view folder
+	 * @brief Returns the absolute path of the default theme view folder
 	 * 
 	 * @return the absolute path of the default theme view folder
 	 */
@@ -119,7 +121,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the absolute path of the theme css folder
+	 * @brief Returns the absolute path of the theme css folder
 	 * 
 	 * @return the absolute path of the theme css folder
 	 */
@@ -130,7 +132,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the absolute path of the default theme css folder
+	 * @brief Returns the absolute path of the default theme css folder
 	 * 
 	 * @return the absolute path of the default theme css folder
 	 */
@@ -141,7 +143,7 @@ class theme {
 	}
 	
 	/**
-	 * Getter method for the $_tpl member
+	 * @brief Getter method for the $_tpl member
 	 * 
 	 * @return the template object property
 	 */
@@ -152,7 +154,7 @@ class theme {
 	}
 
 	/**
-	 * Sets the document template to render 
+	 * @brief Sets the document template to render 
 	 * 
 	 * @param string $tpl the template name
 	 * @return the template instance if the template file exists, null otherwise.
@@ -172,7 +174,7 @@ class theme {
 	}
 
 	/**
-	 * Returns the list of css to be included in the document 
+	 * @brief Returns the list of css to be included in the document 
 	 * 
 	 * @return the array containing the theme css to include in the document
 	 */
@@ -195,7 +197,7 @@ class theme {
 	}
 	
 	/**
-	 * Returns the list of js to be included in the document 
+	 * @brief Returns the list of js to be included in the document 
 	 * 
 	 * @return the array containing the theme js to include in the document
 	 */

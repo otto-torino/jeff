@@ -51,7 +51,7 @@ class mysql implements DbManager {
 	private $_connection;
 
 	/**
-	 * Constructs a class instance 
+	 * @brief Constructs a class instance 
 	 * 
 	 * @param array $params the connection parameters (host, user, password, db_name, charset, connect) as key=>value  
 	 * @return void
@@ -71,7 +71,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Escapes the input string for safe database insertion 
+	 * @brief Escapes the input string for safe database insertion 
 	 * 
 	 * @param string $string 
 	 * @return string the input string escaped
@@ -83,7 +83,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Opens the connection with the DB HOST, exits on error. 
+	 * @brief Opens the connection with the DB HOST, exits on error. 
 	 * 
 	 * @return void
 	 */
@@ -101,7 +101,7 @@ class mysql implements DbManager {
 	}
 	
 	/**
-	 * Sets the database in order to work with utf8 chars 
+	 * @brief Sets the database in order to work with utf8 chars 
 	 * 
 	 * @return void
 	 */
@@ -115,7 +115,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Executes a query on the active database 
+	 * @brief Executes a query on the active database 
 	 * 
 	 * @param string $query the query to execute 
 	 * @return the query result as a resource, or bool value.
@@ -129,7 +129,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns the query result with accessible data. 
+	 * @brief Returns the query result with accessible data. 
 	 * 
 	 * @param string $query the query to execute
 	 * @return the query result
@@ -152,7 +152,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns the error from the last MySQL function in a custom format
+	 * @brief Returns the error from the last MySQL function in a custom format
 	 * 
 	 * @return associative array containing error information 
 	 */
@@ -168,7 +168,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Executes a select statement on the active database, and returns the result. 
+	 * @brief Executes a select statement on the active database, and returns the result. 
 	 * 
 	 * @param mixed $fields the fields to be selected. Possible values: array of fields or string.
 	 * @param mixed $tables the table/s from which retrieve records. Possible values: array of tables, string.
@@ -192,7 +192,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns the number of records in the given table selectyed by the given where clause 
+	 * @brief Returns the number of records in the given table selectyed by the given where clause 
 	 * 
 	 * @param string $table the database table
 	 * @param mixed $where the where clause
@@ -218,7 +218,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns the name of the fields of the given table
+	 * @brief Returns the name of the fields of the given table
 	 * 
 	 * @param string $table the database table
 	 * @return array containing the name of the fields
@@ -241,7 +241,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns information about the structure of a table.
+	 * @brief Returns information about the structure of a table.
 	 *
 	 * @param string $table the database table
 	 * @return 
@@ -249,16 +249,15 @@ class mysql implements DbManager {
 	 *   The returned array is in the form<br />
 	 *   array("field_name" => array("property" => "value"), "primary_key" => "primary_key_name", "keys" => array("keyname1", "keyname2")) <br />
 	 *   Returned properties foreach field:
-	 *   - order: the ordinal position
-	 *   - deafult: the default value
-	 *   - deafult value
-	 *   - null: whether the field is nullable or not
-	 *   - type: the field type (varchar, int, text, ...)
-	 *   - max_length: the field max length
-	 *   - n_int: the number of int digits
-	 *   - n_precision: the number of decimal digits
-	 *   - key: the field key if set
-	 *   - extra: extra information
+	 *   - <b>order</b>: the ordinal position
+	 *   - <b>deafult</b>: the default value
+	 *   - <b>null</b>: whether the field is nullable or not
+	 *   - <b>type</b>: the field type (varchar, int, text, ...)
+	 *   - <b>max_length</b>: the field max length
+	 *   - <b>n_int</b>: the number of int digits
+	 *   - <b>n_precision</b>: the number of decimal digits
+	 *   - <b>key</b>: the field key if set
+	 *   - <b>extra</b>: extra information
 	 */
 	public function getTableStructure($table) {
 
@@ -290,7 +289,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns the tables found in the connected database 
+	 * @brief Returns the tables found in the connected database 
 	 * 
 	 * @param string $like the like clause, defaut null. 
 	 * @return array of table names
@@ -313,7 +312,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Inserts the given data in the given table
+	 * @brief Inserts the given data in the given table
 	 * 
 	 * @param string $table the database table
 	 * @param array $data the data to insert in the form array('field_name'=>'value')
@@ -336,7 +335,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Updates the given table with the given data using the given where clause 
+	 * @brief Updates the given table with the given data using the given where clause 
 	 * 
 	 * @param string $table 
 	 * @param array $data the data to update in the form array('field_name'=>'value')
@@ -357,7 +356,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Returns the last inserted id 
+	 * @brief Returns the last inserted id 
 	 * 
 	 * @return the last inserted id or false
 	 */
@@ -369,7 +368,7 @@ class mysql implements DbManager {
 	}
 
 	/**
-	 * Deletes records from the given table using the given where clause. 
+	 * @brief Deletes records from the given table using the given where clause. 
 	 * 
 	 * @param string $table the database table
 	 * @param mixed $where the where clause

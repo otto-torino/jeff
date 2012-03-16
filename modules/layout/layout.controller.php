@@ -1,9 +1,39 @@
 <?php
+/**
+ * @file layout.controller.php
+ * @brief Contains the controller of the layout module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
+
+/**
+ * @defgroup layout_module Layout
+ * @ingroup modules themes
+ *
+ * Module for the selection of the active theme
+ */
 
 require_once('layout.php');
 
+/**
+ * @ingroup layout_module
+ * @brief Layout module controller
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class layoutController extends controller {
-
+	
+	/**
+	 * @brief Constructs a layout controller instance 
+	 * 
+	 * @return layout controller instance
+	 */
 	function __construct() {
 
 		parent::__construct();
@@ -13,9 +43,18 @@ class layoutController extends controller {
 
 		// privileges
 		$this->_class_privilege = $this->_mdl_name;
+		/**
+ 		 * Module's administration privilege  
+ 		 */
 		$this->_admin_privilege = 1;
 	}
-
+	
+	/**
+	 * @brief Layout module backoffice 
+	 * 
+	 * @access public
+	 * @return the layout module office
+	 */
 	public function manage() {
 	
 		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
@@ -43,6 +82,13 @@ class layoutController extends controller {
 
 	}
 
+	/**
+	 * @brief Theme activation
+	 *
+	 * The theme to activate is taken from the $_GET parameter 'id' 
+	 * 
+	 * @return void
+	 */
 	public function activateTheme() {
 
 		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));

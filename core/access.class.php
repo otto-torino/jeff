@@ -1,6 +1,6 @@
 <?php
 /**
- * @file /var/www/jeff.git/core/access.class.php
+ * @file access.class.php
  * @brief Contains the access class.
  *
  * @author abidibo abidibo@gmail.com

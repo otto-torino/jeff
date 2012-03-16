@@ -1,24 +1,75 @@
 <?php
+/**
+ * @file template.class.php
+ * @brief Contains the template class
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ */
 
+/**
+ * @ingroup templates core
+ * @brief Class used to manage and parse templates
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ */
 class template {
 
-	protected $_registry, $_path, $_mdl_url_content, $_modules;
-
-	function __construct($registry, $tpl_path) {
+	/**
+	 * @brief the @ref registry singleton instance 
+	 */
+	protected $_registry;
 	
-		$this->_registry = $registry;
+	/**
+	 * @brief template file path 
+	 */
+	protected $_path;
+	
+	/**
+	 * @brief Content outputted by the method called through url 
+	 */
+	protected $_mdl_url_content;
+	
+	/**
+	 * @brief Array containing contents outputted by the modules called in the template 
+	 */
+	protected $_modules;
+
+	/**
+	 * @brief Constructs a template instance 
+	 * 
+	 * @param string $tpl_path template file path
+	 * @return void
+	 */
+	function __construct($tpl_path) {
+	
+		$this->_registry = registry::instance();
 		$this->_path = $tpl_path;
-
-		return null;
-
 	}
 
+	/**
+	 * @brief Template file getter 
+	 * 
+	 * @return string template file path
+	 */
 	public function getPath() {
 
 		return $this->_path;
 
 	}
 	
+	/**
+	 * @brief Template parser 
+	 *
+	 * Parses the tempate file and replaces variables and module's outputs
+	 * 
+	 * @return void
+	 */
 	public function parse() {
 		
 		if(!is_readable($this->getPath()))
@@ -46,6 +97,12 @@ class template {
 	
 	}
 
+	/**
+	 * @brief Variables parser 
+	 * 
+	 * @param array $matches regexp matches
+	 * @return void
+	 */
 	protected function parseVariables($matches) {
 		
 		$m = $matches[1];
@@ -93,6 +150,12 @@ class template {
 
 	}
 
+	/**
+	 * @brief modules parser 
+	 * 
+	 * @param array $matches regexp matches 
+	 * @return void
+	 */
 	protected function parseModules($matches) {
 		
 		return ($matches[1]=='url_module' && $matches[2]=='url_method')
@@ -102,6 +165,12 @@ class template {
 
 	}
 
+	/**
+	 * @brief Charges modules outputs
+	 * 
+	 * @param array $matches regexp matches
+	 * @return void
+	 */
 	protected function chargeModules($matches) {
 		
 		$params = isset($matches[4]) ? $matches[4] : null;
