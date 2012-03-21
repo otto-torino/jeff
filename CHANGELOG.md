@@ -3,6 +3,29 @@ CHANGELOG
 
 2012-03-21, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
+New version: v0.99
+ 
+Full code documentation, menu and singleton pattern application and some minor adjustments
+
+### New features:
+
+- **share function**: new function added in order to ease the creation of share links. The supported social platforms are facebook, twitter, linkedin, googleplus and digg.
+- **cut html text function**: the new function allows to truncate an html preserving the correct tag closure
+- **full text search**: added a new core class which allows the execution of full text searches with results highlighting (for MySQL only). The use of this new class requires a database custom function which is provided in the file itself and must be added to your MySQL instance
+- **new db client methods** added in order to allow the direct execution of select statements
+- **singleton**: singleton superclass added in the core of jeff, implementing the singleton pattern. The registry and db factory classes inherits from it assuring the existence of only one registry and db client instance. All classes were updated in order to use the singleton instance, since now it's no longer necessary to pass the registry object everywhere
+- **mysql db client** class moved from modules to the core
+- **mime types** check improvements in the form class and adminTable class when uploading files
+- **source code documentation**
+
+### Bug fixed
+
+- click event bug in datepicker javascript library in the navigation through months and years
+
+___________________________________________________________________________________________
+
+2012-03-21, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
 Preparing version: v0.99
  
 Full code documentation, menu and singleton pattern application and some minor adjustments
