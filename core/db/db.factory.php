@@ -8,7 +8,7 @@
  * Look the database interface definition to see which methods a specific DBMS class should implement.
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -31,7 +31,7 @@ require_once('interface.db.php');
  * @brief Database factory, returns a database object instance depending on the DBMS configuration setting. 
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */

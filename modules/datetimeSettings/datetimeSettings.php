@@ -4,7 +4,7 @@
  * @brief Contains the model of the datetimeSettings module
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -21,7 +21,7 @@
  * - **datetime_format** varchar(64): datetime format, i.e. '%d-%m-%Y at %H:%i'
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */

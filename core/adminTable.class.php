@@ -4,7 +4,7 @@
  * @brief Contains the class which manages the auto generation of the backoffice.
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -41,7 +41,7 @@
  * Clearly even if the module requires something different, it's always possible to extend this class in order to overwrite only the aspects that need a proper customization.
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
