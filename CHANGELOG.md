@@ -16,6 +16,7 @@ Full code documentation, menu and singleton pattern application and some minor a
 - **singleton**: singleton superclass added in the core of jeff, implementing the singleton pattern. The registry and db factory classes inherits from it assuring the existence of only one registry and db client instance. All classes were updated in order to use the singleton instance, since now it's no longer necessary to pass the registry object everywhere
 - **mysql db client** class moved from modules to the core
 - **mime types** check improvements in the form class and adminTable class when uploading files
+- **menu module** main menu voices now stored on the database
 - **source code documentation**
 
 ### Bug fixed
@@ -33,6 +34,7 @@ Full code documentation, menu and singleton pattern application and some minor a
 ### Changes:
 
 - all php files, some have been removed, some added, some renamed
+- menu module
 - README
 
 ___________________________________________________________________________________________  
