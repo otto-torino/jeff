@@ -1,4 +1,14 @@
 <?php
+/**
+ * @file /var/www/jeff.git/themes/default/languages/italiano.php
+ * @ingroup default_theme localization
+ * @brief Contains the italian translations dictionary
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
 return array(
 
@@ -129,6 +139,32 @@ return array(
 	"insertValidEmail"=>"inserisci un indirizzo email valido",
 	"CannotCloneSingleton"=>"Impossibile clonare un'istanza di singleton",
 	"CannotSerializeSingleton"=>"Impossibile serializzare un'istanza di singleton",
+	"sameWindow"=>"stessa finestra",
+	"newWindow"=>"nuova finestra",
+	"startingFromSiteRoot"=>"a partire dalla site root <b>%s</b>",
+	"menuGroupsAdminExp"=>"per rendere una voce pubblica non selezionare alcun gruppo, per restringerne la visualizzazione solamente a certi gruppi selezionare quelli desiderati",
+	"addSubvoice"=>"aggiungi sottovoce",
+	// jeff fields
+	"app_title"=>"titolo applicazione",
+	"app_description"=>"descrizione applicazione",
+	"app_keywords"=>"parole chiave applicazione",
+	"session_timeout"=>"durata sessione (s)",
+	"date_format"=>"formato data",
+	"time_format"=>"formato ora",
+	"datetime_format"=>"formato data e ora",
+	"language"=>"lingua",
+	"code"=>"codice",
+	"main"=>"principale",
+	"lastname"=>"cognome",
+	"firstname"=>"nome",
+	"groups"=>"gruppi",
+	"phone"=>"telefono",
+	"cost"=>"costo orario",
+	"category"=>"categoria",
+	"class"=>"classe",
+	"class_id"=>"identificativo classe",
+	"active"=>"attiva",
+	"position"=>"posizione",
 )
 
 ?>

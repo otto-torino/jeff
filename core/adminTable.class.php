@@ -6,127 +6,139 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
- * @ingroup core
+ * @defgroup backoffice Backoffice
+ * 
+ * ### Auto generated backoffice functionality
+ * 
+ * With a few lines of code is possible to handle the insertion, modification, deletion and export of data of a database table.
+ *
+ * If there is a need to implement specific behaviour it is possible to extend the adminTable class in order to modify or add the desired functionality.
+ */
+
+/**
+ * @ingroup core backoffice
  * @brief Class which generates automatically the backoffice for the management of a database table 
  * 
  * This class creates a default back-office interface for managing a database table (which has a primary key field). It gets the table structure directly from the database 
  * and constructs a navigation view to surf through inserted data, an insertion/edit view (the form) to add or update records and all the necessary actions to perform insertion, 
- * modification, deletion and exportation.<br />
+ * modification, deletion and exportation.
+ *
  * The adminTable class can also manage automatically foreign keys, some particular fields (password, bool, enum, email, multicheck, file, image), 
- * html fields (charging dojo html editor if needed) and fields managed by extra plugins.<br />
- * Also it is possible to automatically add filters for the list view. It's enough to set the filters fields and the class adds for you the filters form and performs the research. 
- * Filters field may be text, int, float, bool and foreign keys fields.<br />
+ * html fields (charging dojo html editor if needed) and fields managed by extra plugins.
+ * Also it is possible to automatically add filters for the list view. It's enough to set the filters fields and the class adds for you the filters form and performs the research.
+ * Filters field may be text, int, float, bool and foreign keys fields.
+ *
  * So if it's not necessary to have a specific logic that regulates the access and actions doable over a database table, 
  * with few lines of code is possible to create the entire table back office. All you have to do is set the foreign keys and/or special fields if needed
  * and then call the manage method. Then Jeff shows you a list of inserted records with the possibility to edit/delete them or insert a new one.
- * All these operations are managed automatically by the manage method.<br />
+ * All these operations are managed automatically by the manage method.
  * In alternative you may use only some features of this class, like using only the records paginated list (setting as not editable the fields: edit_deny='all') 
- * or using only the auto generated form.<br />
- * Clearly even if the module requires something different, it's always possible to extend this class in order to overwrite only the aspects that need a proper customization.<br />
+ * or using only the auto generated form.
+ * Clearly even if the module requires something different, it's always possible to extend this class in order to overwrite only the aspects that need a proper customization.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class adminTable {
 	
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	protected $_registry;
 	
 	/**
-	 * @brief The database table 
+	 * @brief the database table 
 	 */
 	protected $_table;
 	
 	/**
-	 * @brief The primary key name defined for the table 
+	 * @brief the primary key name defined for the table 
 	 */
 	protected $_primary_key;
 
 	/**
-	 * @brief The table column names 
+	 * @brief the table column names 
 	 */
 	protected $_fields;
 
 	/**
-	 * @brief Definition of the foreign keys 
+	 * @brief definition of the foreign keys 
 	 */
 	protected $_fkeys;
 	
 	/**
-	 * @brief Definition of the special fields 
+	 * @brief definition of the special fields 
 	 */
 	protected $_sfields;
 	
 	/**
-	 * @brief Definition of the plugin fields 
+	 * @brief definition of the plugin fields 
 	 */
 	protected $_pfields;
 
 	/**
-	 * @brief Definition of the html fields 
+	 * @brief definition of the html fields 
 	 */
 	protected $_html_fields;
 	
 	/**
-	 * @brief Number of records for page 
+	 * @brief number of records for page 
 	 */
 	protected $_efp;
 	
 	/**
-	 * @brief Delete action callback class 
+	 * @brief delete action callback class 
 	 */
 	protected $_cls_cbk_del;
 	
 	/**
-	 * @brief Delete action callback method 
+	 * @brief delete action callback method 
 	 */
 	protected $_mth_cbk_del;
 	
 	/**
-	 * @brief Allow record insertion 
+	 * @brief allow record insertion 
 	 */
 	protected $_insertion;
 	
 	/**
-	 * @brief Allow record deletion 
+	 * @brief allow record deletion 
 	 */
 	protected $_deletion;
 
 	/**
-	 * @brief Deny record modification 
+	 * @brief deny record modification 
 	 */
 	protected $_edit_deny;
 
 	/**
-	 * @brief Array of fields shown in the admin list 
+	 * @brief array of fields shown in the admin list 
 	 */
 	protected $_changelist_fields;
 	
 	/**
-	 * @brief Array of fields used to filter records in the admin list 
+	 * @brief array of fields used to filter records in the admin list 
 	 */
 	protected $_filter_fields;
 	
 	/**
-	 * @brief Charge dojo editor for html fields 
+	 * @brief charge dojo editor for html fields 
 	 */
 	protected $_editor;
 	
 	/**
-	 * @brief Associative array of custom templates 
+	 * @brief associative array of custom templates 
 	 */
 	protected $_custom_tpl;
 	
 	/**
-	 * @brief View instance 
+	 * @brief @ref view instance 
 	 */
 	protected $_view;
 
@@ -146,16 +158,16 @@ class adminTable {
 	 * @param string $table the database table
 	 * @param array $opts
 	 *   Associative array of options: 
-	 *   - <b>insertion</b>: bool default true. Whether to allow records insertion or not. 
-	 *   - <b>deletion</b>: bool default true. Whether to allow records deletion or not. 
-	 *   - <b>edit_deny</b>: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
-	 *   - <b>changelist_fields</b>: array default null. Array of fields to be shown in the admin list. 
-	 *   - <b>editor</b>: bool default false. Charge dojo editor for html fields insertion/modification. 
-	 *   - <b>export</b>: bool default false. Add export buttons in the admin list. 
-	 *   - <b>custom_tpl</b>: array default array(). Associative array defining custom templates, available keys are 'view', 'insert', 'edit'. 
-	 *   - <b>efp</b>: int default 20. Number of records shown in the admin list. 
-	 *   - <b>cls_callback_delete</b>: string default null. Class to call when performing a delete action. 
-	 *   - <b>mth_callback_delete</b>: string default null. Method to call when performing a delete action. 
+	 *   - **insertion**: bool default true. Whether to allow records insertion or not. 
+	 *   - **deletion**: bool default true. Whether to allow records deletion or not. 
+	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
+	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
+	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
+	 *   - **export**: bool default false. Add export buttons in the admin list. 
+	 *   - **custom_tpl**: array default array(). Associative array defining custom templates, available keys are 'view', 'insert', 'edit'. 
+	 *   - **efp**: int default 20. Number of records shown in the admin list. 
+	 *   - **cls_callback_delete**: string default null. Class to call when performing a delete action. 
+	 *   - **mth_callback_delete**: string default null. Method to call when performing a delete action. 
 	 *
 	 * @return void
 	 */
@@ -196,10 +208,10 @@ class adminTable {
 	 * 
 	 * @param array $fkeys 
 	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
-	 *   - <b>table</b>: the table related with the field 
-	 *   - <b>field</b>: the representative field of the related table record 
-	 *   - <b>where</b>: the where clause used to filter the related table records 
-	 *   - <b>order</b>: the order clause used to order the related table records 
+	 *   - **table**: the table related with the field 
+	 *   - **field**: the representative field of the related table record 
+	 *   - **where**: the where clause used to filter the related table records 
+	 *   - **order**: the order clause used to order the related table records 
 	 *
 	 * @return void
 	 */
@@ -218,36 +230,36 @@ class adminTable {
 	 * 
 	 * @param array $sfields 
 	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
-	 *   - <b>type</b>: string. The type of special field. Possible values are: 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image'
-	 *   - <b>edit_label</b>: (password type) string. The label displayed in the edit form
-	 *   - <b>true_label</b>: (bool type) string. The label tied to the value true
-	 *   - <b>false_label</b>: (bool type) string. The label tied to the value false
-	 *   - <b>default</b>: (bool type) mixed. The deafult value
-	 *   - <b>data</b>: (enum type) array. The associative array containing the allowed values in the form 'value'=>'label'
-	 *   - <b>key_type</b>: (enum type) string. The data type of the values (int, string, float, ...)
-	 *   - <b>list_mailto</b>: (enum type) bool. Whether to show or not a mailto link in the admin list view
-	 *   - <b>value_type</b>: (multicheck type) string. The type of the values (int, string, float, ...)
-	 *   - <b>table</b>: (multicheck type) string. The name of the related table
-	 *   - <b>field</b>: (multicheck type) string. The field of the related table to display in the multicheck form element
-	 *   - <b>where</b>: (multicheck type) string. The where clause used to select only some records from the related table
-	 *   - <b>order</b>: (multicheck type) string. The order clause used to order the records selected from the related table
-	 *   - <b>label</b>: (image and file types) string. The field label
-	 *   - <b>path</b>: (image and file types) string. The absolute path of the uploading directory
-	 *   - <b>rel_path</b>: (image and file types) string. The relative path of the uploading directory
-	 *   - <b>preview</b>: (image and file types) bool. Whether to show file preview in the list view and the edit form view
-	 *   - <b>extensions</b>: (image and file types) array. List of allowed extensions (all allowed if empty)
-	 *   - <b>check_content</b>: (image and file types) bool default true. Whether to check the file mime-type agains the allowed ones
-	 *   - <b>contents_allowed</b>: (image and file types) array. List of allowed mime types in substitution of the default ones
-	 *   - <b>resize</b>: (image type) bool. Whether to resize the image or not
-	 *   - <b>scale</b>: (image type) mixed. Whether to scale the image or not. Possible values: false or an integer which represents the percentage to scale the image to
-	 *   - <b>resize_enlarge</b>: (image type) mixed. Whether to allow image enlargement during resize or not. The enlargement is always allowed for the thumbnail
-	 *   - <b>make_thumb</b>: (image type) bool. Whether to make a thumbnail of the image or not
-	 *   - <b>prefix</b>: (image type) string. The prefix added to the image filename
-	 *   - <b>prefix_thumb</b>: (image type) string default 'thumb_'. The prefix added to the thumbnail file. It sums to the image prefix
-	 *   - <b>resize_width</b>: (image type) int. The width of the resized image
-	 *   - <b>resize_height</b>: (image type) int. The height of the resized image
-	 *   - <b>thumb_width</b>: (image type) int. The width of the thumb image
-	 *   - <b>thumb_height</b>: (image type) int. The height of the thumb image
+	 *   - **type**: string. The type of special field. Possible values are: 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image'
+	 *   - **edit_label**: (password type) string. The label displayed in the edit form
+	 *   - **true_label**: (bool type) string. The label tied to the value true
+	 *   - **false_label**: (bool type) string. The label tied to the value false
+	 *   - **default**: (bool type) mixed. The deafult value
+	 *   - **data**: (enum type) array. The associative array containing the allowed values in the form 'value'=>'label'
+	 *   - **key_type**: (enum type) string. The data type of the values (int, string, float, ...)
+	 *   - **list_mailto**: (email type) bool. Whether to show or not a mailto link in the admin list view
+	 *   - **value_type**: (multicheck type) string. The type of the values (int, string, float, ...)
+	 *   - **table**: (multicheck type) string. The name of the related table
+	 *   - **field**: (multicheck type) string. The field of the related table to display in the multicheck form element
+	 *   - **where**: (multicheck type) string. The where clause used to select only some records from the related table
+	 *   - **order**: (multicheck type) string. The order clause used to order the records selected from the related table
+	 *   - **label**: (image and file types) string. The field label
+	 *   - **path**: (image and file types) string. The absolute path of the uploading directory
+	 *   - **rel_path**: (image and file types) string. The relative path of the uploading directory
+	 *   - **preview**: (image and file types) bool. Whether to show file preview in the list view and the edit form view
+	 *   - **extensions**: (image and file types) array. List of allowed extensions (all allowed if empty)
+	 *   - **check_content**: (image and file types) bool default true. Whether to check the file mime-type agains the allowed ones
+	 *   - **contents_allowed**: (image and file types) array. List of allowed mime types in substitution of the default ones
+	 *   - **resize**: (image type) bool. Whether to resize the image or not
+	 *   - **scale**: (image type) mixed. Whether to scale the image or not. Possible values: false or an integer which represents the percentage to scale the image to
+	 *   - **resize_enlarge**: (image type) mixed. Whether to allow image enlargement during resize or not. The enlargement is always allowed for the thumbnail
+	 *   - **make_thumb**: (image type) bool. Whether to make a thumbnail of the image or not
+	 *   - **prefix**: (image type) string. The prefix added to the image filename
+	 *   - **prefix_thumb**: (image type) string default 'thumb_'. The prefix added to the thumbnail file. It sums to the image prefix
+	 *   - **resize_width**: (image type) int. The width of the resized image
+	 *   - **resize_height**: (image type) int. The height of the resized image
+	 *   - **thumb_width**: (image type) int. The width of the thumb image
+	 *   - **thumb_height**: (image type) int. The height of the thumb image
 	 *
 	 * @return void
 	 */
@@ -264,7 +276,7 @@ class adminTable {
 	/**
 	 * @brief Sets plugin fields 
 	 * 
-	 * @param array $pfields An associative array where the key is the name of the "plugin type" field and the value is an array which contains the options required by the plugin itself 
+	 * @param array $pfields associative array where the key is the name of the "plugin type" field and the value is an array which contains the options required by the plugin itself 
 	 *
 	 * @return void
 	 */
@@ -281,7 +293,7 @@ class adminTable {
 	/**
 	 * @brief Sets the $_changelist_field property 
 	 * 
-	 * @param array $fields See adminTable::__construct() options
+	 * @param array $fields See @ref adminTable::__construct() options
 	 *
 	 * @return void
 	 */
@@ -324,7 +336,7 @@ class adminTable {
 	 *
 	 * This is the method called by client classes to generate their tables backoffice 
 	 * 
-	 * @return string the requested view or action
+	 * @return the requested view or action
 	 */
 	public function manage() {
 
@@ -355,7 +367,7 @@ class adminTable {
 	/**
 	 * @brief The method which returns the admin list view 
 	 * 
-	 * @return string the admin list view
+	 * @return the admin list view
 	 */
 	public function view() {
 
@@ -376,7 +388,7 @@ class adminTable {
 		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
 		
 		$where_pag = $tot_ff ? $this->setWhereClause(false) : null;
-		$pag = new pagination($this->_registry, $this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
+		$pag = new pagination($this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
 		if(count($this->_changelist_fields)) {
@@ -457,7 +469,7 @@ class adminTable {
 		$table = $this->_view->render();
 
 		if($this->_edit_deny!='all' || $this->_export) {
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$myform = new form('post', 'atbl_form', array("validation"=>false));
 			$formstart = $myform->sform('?edit'.($order ? "&order=$order" : ""), null);
 			$formend = $myform->cform();
 		}
@@ -575,7 +587,7 @@ class adminTable {
 	 * 
 	 * @param bool $fkeysorder Whether records are ordered by a foreign key field or not
 	 *
-	 * @return string the where clause
+	 * @return the where clause
 	 */
 	protected function setWhereClause($fkeysorder) {
 
@@ -609,11 +621,11 @@ class adminTable {
 	/**
 	 * @brief Form which contains filters in the admin list view 
 	 * 
-	 * @return string the filters html form
+	 * @return the filters html form
 	 */
 	protected function formFilters() {
 
-		$myform = new form($this->_registry, 'post', 'atbl_filter_form', array("validation"=>false));
+		$myform = new form('post', 'atbl_filter_form', array("validation"=>false));
 		$myform->load();
 
 		$form = $myform->sform('', null);
@@ -641,7 +653,7 @@ class adminTable {
 	/**
 	 * @brief Parses the results from a database query substituting the foreign keys values with the related fields values of the related table 
 	 * 
-	 * @param array $row Associative array deriving from a db query result
+	 * @param array $row associative array deriving from a db query result
 	 *
 	 * @return void
 	 */
@@ -665,11 +677,11 @@ class adminTable {
 	/**
 	 * @brief Parses the results from a database query substituting the special fields values with the way they have to be displayed 
 	 * 
-	 * @param mixed $row Associative array deriving from a db query result
+	 * @param mixed $row associative array deriving from a db query result
 	 * @param mixed $opts 
 	 *   Associative array of options: 
-	 *   - <b>show_pwd</b>: bool default false: Whether to show a clear-text password or not
-	 *   - <b>mailto</b>: bool default false: Whether to ass a mailto link or not
+	 *   - **show_pwd**: bool default false: Whether to show a clear-text password or not
+	 *   - **mailto**: bool default false: Whether to ass a mailto link or not
 	 *
 	 * @return void
 	 */
@@ -720,7 +732,7 @@ class adminTable {
 	/**
 	 * @brief Parses the results from a database query substituting the plugin fields values with the way they have to be displayed 
 	 * 
-	 * @param mixed $row Associative array deriving from a db query result 
+	 * @param mixed $row associative array deriving from a db query result 
 	 *
 	 * @return void
 	 */
@@ -742,7 +754,7 @@ class adminTable {
 	/**
 	 * @brief Parses the results from a database query substituting the date/datetime fields values with format set in the site configuration 
 	 * 
-	 * @param mixed $row Associative array deriving from a db query result 
+	 * @param mixed $row associative array deriving from a db query result 
 	 *
 	 * @return void
 	 */
@@ -766,7 +778,7 @@ class adminTable {
 	/**
 	 * @brief Checks if at least one of the special fields requires a file upload 
 	 * 
-	 * @return bool true if there's at least an image or file special field set.
+	 * @return bool, true if there's at least an image or file special field set.
 	 */
 	protected function checkUpload() {
 		
@@ -779,10 +791,10 @@ class adminTable {
 	 * @brief The method which returns the admin insertion/modification/deletion/export views and functionality 
 	 * 
 	 * @param mixed $opts 
-	 *   Associative array of options
-	 *   - <b>insert</b>: bool default null. Force a record insertion 
-	 *   - <b>action</b>: string default '?save'. The url of the form action
-	 *   - <b>f_s</b>: array default null. Array containing the identifiers of the records that have to be managed. By default are taken from POST or SESSION.
+	 *   associative array of options
+	 *   - **insert**: bool default null. Force a record insertion 
+	 *   - **action**: string default '?save'. The url of the form action
+	 *   - **f_s**: array default null. Array containing the identifiers of the records that have to be managed. By default are taken from POST or SESSION.
 	 *
 	 * @return string the requested view (insertion form, modification form) or the requested action (export, deletion)
 	 */
@@ -829,7 +841,7 @@ class adminTable {
 			exit();
 		}
 
-		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
+		$myform = new form('post', 'atbl_form', array("validation"=>true));
 		$myform->load();
 
 		$buffer = $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
@@ -931,7 +943,7 @@ class adminTable {
 		$buffer = '';
 		if(!$myform) {
 			if(!$formaction) $formaction = '?save';
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
+			$myform = new form('post', 'atbl_form', array("validation"=>true));
 			$myform->load();
 			$buffer .= $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
 		}	
@@ -957,10 +969,10 @@ class adminTable {
 	 * @param mixed $id the value of the primary key
 	 * @param mixed $opts  
 	 *   Associative array of options
-	 *   - <b>value</b>: mixed. The field value 
-	 *   - <b>size</b>: int default 40. The size attribute of the input element 
+	 *   - **value**: mixed. The field value 
+	 *   - **size**: int default 40. The size attribute of the input element 
 	 *
-	 * @return string the html form element
+	 * @return the html form element
 	 */
 	protected function formElement($myform, $fname, $field, $id, $opts=null) {
 	
@@ -1048,7 +1060,7 @@ class adminTable {
 	 */
 	public function saveFields() {
 
-		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+		$myform = new form('post', 'atbl_form', array("validation"=>false));
 		$myform->save();
 
 		// save and continue editing clear session
@@ -1156,9 +1168,9 @@ class adminTable {
 	 * @param string $type the field data type 
 	 * @param mixed $opts 
 	 *   Associative array of options
-	 *   - <b>escape</b> bool default true. Whether to escape values or not.
+	 *   - **escape** bool default true. Whether to escape values or not.
 	 *
-	 * @return void
+	 * @return cleaned input
 	 */
 	protected function cleanField($name, $type, $opts=null) {
 
@@ -1179,7 +1191,7 @@ class adminTable {
 	}
 
 	/**
-	 * @brief Cleans special fields inputs from the user
+	 * @brief Cleans special fields inputs from the user and sets the model properties 
 	 * 
 	 * @param mixed $model the model instance
 	 * @param string $fname the field name
@@ -1210,7 +1222,7 @@ class adminTable {
 			$sf = $this->_sfields[$fname];
 			$opts['check_content'] = isset($sf['check_content']) ? $sf['check_content'] : true;
 			$opts['contents'] = isset($sf['contents_allowed']) ? $sf['contents_allowed'] : null;
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$myform = new form('post', 'atbl_form', array("validation"=>false));
 			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
 		}
 		elseif($this->_sfields[$fname]['type']=='image') {
@@ -1226,7 +1238,7 @@ class adminTable {
 			$opts['resize_height'] = isset($sf['resize_height']) ? $sf['resize_height'] : null;
 			$opts['thumb_width'] = isset($sf['thumb_width']) ? $sf['thumb_width'] : null;
 			$opts['thumb_height'] = isset($sf['thumb_height']) ? $sf['thumb_height'] : null;
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$myform = new form('post', 'atbl_form', array("validation"=>false));
 			$model->{$fname} = $myform->uploadImage($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
 		}
 

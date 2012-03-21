@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 require_once('interface.theme.php');
@@ -15,42 +15,43 @@ require_once('interface.theme.php');
  * @ingroup themes core
  * @brief the primitive theme class
  * 
- * <p>A Jeff theme is a module composed by views, css, img, locales, js, template files and a class file.<br />
-* The class which takes its name from the theme name extends this theme class (which then acts like a super class) and implements the theme interface.</p>
- * <p>Jeff has a default and complete theme. It's the base theme that all others theme extends (not at class level). 
+ * A Jeff theme is a module composed by views, css, img, locales, js, template files and a class file.\n
+ * The class which takes its name from the theme name extends this theme class (which then acts like a super class) and implements the theme interface.
+ *
+ * Jeff has a default and complete theme. It's the base theme that all others theme extends (not at class level). 
  * That is every template file, css, localized string, js, img which is not founded in the used theme module is taken from the default one, 
  * so that it's not necessary to overwrite every single aspect of the default theme to create a new custom one, 
- * but you may only overwrite that features that you want to change.</p> 
+ * but you may only overwrite that features that you want to change.
  * 
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class theme {
 
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the @ref registry singleton instance 
 	 */
 	protected $_registry;
 	
 	/**
-	 * @brief The theme name 
+	 * @brief the theme name 
 	 */
 	protected $_name;
 
 	/**
-	 * @brief The document template name 
+	 * @brief the document template name 
 	 */
 	protected $_tpl_name;
 	
 	/**
-	 * @brief The template object 
+	 * @brief the template object 
 	 */
 	protected $_tpl;
 
 	/**
-	 * @brief The name of the default theme 
+	 * @brief the name of the default theme 
 	 */
 	protected $_dft_theme = 'default';
 
@@ -169,7 +170,7 @@ class theme {
 			$tpl_path = $this->dftPath().DS.$tpl.".tpl";
 		else $tpl_path = null;
 
-		$this->_tpl = $tpl_path ? new template($this->_registry, $tpl_path) : null;
+		$this->_tpl = $tpl_path ? new template($tpl_path) : null;
 
 	}
 

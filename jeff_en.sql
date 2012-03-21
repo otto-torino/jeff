@@ -40,6 +40,31 @@ INSERT INTO `languages` (`id`, `label`, `language`, `code`, `main`, `active`) VA
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `menu`
+--
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `parent` int(4) DEFAULT NULL,
+  `label` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `url` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `target` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `position` int(3) NOT NULL,
+  `groups` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `menu`
+--
+
+INSERT INTO `menu` (`id`, `parent`, `label`, `url`, `target`, `position`, `groups`) VALUES
+(1, 0, 'Home', '/', '_self', 1, NULL),
+(2, 0, 'Home Admin', '/admin/', '_self', 2, '1,2,3');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sys_datetime_settings`
 --
 
@@ -115,7 +140,8 @@ INSERT INTO `sys_privileges` (`id`, `category`, `class`, `class_id`, `label`, `d
 (8, 'Users', 'group', 1, 'Groups administration', 'Insertion, modification and deletion of groups and privilege associations'),
 (9, 'Users', 'privileges', 1, 'Privilege visualization', 'Visualization and description of the sytem privileges that may be associated to system groups'),
 (10, 'Languages', 'language', 1, 'Languages administration', 'Insertion, modification and deletion of the languages supported by the system'),
-(11, 'Layout', 'layout', 1, 'Themes administration', 'Administration of the themes installed in the system. Selection of the current used theme');
+(11, 'Layout', 'layout', 1, 'Themes administration', 'Administration of the themes installed in the system. Selection of the current used theme'),
+(12, 'Menu', 'menu', 1, 'Menu administration', 'Insertion, modification and deletion of menu voices');
 
 -- --------------------------------------------------------
 

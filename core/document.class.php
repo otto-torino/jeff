@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -16,29 +16,30 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class document {
 
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	private $_registry;
 	
 	/**
-	 * @brief The active template instance 
+	 * @brief the active template instance 
 	 */
 	private $_template;
 	
 	/**
 	 * @brief Constructs the document instance 
 	 * 
-	 * <p>Retrieves the template instance to use. The template object is created by a factory class which returns the proper
-	 * template instance depending on the requested url.<br />
+	 * Retrieves the template instance to use. The template object is created by a factory class which returns the proper
+	 * template instance depending on the requested url.
+	 *
 	 * The template instance represents a global template, the one which contains 
-	 * the whole html code and the modules views which may be considered as local templates.</p> 
+	 * the whole html code and the modules views which may be considered as local templates. 
 	 * 
-	 * @return void
+	 * @return document instance
 	 */
 	function __construct() {
 
@@ -50,7 +51,7 @@ class document {
 	/**
 	 * @brief Rendering of the whole document 
 	 * 
-	 * @return void
+	 * @return prints the whole document
 	 */
 	public function render() {
 	
@@ -97,7 +98,7 @@ class document {
 	 * @brief Alert system errors if present 
 	 * @ingroup errors
 	 * 
-	 * @return string the javascript code which alerts the error
+	 * @return the javascript code which alerts the error
 	 */
 	public static function errorMessages() {
 
@@ -109,13 +110,14 @@ class document {
 	/**
 	 * @brief Retrieves the template object from the template factory 
 	 * 
-	 * @return template the template instance
+	 * @return the @ref template instance
 	 */
 	private function getTemplate() {
 
-		return templateFactory::create($this->_registry);
+		return templateFactory::create();
 			
 	}
+
 }
 
 ?>

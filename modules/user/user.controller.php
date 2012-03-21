@@ -1,10 +1,50 @@
 <?php
+/**
+ * @file user.controller.php
+ * @brief Contains the controller of the user module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
+/**
+ * @defgroup user_module Users
+ * @ingroup modules security
+ *
+ * Module for the management of the system users
+ */
+
+/**
+ * @ingroup user_module
+ * @brief User module controller
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class userController extends controller {
 
-	function __construct($registry) {
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
 
-		parent::__construct($registry);
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
+
+	/**
+	 * @brief Constructs a user controller instance 
+	 * 
+	 * @return user controller instance
+	 */
+	function __construct() {
+
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "user";
@@ -13,19 +53,16 @@ class userController extends controller {
 		$this->_class_privilege = $this->_mdl_name;
 		$this->_admin_privilege = 1;
 	}
-
+	
+	/**
+	 * @brief System users backoffice 
+	 * 
+	 * @access public
+	 * @return the system users back office
+	 */
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
-
-		/*$f_keys = array(
-			"main_group"=>array(
-				"table"=>TBL_SYS_GROUPS,
-				"field"=>"label",
-				"where"=>null,
-				"order"=>"id"
-			)
-		);*/
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$s_fields = array(
 			"password"=>array(
@@ -43,8 +80,7 @@ class userController extends controller {
 			)
 		);
 
-		$at = new adminTable($this->_registry, TBL_USERS, array("edit_deny"=>array(1)));
-		//$at->setForeignKeys($f_keys);
+		$at = new adminTable(TBL_USERS, array("edit_deny"=>array(1)));
 		$at->setSpecialFields($s_fields);
 
 		$table = $at->manage();

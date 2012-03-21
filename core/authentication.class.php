@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -16,7 +16,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
  */
 class authentication {
 
@@ -29,8 +29,6 @@ class authentication {
 	 * If the user is already logged in is associated with the property 'user' of the register singleton instance, 
 	 * otherwise that property is associated with a user of type 'free user' with id equal to 0 
 	 * 
-	 * @static
-	 * @access public
 	 * @return void 
 	 */
 	public static function check() {
@@ -41,9 +39,9 @@ class authentication {
 
 		    	$redirect = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : $registry->router->linkHref(null, null);
 
-			if(($username=cleanInput('post', 'user', 'string')) && ($password=cleanInput('post', 'password', 'string'))) {
-				$user = user::getFromAuth($registry, $username, $password);	
-				if(self::checkUser($registry, $user)) {
+			if(($username = cleanInput('post', 'user', 'string')) && ($password = cleanInput('post', 'password', 'string'))) {
+				$user = user::getFromAuth($username, $password);	
+				if(self::checkUser($user)) {
 					$_SESSION['userid'] = $user->id;
 					header('Location: '.$redirect);
 					exit;

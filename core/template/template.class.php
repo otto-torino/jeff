@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -16,7 +16,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class template {
 
@@ -31,12 +31,12 @@ class template {
 	protected $_path;
 	
 	/**
-	 * @brief Content outputted by the method called through url 
+	 * @brief content outputted by the method called through url 
 	 */
 	protected $_mdl_url_content;
 	
 	/**
-	 * @brief Array containing contents outputted by the modules called in the template 
+	 * @brief array containing contents outputted by the modules called in the template 
 	 */
 	protected $_modules;
 

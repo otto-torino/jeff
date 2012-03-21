@@ -1,3 +1,19 @@
+<?php
+/**
+ * @file /var/www/jeff.git/themes/default/view/menu_admin.php
+ * @ingroup default_theme menu_module
+ * @brief Template containing the menu of the administrative area, see @ref menuController::adminMenu
+ *
+ * Available variables:
+ * - **voices**: associative array of menu voices in the form array('link'=>SUB), where SUB may be another array structure or a label 
+ *                  (in other words voices contains the tree structure of the menu)
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+?>
 <ul id="nav">
 <?php $continue = true; $parsed = $voices; $tree = array(); $last = null; ?>
 <?php while ($continue === true): ?>
@@ -22,5 +38,5 @@
 <?php endwhile ?>
 </ul>
 <script>
-window.addEvent('domready', function() { var myMenu = new MenuMatic(); });
+window.addEvent('load', function() { var myMenu = new MenuMatic('nav'); });
 </script>

@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -21,26 +21,24 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class core {
 
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	protected $_registry;
 	
 	/**
-	 * @brief Path used to generate links 
+	 * @brief path used to generate links 
 	 */
 	private $_base_path;
 
 	/**
 	 * @brief Constructs the core instance 
 	 * 
-	 * Initializes many registry properties used throughout the framework<br />
-	 * Checks for session timeout, if active.<br />
-	 * Checks for installed plugins. 
+	 * Initializes many registry properties used throughout the framework, checks for session timeout (if active) and checks for installed plugins. 
 	 * 
 	 * @return void
 	 */
@@ -65,7 +63,7 @@ class core {
 		$this->_registry->lng = language::setLanguage($this->_registry);
 		$this->_registry->site_settings = new siteSettings($this->_registry);
 		$this->_registry->dtime = new dtime($this->_registry);
-		$this->_registry->router = new router($this->_registry, $this->_base_path);
+		$this->_registry->router = new router($this->_base_path);
 		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 		$this->_registry->css = array();
 		$this->_registry->js = array();
@@ -117,7 +115,7 @@ class core {
 		/*
 		 * check login/logout
 		 */
-		authentication::check($this->_registry);
+		authentication::check();
 
 		/*
 		 * create document
@@ -172,7 +170,6 @@ class core {
 			Error::syserrorMessage('coew', 'getTheme', sprintf(__("CantLoadThemeError"), $theme_name, __LINE__));
 
 	}
-
 
 }
 

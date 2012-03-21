@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -23,49 +23,49 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class cache {
 
 	/**
-	 * @brief Directory separator 
+	 * @brief directory separator 
 	 */
 	protected $_ds;
 	
 	/**
-	 * @brief Absolute path to the cache folder storing all the cache files 
+	 * @brief absolute path to the cache folder storing all the cache files 
 	 */
 	protected $_fld;
 	
 	/**
-	 * @brief Cache files prefix 
+	 * @brief cache files prefix 
 	 */
 	protected $_prefix;
 	
 	/**
-	 * @brief Cache content group 
+	 * @brief cache content group 
 	 */
 	protected $_grp;
 	
 	/**
-	 * @brief Cache content identifier 
+	 * @brief cache content identifier 
 	 */
 	protected $id;
 	
 	/**
-	 * @brief Caching time 
+	 * @brief caching time 
 	 */
 	protected $_tc;
 	
 	/**
-	 * @brief Status 
+	 * @brief status 
 	 */
 	protected $_enabled;
 
 	/**
 	 * @brief Construct a cache instance 
 	 * 
-	 * @return void
+	 * @return cache instance
 	 */
 	function __construct() {
 
@@ -136,8 +136,9 @@ class cache {
  * @ingroup cache core
  * @brief Cache implemetation to store html/text/xml outputs
  * 
- * USAGE
+ * ### Usage
  *
+ * ~~~~~~~~~~~~~~~~~~~{.php}
  * $buffer = "previous text-";
  * $cache = new outputCache($buffer);
  * if($cache->start("group_name", "id", 3600)) {
@@ -148,23 +149,27 @@ class cache {
  *
  * }
  * $buffer .= "next text";
+ * ~~~~~~~~~~~~~~~~~~~
  *
- * -------> result: $buffer = "previous text-somec content-next text";
+ * the result is: 
+ * ~~~~~~~~~~~~~~~~~~~{.php}
+ * $buffer = "previous text-somec content-next text";
+ * ~~~~~~~~~~~~~~~~~~~
  *
  * if the content is cached the if statement is skipped and the content is
- * concatenated to $buffer
+ * concatenated to $buffer,
  * if content is not cached the if statemet runs, the content is prepared
  * and then saved in cache and added to $buffer (through stop method)
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class outputCache extends cache {
 
 	/**
-	 * @brief A reference to the output to which add the cached data 
+	 * @brief reference to the output to which add the cached data 
 	 */
 	protected $_buffer;
 
@@ -173,7 +178,7 @@ class outputCache extends cache {
 	 * 
 	 * @param mixed &$buffer reference to the $_buffer variable 
 	 * @param mixed $enable status
-	 * @return void
+	 * @return outputCache instance
 	 */
 	function __construct(&$buffer, $enable = true) {
 
@@ -228,15 +233,17 @@ class outputCache extends cache {
  * @ingroup cache core
  * @brief Cache implementation to store data structures
  * 
- * Usage
+ * ### Usage
  *
+ * ~~~~~~~~~~~~~~~~~~~{.php}
  * $cache = new dataCache();
  * if(!$data = $cache->get('group_name', 'id', 3600)) {
  *
  *	$data = someCalculations();
  *	$cache->save($data);
  *
- * }
+ *}
+ * ~~~~~~~~~~~~~~~~~~~
  *
  * if data is stored it's returned by get method and if statement is not processed, otherwise data 
  * is calculated and saved in cache
@@ -244,7 +251,7 @@ class outputCache extends cache {
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class dataCache extends cache {
 
@@ -252,7 +259,7 @@ class dataCache extends cache {
 	 * @brief Constructs a dataCache instance 
 	 * 
 	 * @param mixed $enable status
-	 * @return void
+	 * @return dataCache instance
 	 */
 	function __construct($enable = true) {
 

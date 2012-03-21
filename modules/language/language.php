@@ -6,17 +6,25 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @ingroup language_module
  * @brief language model class
  *
+ * <p>Model fields:</p>
+ * - **id** int(8): primary key
+ * - **label** varchar(10): short label, i.e. 'I', 'GB'
+ * - **language** varchar(50): language full name
+ * - **code** varchar(5): language code, i.e. 'en_EN'
+ * - **main** int(1): is the main language?
+ * - **active** int(1): is active?
+ *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class language extends model {
 	
@@ -38,7 +46,7 @@ class language extends model {
 	 * @brief Get language objects 
 	 * 
 	 * @param array $opts associative array of options:
-	 * - <b>where</b>: where clause for the select statement
+	 * - **where**: where clause for the select statement
 	 * @return array language objects
 	 */
 	public static function get($registry, $opts=null) {

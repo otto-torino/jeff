@@ -7,7 +7,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /*
@@ -16,7 +16,7 @@
 
 /**
  * @brief Clean variables
- * @todo Not used by now, but implement should be implemented looking at @ref cleanInput 
+ * @todo Not used by now, but should be implemented looking at @ref cleanInput 
  * 
  * @param mixed $var variable to clean
  * @param string $type variable type
@@ -35,7 +35,7 @@ function cleanVar($var, $type, $opts=array()) {
  * @param string $type input type ('string', 'int', 'float', 'date', 'datetime', 'email', 'html') 
  * @param array $opts 
  *   associative array of options:
- *   - <b>escape</b>: bool default true. Whether to escape input for db insertion or not
+ *   - **escape**: bool default true. Whether to escape input for db insertion or not
  * @return the sanitized input
  */
 function cleanInput($method, $name, $type, $opts=array()) {
@@ -104,7 +104,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
  * @param string $type input array elements type ('string', 'int', 'float') 
  * @param array $opts 
  *   associative array of options:
- *   - <b>escape</b>: bool default true. Whether to escape inputs for db insertion or not
+ *   - **escape**: bool default true. Whether to escape inputs for db insertion or not
  * @return the sanitized array
  */
 function cleanInputArray($method, $name, $type=null, $opts=array()) {
@@ -150,7 +150,7 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 
 /**
  * @brief Sanitize html content 
- * @todo strip dangerous tags if needed, check user privileges or which tag are allowed for the input
+ * @todo strip dangerous tags if needed, check user privileges or which tags are allowed for the input
  * 
  * @param string $html html string 
  * @return the sanitized string

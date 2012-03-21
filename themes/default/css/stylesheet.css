@@ -72,6 +72,11 @@ div.header_bottom {
 	height:28px;
 	line-height: 28px;
 }
+.credits section {
+	margin: 0;
+	padding: 0;
+	height:28px;
+}
 
 .credits a:link, .credits a:visited {
 	color: #51a9fb;

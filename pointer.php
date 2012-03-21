@@ -2,13 +2,13 @@
 /**
  * @file /var/www/jeff.git/pointer.php
  * @ingroup entry_point
- * @brief Front end entry point to call a specific class method.
- * @details This file is used when performing ajax requests.
+ * @brief Front end entry point used to call a specific class method (and get its output).
+ * @details This file is usually used when performing ajax requests.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**

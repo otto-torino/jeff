@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -25,10 +25,20 @@ require_once('layout.php');
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class layoutController extends controller {
 	
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
+
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
+
 	/**
 	 * @brief Constructs a layout controller instance 
 	 * 
@@ -43,9 +53,6 @@ class layoutController extends controller {
 
 		// privileges
 		$this->_class_privilege = $this->_mdl_name;
-		/**
- 		 * Module's administration privilege  
- 		 */
 		$this->_admin_privilege = 1;
 	}
 	
@@ -53,11 +60,11 @@ class layoutController extends controller {
 	 * @brief Layout module backoffice 
 	 * 
 	 * @access public
-	 * @return the layout module office
+	 * @return the layout module backoffice
 	 */
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$items = array();
 		foreach(layout::getThemes($this->_registry) as $theme) {
@@ -91,10 +98,10 @@ class layoutController extends controller {
 	 */
 	public function activateTheme() {
 
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('get', 'id', 'int');
-		layout::activateTheme($this->_registry, $id);
+		layout::activateTheme($id);
 
 		header("Location: ".$this->_router->linkHref($this->_mdl_name, 'manage'));
 

@@ -5,17 +5,18 @@
  *
  * Defines the mvc model class
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @note 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @license MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup mvc MVC pattern
- * <p>Set of primitive classes which implements the MVC pattern.</p>
- * <p>Jeff is designed following the MVC pattern directive.</br> 
- * All user requests are managed by \ref controller classes which may or not control \ref model objects and return specific model \ref view.</p>
+ * Set of primitive classes which implements the MVC pattern.
+ *
+ * Jeff is designed following the MVC pattern directive. \n
+ * All user requests are managed by @ref controller classes which may or not control \ref model objects and return specific model @ref view.
  *
  */
 
@@ -29,25 +30,25 @@
  * - the init methods to instantiate the object and set all its properties reading the field values from db.
  *
  * A Model instance represents a record of a database table.<br />
- * Each model stores all the record field values as elements of a property array. Each model property value can be retrieved calling it as a normal property.<br />
+ * Each model stores all the record field values as elements of a property array. Each model property value can be retrieved calling it as a normal property.\n
  * i.e. $model->field is the same as  $model->_p['field'] and contains the value of 'field' for the represented record. 
  * 
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @note 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @license MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com 
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php) 
  */
 class model {
 
 	/**
-	 * @brief Model properties 
+	 * @brief model properties 
 	 * 
 	 * an associative array containing the record fields name and their value
 	 */
 	protected $_p = array();
 
  	/**
- 	 * @brief Changed model properties 
+ 	 * @brief changed model properties 
  	 * 
  	 * an array an array containing the list of changed model properties
  	 */
@@ -55,17 +56,17 @@ class model {
 
 
 	/**
-	 * @brief The database table of the model
+	 * @brief the database table of the model
 	 */
 	protected $_tbl_data = '';
 
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	protected $_registry;
 
 	/**
-	 * @brief The name of the primary key field 
+	 * @brief the name of the primary key field 
 	 */
 	protected $_id_name = 'id';
 
@@ -74,7 +75,7 @@ class model {
 	 * 
 	 * @param mixed $id the identifier of the record (the primary key value) 
 	 * @param mixed $table the model database table. Default null (may be set after object construction)
-	 * @return void
+	 * @return model instance
 	 */
 	function __construct($id, $table=null) {
 		
@@ -87,7 +88,7 @@ class model {
 	}
 
 	/**
-	 * @brief Setter method for _id_name property 
+	 * @brief Setter method for $_id_name property 
 	 * 
 	 * @param mixed $id_name the name of the primary key 
 	 * @return void
@@ -99,7 +100,7 @@ class model {
 	}
 
 	/**
-	 * @brief Setter method for _tbl_data property 
+	 * @brief Setter method for $_tbl_data property 
 	 * 
 	 * @param string $table the model database table
 	 * @return void

@@ -6,19 +6,19 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @ingroup forms core
  * @brief Image manipulation class 
  * 
- * <p>Supported image types are <b>jpg</b>, <b>png</b> and <b>gif</b></p> 
+ * Supported image types are **jpg**, **png** and **gif** 
  * 
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class image {
  
@@ -127,7 +127,7 @@ class image {
 	 * @param int $height resizing height
 	 * @param mixed $opts
 	 *   Associative array of options:
-	 *   - <b>enlarge</b>: bool default false. Allow image enlargement 
+	 *   - **enlarge**: bool default false. Allow image enlargement 
 	 * @return void
 	 */
 	public function resizeToHeight($height, $opts=null) {
@@ -153,7 +153,7 @@ class image {
 	 * @param int $width resizing width
 	 * @param mixed $opts
 	 *   Associative array of options:
-	 *   - <b>enlarge</b>: bool default false. Allow image enlargement 
+	 *   - **enlarge**: bool default false. Allow image enlargement 
 	 * @return void
 	 */
 	public function resizeToWidth($width, $opts=null) {

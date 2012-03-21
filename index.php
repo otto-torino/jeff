@@ -8,7 +8,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -27,19 +27,14 @@ define('ABS_ROOT', realpath(dirname(__FILE__)));
  * @brief operating system directory separator 
  */
 define( 'DS', DIRECTORY_SEPARATOR );
-/**
- * @brief include system paths 
- */
+
+// system paths 
 include(ABS_ROOT.DS.'paths.php');
 
-/**
- * @brief include system configuration  
- */
+// system configuration  
 include(ABS_ROOT.DS.'configuration.php');
 
-/**
- * @brief include core class  
- */
+// core class  
 include(ABS_CORE.DS.'core.class.php');
 
 /**
@@ -48,7 +43,7 @@ include(ABS_CORE.DS.'core.class.php');
 define('BASE_PATH', ROOT);
 
 /**
- * @brief render the application  
+ * @brief core instance, renders the whole application  
  */
 $core = new core();
 $core->renderApp();

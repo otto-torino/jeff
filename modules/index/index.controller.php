@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -23,7 +23,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class indexController extends controller {
 	
@@ -44,7 +44,7 @@ class indexController extends controller {
 	 * @brief Jeff default index views (admin and public)
 	 *
 	 * @access public
-	 * @return index view
+	 * @return index view output
 	 */
 	public function index() {
 	
@@ -57,7 +57,7 @@ class indexController extends controller {
 	/**
 	 * @brief public index view 
 	 * 
-	 * @return public index view
+	 * @return public index view output
 	 */
 	public function publicIndex() {
 
@@ -71,14 +71,13 @@ class indexController extends controller {
 	/**
 	 * @brief user index view 
 	 * 	 
-	 * @return user index view
+	 * @return user index view output
 	 */
 	public function userIndex() {
 	
 		access::check('private_view');
 
 		$this->_view->setTpl('index_user', array('css'=>'index'));
-		$this->_view->assign('summary', $summary);
 
 		return $this->_view->render();	
 	}
@@ -86,7 +85,7 @@ class indexController extends controller {
 	/**
 	 * @brief admin index view 
 	 * 	 
-	 * @return admin index view
+	 * @return admin index view output
 	 */
 	public function adminIndex() {
 	

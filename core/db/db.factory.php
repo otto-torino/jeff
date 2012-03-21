@@ -3,22 +3,24 @@
  * @file db.factory.php
  * @brief Contains the database factory implementation.
  *
- * <p>The database instance is unique due to the use of the singleton pattern.<br />
- * The database instance returned depends on the DBMS configuration setting, so that it's easy to add support for other DBMS different from MySQL.<br />
- * Look the database interface definition to see which methods a specific DBMS class should implement.</p>
+ * The database instance is unique due to the use of the singleton pattern.\n       
+ * The database instance returned depends on the DBMS configuration setting, so that it's easy to add support for other DBMS different from MySQL.\n
+ * Look the database interface definition to see which methods a specific DBMS class should implement.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup database Database management
- * <p>Set of classes used to create a db client object. The existence of only one db client instance at runtime is granted by the <b>singleton</b> pattern. <br />
- * The <b>abstract factory</b> pattern is also used in the creation of the client db instance so that the db management module is <b>easily extensible</b>.</p>
- * <p>The class used as db client is decided at runtime reading the constant DBMS set in the configuration file.<br />
- * Jeff comes with the MySQL client class \ref mysql, but it's quite simple to add support for opther DBMS, just implement all the methods defined in the interface DbManager.</p>
+ * Set of classes used to create a db client object. The existence of only one db client instance at runtime is granted by the **singleton** pattern.
+ *
+ * The **abstract factory** pattern is also used in the creation of the client db instance so that the db management module is **easily extensible**.
+ *
+ * The class used as db client is decided at runtime reading the constant **DBMS** set in the [configuration](configuration.php) file.\n        
+ * Jeff comes with the MySQL client class \ref mysql, but it's quite simple to add support for opther DBMS, just implement all the methods defined in the interface DbManager.
  *
  */
 
@@ -31,42 +33,42 @@ require_once('interface.db.php');
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 abstract class db extends singleton {
 	
 	/**
-	 * @brief Database host
+	 * @brief database host
  	 */
 	private static $_db_host = DB_HOST;
 
 	/**
-	 * @brief Database user
+	 * @brief database user
 	 */
 	private static $_db_user = DB_USER;
 
 	/**
-	 * @brief Database password
+	 * @brief database password
 	 */
 	private static $_db_pass = DB_PASSWORD;
 
 	/**
-	 * @brief Database name
+	 * @brief database name
 	 */
 	private static $_db_dbname = DB_DBNAME;
 
 	/**
-	 * @brief Database charset
+	 * @brief database charset
 	 */
 	private static $_db_charset = DB_CHARSET;
 
 	/**
-	 * @brief Database schema
+	 * @brief database schema
 	 */
 	private static $_db_schema = DB_SCHEMA;
 
 	/**
-	 * @brief Returns a singleton db instance 
+	 * @brief returns a singleton db instance 
 	 * 
 	 * @return 
 	 *   the singleton instance

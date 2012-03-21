@@ -8,34 +8,37 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup themes Theme management
- * <p>Set of classes used to manage themes</p>
- * <p>Thanks to its modularity Jeff may support different themes, and the user may set which one to use, setting it as active.<br />
- * All theme classes extends the theme class and implements the theme interface.</p>
- * <p>Every new installed theme "extends" the default one, in the sense that the new template may only override some features and all other stuffs (img, css, views, locales, js)
+ * Set of classes used to manage themes
+ *
+ * Thanks to its modularity Jeff may support different themes, and the user may set which one to use, setting it as active. \n
+ * All theme classes extends the theme class and implements the theme interface.
+ *
+ * Every new installed theme "extends" the default one, in the sense that the new template may only override some features and all other stuffs (img, css, views, locales, js)
  * falbacks to the default template, this way is quite fast to change for example only the template graphics
- * because it's enough to create some images and rewrite the css stylesheet.<p>
+ * because it's enough to create some images and rewrite the css stylesheet.
+ *
  * What follow is the list of features a theme might have
- * - <b>css</b> (under themes/theme_name/css/)
+ * - **css** (under themes/theme_name/css/)
  *       - stylesheet.css: the main theme css
  *       - <template_name>.css: the specific global template css
  *       modules css: specific modules css
- * - <b>js</b> (under themes/theme_name/js)
+ * - **js** (under themes/theme_name/js)
  *       - themejs.js: the main theme javascript file (not present in the default theme)
  *       - <active_template>.js: the specific template js
- * - <b>images</b> (themes/theme_name/img) 
+ * - **images** (themes/theme_name/img) 
  *       - the theme images
- * - <b>locale</b> (themes/theme_name/languages) 
+ * - **locale** (themes/theme_name/languages) 
  *       - the files which contains the associative array used to translate strings
- * - <b>view</b> (themes/theme_name/view) 
+ * - **view** (themes/theme_name/view) 
  *       - all the module's views, that is the module templates
- * - <b>template files</b> (themes/theme_name/) es public_home.tpl
+ * - **template files** (themes/theme_name/) es public_home.tpl
  *       - all the global template files loaded and parsed by the template engine
- * - <b><template_name>.php</b> (themes/theme_name) the specific theme class
+ * - **<template_name>.php** (themes/theme_name) the specific theme class
  *
  */
 
@@ -46,7 +49,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 interface Itheme {
 

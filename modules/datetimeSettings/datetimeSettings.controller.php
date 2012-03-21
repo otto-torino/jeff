@@ -6,22 +6,24 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup modules Modules
  *
- * <p>Modules are the entities which produce html outputs. May be formed by one or more classes, following the @ref MVC pattern.<br />
- * Every module has at least a controller which exposes the public methods callable by url and usable in the global templates, see @ref templates.</p>
- * <p>Standard models have a @ref controller class and one or more @ref model classes which manages the module's data stored in the database.</p>
- * <p>Usually all models used the primitive @ref view class but may also extend it to add more functionality.</p>
+ * Modules are the entities which produce html outputs. May be formed by one or more classes, following the @ref MVC pattern. \n 
+ * Every module has at least a controller which exposes the public methods callable by url and usable in the global templates, see @ref templates.
+ *
+ * Standard models have a @ref controller class and one or more @ref model classes which manages the module's data stored in the database.
+ *
+ * Usually all models used the primitive @ref view class but may also extend it to add more functionality.
  *
  */
 
 /**
  * @defgroup datetimesettings_module Datetime settings
- * @ingroup modules datetime
+ * @ingroup modules datetime configurations
  *
  * Module for the management of the system date and time settings
  */
@@ -33,9 +35,19 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class datetimeSettingsController extends controller {
+	
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
+
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
 
 	/**
 	 * @brief Constructs a datetimeSettings controller instance 
@@ -51,10 +63,6 @@ class datetimeSettingsController extends controller {
 
 		// privileges
 		$this->_class_privilege = $this->_mdl_name;
-
-		/**
- 		 * Module's administration privilege  
- 		 */
 		$this->_admin_privilege = 1;
 
 	}

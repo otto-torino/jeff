@@ -6,17 +6,23 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @ingroup group_module
  * @brief User group model class
  *
+ * <p>Model fields:</p>
+ * - **id** int(1): primary key
+ * - **label** varchar(32): group label
+ * - **description** text: group description
+ * - **privileges** varchar(128): comma separated list of @ref privilege ids
+ *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class group extends model {
 	

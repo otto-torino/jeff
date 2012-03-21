@@ -7,12 +7,12 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup php_lib PHP functions library
- * <p>Set of php functions used by many classes and of general interest.</p>
+ * Set of php functions used by many classes and of general interest.
  */
 
 /**
@@ -50,11 +50,11 @@ function __($id) {
  * @param string $text link's text
  * @param array $opts 
  *   associative array of options:
- *   - <b>over</b>: onmouseover attribute
- *   - <b>out</b>: onmouseout function
- *   - <b>class</b>: css class
- *   - <b>title</b>: title attribute
- *   - <b>target</b>: target attribute
+ *   - **over**: onmouseover attribute
+ *   - **out**: onmouseout function
+ *   - **class**: css class
+ *   - **title**: title attribute
+ *   - **target**: target attribute
  * @return the anchor element
  */
 function anchor($link, $text, $opts=null) {
@@ -96,10 +96,10 @@ function layerWindow($title, $url, $text, $opts=null) {
  * @param string $url content's url
  * @param array $opts 
  *   associative array of options:
- *   - <b>width</b>: int default 800. The window width
- *   - <b>height</b>: int default null. The window height. If null the window height depends on its contents.
- *   - <b>bodyId</b>: string default 'bid'. Id attribute of the window body.
- *   - <b>reloadZindex</b>: bool default false. Whether to check the maximum z-index in the document or not. If not the maximum z-index is considered equal to 1.
+ *   - **width**: int default 800. The window width
+ *   - **height**: int default null. The window height. If null the window height depends on its contents.
+ *   - **bodyId**: string default 'bid'. Id attribute of the window body.
+ *   - **reloadZindex**: bool default false. Whether to check the maximum z-index in the document or not. If not the maximum z-index is considered equal to 1.
  * @return the javascript code
  */
 function layerWindowCall($title, $url, $opts=null) {
@@ -125,7 +125,7 @@ function layerWindowCall($title, $url, $opts=null) {
  * @param string $text tooltip text
  * @param array $opts 
  *   associative array of options:
- *   - <b>class</b>: element css class
+ *   - **class**: element css class
  * @return the tooltip element
  */
 function tooltip($label, $title, $text, $opts=null) {
@@ -264,11 +264,11 @@ function chargeEditor($selector) {
  * 
  * @param mixed $social 
  *   "all" or an array of social site names. Supported ones are:
- *   - <b>facebook</b>
- *   - <b>twitter</b>
- *   - <b>linkedin</b>
- *   - <b>digg</b>
- *   - <b>googleplus</b>
+ *   - **facebook**
+ *   - **twitter**
+ *   - **linkedin**
+ *   - **digg**
+ *   - **googleplus**
  * @param string $url the url to share
  * @param string $title title to share
  * @param string $description description to share
@@ -318,7 +318,7 @@ function share($social, $url, $title=null, $description=null) {
  * @param bool $cut_images whether to remove image tags or not
  * @param array $opts 
  *   associative array of options:
- *   - <b>endingPosition</b> "in" or "out". Whether to add the ending characters inside or outside the outer tag
+ *   - **endingPosition** "in" or "out". Whether to add the ending characters inside or outside the outer tag
  * @return void
  */
 function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_images, $opts = null) {

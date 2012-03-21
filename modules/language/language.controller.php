@@ -6,14 +6,15 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup localization Localization
  *
- * <p>Jeff supports localization. Strings in different languages are translated in themes localization files and retrieved by their key identifier.</p>
- * <p>The localization function @ref __() returns the string translated in the active language.</p>
+ * Jeff supports localization. Strings in different languages are translated in themes localization files and retrieved by their key identifier.
+ *
+ * The localization function @ref __() returns the string translated in the active language.
  */
 
 /**
@@ -30,10 +31,20 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class languageController extends controller {
 	
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
+
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
+
 	/**
 	 * @brief Constructs a language controller instance 
 	 * 
@@ -48,10 +59,6 @@ class languageController extends controller {
 
 		// privileges
 		$this->_class_privilege = $this->_mdl_name;
-
-		/**
- 		 * Module's administration privilege  
- 		 */
 		$this->_admin_privilege = 1;
 	}
 	

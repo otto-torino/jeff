@@ -1,12 +1,22 @@
 <?php
 /**
  * @file configuration.php
+ * @ingroup configurations
  * @brief Jeff configuration file.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+
+/**
+ * @defgroup configurations Configuration
+ *
+ * ### Configuration of the web application
+ * 
+ * Includes the configuration of the database parameters, the configuration of some general properties of the web application, like TITLE and DESCRIPTION 
+ * appearing in the head of the document, and the configuration of the date and time formats.
  */
 
 /**

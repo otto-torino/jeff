@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -18,42 +18,42 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class export {
 	
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	private $_registry;
 	
 	/**
-	 * @brief Data separator character  
+	 * @brief data separator character  
 	 */
 	private $_s;
 	
 	/**
-	 * @brief Field enclosure character  
+	 * @brief field enclosure character  
 	 */
 	private $_fe;
 
 	/**
-	 * @brief Database table  
+	 * @brief database table  
 	 */
 	private $_table;
 	
 	/**
-	 * @brief Table primary key field  
+	 * @brief table primary key field  
 	 */
 	private $_pkey;
 	
 	/**
-	 * @brief Special fields  
+	 * @brief special fields  
 	 */
 	private $_sfields;
 	
 	/**
-	 * @brief Foreign keys  
+	 * @brief foreign keys  
 	 */
 	private $_fkeys;
 
@@ -87,31 +87,31 @@ class export {
 	 * 
 	 * @param array $opts 
 	 *   Associative array of options</b>:
-	 *   - <b>separator</b>: string default ','. Data separator character
-	 *   - <b>field_enclosure</b>: string default '"'. Field enclosure character 
-	 *   - <b>table</b>: string. Database table 
-	 *   - <b>pkey</b>: string default 'id'. Table primary key field 
-	 *   - <b>sfields</b>: array default array(). Special fields, same as \ref adminTable::setSpecialFields 
-	 *   - <b>fkeys</b>: array default array(). Foreign keys, same as \ref adminTable::setForeignKeys 
-	 *   - <b>head</b>: bool default true. Whether or not to print fields' headings 
-	 *   - <b>fields</b>: mixed default '*'. Fields to export. Possible values are: 
-	 *     - <b>*</b>: all fields
-	 *     - <b>-(field1, field2)</b>: all fields except from field1 and field2
-	 *     - <b>field1,field2</b>: the fields field1 and field2
-	 *     - <b>array('field1', 'field2')</b>: the fields field1 and field2
-	 *   - <b>rids</b>: mixed default '*'. Records to export. Possible values are: 
-	 *     - <b>*</b>: all records
-	 *     - <b>-(field1, field2)</b>: all fields except from field1 and field2
-	 *     - <b>1,3,5</b>: the records with id=1, id=3 and id=5
-	 *     - <b>array(1,3,5)</b>: the records with id=1, id=3 and id=5
-	 *   - <b>order</b>: string default ''. The field used to sort the results 
-	 *   - <b>data</b>: array default array(). Arra of data to export. Competitive to table option, ie: 
+	 *   - **separator**: string default ','. Data separator character
+	 *   - **field_enclosure**: string default '"'. Field enclosure character 
+	 *   - **table**: string. Database table 
+	 *   - **pkey**: string default 'id'. Table primary key field 
+	 *   - **sfields**: array default array(). Special fields, same as \ref adminTable::setSpecialFields 
+	 *   - **fkeys**: array default array(). Foreign keys, same as \ref adminTable::setForeignKeys 
+	 *   - **head**: bool default true. Whether or not to print fields' headings 
+	 *   - **fields**: mixed default '*'. Fields to export. Possible values are: 
+	 *     - *****: all fields
+	 *     - **-(field1, field2)**: all fields except from field1 and field2
+	 *     - **field1,field2**: the fields field1 and field2
+	 *     - **array('field1', 'field2')**: the fields field1 and field2
+	 *   - **rids**: mixed default '*'. Records to export. Possible values are: 
+	 *     - *****: all records
+	 *     - **-(field1, field2)**: all fields except from field1 and field2
+	 *     - **1,3,5**: the records with id=1, id=3 and id=5
+	 *     - **array(1,3,5)**: the records with id=1, id=3 and id=5
+	 *   - **order**: string default ''. The field used to sort the results 
+	 *   - **data**: array default array(). Arra of data to export. Competitive to table option, ie: 
 	 *     array(
 	 *       0=>array("head1", "head2", "head3"), 
 	 *       1=>array("value1 record 1", "value 2 record 1", "value 3 record 1"), 
 	 *       2=>array("value1 record 2", "value 2 record 2", "value 3 record 2")
 	 *    )
-	 * @return void
+	 * @return export instance
 	 */
 	function __construct($opts=array()) {
 
@@ -184,7 +184,7 @@ class export {
 	/**
 	 * @brief Sets the $_fields property 
 	 * 
-	 * @param mixed $fields fields value (see \ref export::__construct)
+	 * @param mixed $fields fields value (see @ref export::__construct)
 	 * @return void
 	 */
 	public function setFields($fields) {
@@ -194,7 +194,7 @@ class export {
 	/**
 	 * @brief Sets the $_head property 
 	 * 
-	 * @param bool $head headings visibility (see \ref export::__construct)
+	 * @param bool $head headings visibility (see @ref export::__construct)
 	 * @return void
 	 */
 	public function setHead($head) {
@@ -204,7 +204,7 @@ class export {
 	/**
 	 * @brief Sets the $_rids property 
 	 * 
-	 * @param mixed $rids rids value (see \ref export::__construct)
+	 * @param mixed $rids rids value (see @ref export::__construct)
 	 * @return void
 	 */
 	public function setRids($rids) {
@@ -214,7 +214,7 @@ class export {
 	/**
 	 * @brief Sets the $_order property 
 	 * 
-	 * @param string $order sort order (see \ref export::__construct)
+	 * @param string $order sort order (see @ref export::__construct)
 	 * @return void
 	 */
 	public function setOrder($order) {
@@ -224,7 +224,7 @@ class export {
 	/**
 	 * @brief Sets the $_data property 
 	 * 
-	 * @param array $data data value (see \ref export::__construct)
+	 * @param array $data data value (see @ref export::__construct)
 	 * @return void
 	 */
 	public function setData($data) {

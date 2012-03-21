@@ -2,12 +2,12 @@
 /**
  * @file admin.php
  * @ingroup entry_point
- * @brief Administrative area entry point
+ * @brief Entry point for the administrative area
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**

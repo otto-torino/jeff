@@ -8,7 +8,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -20,7 +20,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 interface DbManager {
 
@@ -99,20 +99,19 @@ interface DbManager {
 	 *
 	 * @param string $table the database table
 	 * @return 
-	 *   information about the table structure.<br />
-	 *   The returned array is in the form<br />
-	 *   array("field_name" => array("property" => "value"), "primary_key" => "primary_key_name", "keys" => array("keyname1", "keyname2")) <br />
+	 *   information about the table structure. \n
+	 *   The returned array is in the form \n
+	 *   array("field_name" => array("property" => "value"), "primary_key" => "primary_key_name", "keys" => array("keyname1", "keyname2")) \n
 	 *   Returned properties foreach field:
-	 *   - order: the ordinal position
-	 *   - deafult: the default value
-	 *   - deafult value
-	 *   - null: whether the field is nullable or not
-	 *   - type: the field type (varchar, int, text, ...)
-	 *   - max_length: the field max length
-	 *   - n_int: the number of int digits
-	 *   - n_precision: the number of decimal digits
-	 *   - key: the field key if set
-	 *   - extra: extra information
+	 *   - **order**: the ordinal position
+	 *   - **deafult**: the default value
+	 *   - **null**: whether the field is nullable or not
+	 *   - **type**: the field type (varchar, int, text, ...)
+	 *   - **max_length**: the field max length
+	 *   - **n_int**: the number of int digits
+	 *   - **n_precision**: the number of decimal digits
+	 *   - **key**: the field key if set
+	 *   - **extra**: extra information
 	 */
 	public function getTableStructure($table);
 	

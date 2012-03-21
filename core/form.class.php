@@ -6,14 +6,16 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @defgroup forms Form management
- * <p>Set of classes used to manage data forms. The \ref form class provides methods to create html form elements and upload files. 
- * The \ref captcha class allows the generation of captcha images.</p>
- * The \ref image class provides methods to manipulate images.</p>
+ * Set of classes used to manage data forms. The @ref form class provides methods to create html form elements and upload files. 
+ *
+ * The @ref captcha class allows the generation of captcha images.
+ *
+ * The @ref image class provides methods to manipulate images.
  */
 
 /**
@@ -23,17 +25,17 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class form {
 	
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	private $_registry;
 
 	/**
-	 * @brief a \ref view instance
+	 * @brief a @ref view instance
 	 */
 	private $_view;
 
@@ -64,8 +66,8 @@ class form {
 	 * @param string $name form name and id
 	 * @param array $opts 
 	 *   associative array of options:
-	 *   - <b>validation</b>: whether to perform javascript validation or not
-	 *   - <b>verifyToken</b>: whether to verify the token used to detect CSRF attacks or not
+	 *   - **validation**: whether to perform javascript validation or not
+	 *   - **verifyToken**: whether to verify the token used to detect CSRF attacks or not
 	 * @return void
 	 */
 	function __construct($method, $name, $opts=null) {
@@ -92,7 +94,7 @@ class form {
 	/**
 	 * @brief CSRF token generation 
 	 * 
-	 * @return string the generated token
+	 * @return the generated token
 	 */
 	private function generateFormToken() {
   		$token = md5(uniqid(microtime(), true));
@@ -103,7 +105,7 @@ class form {
 	/**
 	 * @brief CSRF token verification 
 	 * 
-	 * @return bool the verification result
+	 * @return bool, the verification result
 	 */
 	private function verifyFormToken() {
   		$index = $this->_name.'_token';
@@ -190,7 +192,7 @@ class form {
 	/**
 	 * @brief Checks if the required fields have been filled 
 	 * 
-	 * @return bool the check result, true if all required fields were filled, false otherwise
+	 * @return bool, the check result, true if all required fields were filled, false otherwise
 	 */
 	public function checkRequired() {
 		
@@ -214,9 +216,9 @@ class form {
 	 * @param string $required comma separated list of required fields
 	 * @param mixed $opts 
 	 *   Associative array:
-	 *   - <b>upload</b>: bool. Whether the form allows file upload or not
-	 *   - <b>generateToken</b>: bool. Whether the generate a CSRF token
-	 * @return string the form open tag
+	 *   - **upload**: bool. Whether the form allows file upload or not
+	 *   - **generateToken**: bool. Whether the generate a CSRF token
+	 * @return the form open tag
 	 */
 	public function sform($action, $required, $opts=null) {
 	
@@ -248,8 +250,8 @@ class form {
 	 * 
 	 * @param array $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field 
-	 *   - see \ref form::captcha
+	 *   - **text_add**: text added after the field 
+	 *   - see @ref form::captcha
 	 * @return void
 	 */
 	public function ccaptcha($opts=null) {
@@ -267,7 +269,7 @@ class form {
 	 * 
 	 * @param array $opts 
 	 *   associative array of options:
-	 *   - <b>class</b>: css class of the div which contains the captcha 
+	 *   - **class**: css class of the div which contains the captcha 
 	 * @return void
 	 */
 	public function captcha($opts=null) {
@@ -284,7 +286,7 @@ class form {
 	/**
 	 * @brief Captcha code check 
 	 * 
-	 * @return bool check result
+	 * @return bool, check result
 	 */
 	public function checkCaptcha() {
 	
@@ -303,8 +305,8 @@ class form {
 	 * @param string $content the fieldset content 
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>id</b>: fieldset id 
-	 * @return string the fieldset element
+	 *   - **id**: fieldset id 
+	 * @return the fieldset element
 	 */
 	public function fieldset($legend, $content, $opts=null) {
 
@@ -343,7 +345,7 @@ class form {
 	 * @param mixed $value field value
 	 * @param array $opts 
 	 *   associative array of options:
-	 *   - <b>id</b>: field id 
+	 *   - **id**: field id 
 	 * @return void
 	 */
 	public function hidden($name, $value, $opts=null) {
@@ -363,9 +365,9 @@ class form {
 	 * @param string $tadd text added after the input element
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>label_class</b>: string. css class for the label element 
-	 *   - <b>label_form</b>: string. form attribute of the label element 
-	 *   - <b>more</b>: string. Additional content after the input element and text added 
+	 *   - **label_class**: string. css class for the label element 
+	 *   - **label_form**: string. form attribute of the label element 
+	 *   - **more**: string. Additional content after the input element and text added 
 	 * @return void
 	 */
 	private function prepareView($name, $l, $d, $req, $tadd, $opts=null) {
@@ -391,8 +393,8 @@ class form {
 	 * @param string $cright right content (as an input)
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>idLeft</b>: string. id attribute of the left content 
-	 *   - <b>idRight</b>: string. id attribute of the right content 
+	 *   - **idLeft**: string. id attribute of the left content 
+	 *   - **idRight**: string. id attribute of the right content 
 	 * @return void
 	 */
 	public function freeInput($cleft, $cright, $opts=null) {
@@ -414,19 +416,19 @@ class form {
 	 * @param mixed $value the input value
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>id</b>: string. id attribute of the input element 
-	 *   - <b>class</b>: string. css class of the input element 
-	 *   - <b>pattern</b>: string. pattern attribute of the input element 
-	 *   - <b>hint</b>: string. hint message shown when the specified pattern checks fails 
-	 *   - <b>placeholder</b>: string. placeholder attribute of the input element 
-	 *   - <b>size</b>: string. size attribute of the input element 
-	 *   - <b>maxlength</b>: string. maxlength attribute of the input element 
-	 *   - <b>readonly</b>: bool. whether the input element is readonly or not 
-	 *   - <b>required</b>: bool. whether the field is required or not 
-	 *   - <b>formnovalidate</b>: bool. whether the input element is not to be validated or not 
-	 *   - <b>js</b>: string. js event handler 
-	 *   - <b>other</b>: string. other element attributes 
-	 * @return string the input element
+	 *   - **id**: string. id attribute of the input element 
+	 *   - **class**: string. css class of the input element 
+	 *   - **pattern**: string. pattern attribute of the input element 
+	 *   - **hint**: string. hint message shown when the specified pattern checks fails 
+	 *   - **placeholder**: string. placeholder attribute of the input element 
+	 *   - **size**: string. size attribute of the input element 
+	 *   - **maxlength**: string. maxlength attribute of the input element 
+	 *   - **readonly**: bool. whether the input element is readonly or not 
+	 *   - **required**: bool. whether the field is required or not 
+	 *   - **formnovalidate**: bool. whether the input element is not to be validated or not 
+	 *   - **js**: string. js event handler 
+	 *   - **other**: string. other element attributes 
+	 * @return the input element
 	 */
 	public function input($name, $type, $value, $opts=null){
 
@@ -466,9 +468,9 @@ class form {
 	 * @param mixed $label field label
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field 
-	 *   - see \ref form::input
-	 * @return string the complete input element
+	 *   - **text_add**: text added after the field 
+	 *   - see @ref form::input
+	 * @return the complete input element
 	 */
 	public function cinput($name, $type, $value, $label, $opts){
 
@@ -487,9 +489,9 @@ class form {
 	 * @param mixed $label field label
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field 
-	 *   - see \ref form::input except from options size, maxlength, pattern, hint which have default values
-	 * @return string the complete datetime element
+	 *   - **text_add**: text added after the field 
+	 *   - see @ref form::input except from options size, maxlength, pattern, hint which have default values
+	 * @return the complete datetime element
 	 */
 	public function cinput_date($name, $value, $label, $opts){
 
@@ -531,9 +533,9 @@ class form {
 	 * @param mixed $label field label
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field 
-	 *   - see \ref form::input except from options size, maxlength, pattern, hint which have default values
-	 * @return string the datetime element
+	 *   - **text_add**: text added after the field 
+	 *   - see @ref form::input except from options size, maxlength, pattern, hint which have default values
+	 * @return the datetime element
 	 */
 	public function cinput_datetime($name, $value, $label, $opts){
 
@@ -576,9 +578,9 @@ class form {
 	 * @param mixed $label field label
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field 
-	 *   - see \ref form::textarea
-	 * @return string the complete textarea element
+	 *   - **text_add**: text added after the field 
+	 *   - see @ref form::textarea
+	 * @return the complete textarea element
 	 */
 	public function ctextarea($name, $value, $label, $opts=null){
 
@@ -596,19 +598,19 @@ class form {
 	 * @param string $value field value 
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>editor</b>: whether to charge dojo editor or not 
-	 *   - <b>id</b>: string. id attribute of the textarea element 
-	 *   - <b>class</b>: string. css class of the textarea element 
-	 *   - <b>pattern</b>: string. pattern attribute of the textarea element 
-	 *   - <b>hint</b>: string. hint message shown when the specified pattern checks fails 
-	 *   - <b>placeholder</b>: string. placeholder attribute of the textarea element 
-	 *   - <b>cols</b>: int. cols attribute of the textarea element 
-	 *   - <b>rows</b>: int. rows attribute of the textarea element 
-	 *   - <b>readonly</b>: bool. whether the textarea element is readonly or not 
-	 *   - <b>required</b>: bool. whether the field is required or not 
-	 *   - <b>js</b>: string. js event handler 
-	 *   - <b>other</b>: string. other element attributes 
-	 * @return string the texarea element
+	 *   - **editor**: whether to charge dojo editor or not 
+	 *   - **id**: string. id attribute of the textarea element 
+	 *   - **class**: string. css class of the textarea element 
+	 *   - **pattern**: string. pattern attribute of the textarea element 
+	 *   - **hint**: string. hint message shown when the specified pattern checks fails 
+	 *   - **placeholder**: string. placeholder attribute of the textarea element 
+	 *   - **cols**: int. cols attribute of the textarea element 
+	 *   - **rows**: int. rows attribute of the textarea element 
+	 *   - **readonly**: bool. whether the textarea element is readonly or not 
+	 *   - **required**: bool. whether the field is required or not 
+	 *   - **js**: string. js event handler 
+	 *   - **other**: string. other element attributes 
+	 * @return the texarea element
 	 */
 	public function textarea($name, $value, $opts){
 		
@@ -647,10 +649,10 @@ class form {
 	 * @param mixed $label field label 
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field 
-	 *   - <b>required</b>: bool. whether the field is required or not 
-	 *   - see \ref form::radio
-	 * @return string the complete radio button
+	 *   - **text_add**: text added after the field 
+	 *   - **required**: bool. whether the field is required or not 
+	 *   - see @ref form::radio
+	 * @return the complete radio button
 	 */
 	public function cradio($name, $value, $data, $default, $label, $opts=null){
 		
@@ -671,11 +673,11 @@ class form {
 	 * @param mixed $default default choice selected 
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>aspect</b>: string. whether the choices should be vertically or horizontally listed 
-	 *   - <b>id</b>: string. id attribute of the element 
-	 *   - <b>js</b>: string. js event handler 
-	 *   - <b>other</b>: string. other element attributes 
-	 * @return string the radio button
+	 *   - **aspect**: string. whether the choices should be vertically or horizontally listed 
+	 *   - **id**: string. id attribute of the element 
+	 *   - **js**: string. js event handler 
+	 *   - **other**: string. other element attributes 
+	 * @return the radio button
 	 */
 	public function radio($name, $value, $data, $default, $opts){
 		
@@ -707,9 +709,9 @@ class form {
 	 * @param mixed $label field label 
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field
-	 *   - see \ref form::select
-	 * @return string the complete select element
+	 *   - **text_add**: text added after the field
+	 *   - see @ref form::select
+	 * @return the complete select element
 	 */
 	public function cselect($name, $value, $data, $label, $opts=null) {
 		
@@ -729,19 +731,19 @@ class form {
 	 * @param array $data select options in the array form array('value'=>'label')
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>id</b>: string. id attribute of the element 
-	 *   - <b>classField</b>: string. css class of the select element 
-	 *   - <b>size</b>: string. size attribute of the select element 
-	 *   - <b>multiple</b>: bool. whether to allow multiple selection or not 
-	 *   - <b>required</b>: bool. whether the field is required or not 
-	 *   - <b>js</b>: string. js event handler 
-	 *   - <b>other</b>: string. other element attributes 
-	 *   - <b>firstVoice</b>: string. custom first option label 
-	 *   - <b>firstValue</b>: string. custom first option value 
-	 *   - <b>noFirst</b>: bool. Whether to show or not an empty first option 
-	 *   - <b>maxChars</b>: int. If set the option labels are cut at the given number of characters 
-	 *   - <b>cutWords</b>: bool default false. Whether to allow cut of words when truncating labels or not 
-	 * @return string the select element
+	 *   - **id**: string. id attribute of the element 
+	 *   - **classField**: string. css class of the select element 
+	 *   - **size**: string. size attribute of the select element 
+	 *   - **multiple**: bool. whether to allow multiple selection or not 
+	 *   - **required**: bool. whether the field is required or not 
+	 *   - **js**: string. js event handler 
+	 *   - **other**: string. other element attributes 
+	 *   - **firstVoice**: string. custom first option label 
+	 *   - **firstValue**: string. custom first option value 
+	 *   - **noFirst**: bool. Whether to show or not an empty first option 
+	 *   - **maxChars**: int. If set the option labels are cut at the given number of characters 
+	 *   - **cutWords**: bool default false. Whether to allow cut of words when truncating labels or not 
+	 * @return the select element
 	 */
 	public function select($name, $selected, $data, $opts) {
 		
@@ -786,9 +788,9 @@ class form {
 	 * @param mixed $label field label
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>text_add</b>: text added after the field
-	 *   - see \ref form::checkbox
-	 * @return string the complete checkbox element
+	 *   - **text_add**: text added after the field
+	 *   - see @ref form::checkbox
+	 * @return the complete checkbox element
 	 */
 	public function ccheckbox($name, $checked, $value, $label, $opts=null){
 		
@@ -808,12 +810,12 @@ class form {
 	 * @param mixed $value field value
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>id</b>: string. id attribute of the element 
-	 *   - <b>classField</b>: string. css class of the element
-	 *   - <b>required</b>: bool. whether the field is required or not 
-	 *   - <b>js</b>: string. js event handler 
-	 *   - <b>other</b>: string. other element attributes 
-	 * @return string the checkbox element
+	 *   - **id**: string. id attribute of the element 
+	 *   - **classField**: string. css class of the element
+	 *   - **required**: bool. whether the field is required or not 
+	 *   - **js**: string. js event handler 
+	 *   - **other**: string. other element attributes 
+	 * @return the checkbox element
 	 */
 	public function checkbox($name, $checked, $value, $opts=null){
 		
@@ -837,10 +839,10 @@ class form {
 	 * @param mixed $label form label 
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>label_class</b>: label css class
-	 *   - <b>text_add</b>: text added after the field
-	 *   - see \ref form::multiplecheckbox
-	 * @return string the complete multicheck element
+	 *   - **label_class**: label css class
+	 *   - **text_add**: text added after the field
+	 *   - see @ref form::multiplecheckbox
+	 * @return the complete multicheck element
 	 */
 	public function cmulticheckbox($name, $checked, $values, $label, $opts=null){
 		
@@ -861,11 +863,11 @@ class form {
 	 * @param array $values array of items in the form array(array('label'=>'item_label', 'value'=>'item_value'))
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>id</b>: string. id attribute of every single element 
-	 *   - <b>classField</b>: string. css class of every single element
-	 *   - <b>js</b>: string. js event handler of every single element
-	 *   - <b>other</b>: string. other element attributes of every single element
-	 * @return string the multicheck element
+	 *   - **id**: string. id attribute of every single element 
+	 *   - **classField**: string. css class of every single element
+	 *   - **js**: string. js event handler of every single element
+	 *   - **other**: string. other element attributes of every single element
+	 * @return the multicheck element
 	 */
 	public function multiplecheckbox($name, $checked, $values, $opts=null){
 
@@ -900,10 +902,10 @@ class form {
 	 * @param mixed $label field label
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>extensions</b>: array. List of valid file extensions
-	 *   - <b>text_add</b>: text added after the field
+	 *   - **extensions**: array. List of valid file extensions
+	 *   - **text_add**: text added after the field
 	 *   - see \ref form::input_file
-	 * @return string the complete input file element
+	 * @return the complete input file element
 	 */
 	public function cinput_file($name, $value, $label, $opts=null){
 
@@ -924,10 +926,10 @@ class form {
 	 * @param string $value field value
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>rel_path</b>: string. Relative path of the directory of upload
-	 *   - <b>preview</b>: whether to show a lightbox style file previwe or not (to use with images only)
-	 *   - see \ref form::input
-	 * @return string the input file element
+	 *   - **rel_path**: string. Relative path of the directory of upload
+	 *   - **preview**: whether to show a lightbox style file previwe or not (to use with images only)
+	 *   - see @ref form::input
+	 * @return the input file element
 	 */
 	public function input_file($name, $value, $opts=null) {
 
@@ -956,7 +958,8 @@ class form {
 	/**
 	 * @brief Management of form file uploads 
 	 *
-	 * Method for managing files via the upload form. If a new file is uploaded the old file is deleted.<br />
+	 * Method for managing files via the upload form. If a new file is uploaded the old file is deleted.
+	 *
 	 * The old file can also be deleted without uploading a new one. If no file is uploaded and the 
 	 * deletion checkbox in the input file element is unchecked then all stands as is.
 	 * 
@@ -966,12 +969,12 @@ class form {
 	 * @param string $link_error redirection url in case of error
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>error_query</b>: string. Query to execute in case of file upload error
-	 *   - <b>check_content</b>: string. Whether to check file mime type or not
-	 *   - <b>contents</b>: array. List of allowed mime types, if not given the default one is taken
-	 *   - <b>prefix</b>: string. Filename prefix
-	 *   - <b>max_file_size</b>: int. Maximum size allowed for the file
-	 * @return string the name of the uploaded file or an empty string or the old file name 
+	 *   - **error_query**: string. Query to execute in case of file upload error
+	 *   - **check_content**: string. Whether to check file mime type or not
+	 *   - **contents**: array. List of allowed mime types, if not given the default one is taken
+	 *   - **prefix**: string. Filename prefix
+	 *   - **max_file_size**: int. Maximum size allowed for the file
+	 * @return the name of the uploaded file or an empty string or the old file name 
 	 */
 	public function uploadFile($name, $valid_extension, $path, $link_error, $opts) {
 	
@@ -1057,7 +1060,8 @@ class form {
 	/**
 	 * @brief Uploads the submitted image to the given directory 
 	 * 
-	 * Method for managing images via the upload form. If a new file is uploaded the old file is deleted.<br />
+	 * Method for managing images via the upload form. If a new file is uploaded the old file is deleted.
+	 *
 	 * The old file can also be deleted without uploading a new one. If no file is uploaded and the 
 	 * deletion checkbox in the input file element is unchecked then all stands as is.
 	 *
@@ -1067,20 +1071,20 @@ class form {
 	 * @param string $link_error redirectino url in case of error
 	 * @param mixed $opts 
 	 *   associative array of options:
-	 *   - <b>error_query</b>: string. Query to execute in case of file upload error
-	 *   - <b>check_content</b>: string. Whether to check file mime type or not
-	 *   - <b>contents</b>: array. List of allowed mime types, if not given the default one is taken
-	 *   - <b>prefix</b>: string. Filename prefix
-	 *   - <b>prefix_thumb</b>: string default 'thumb_'. Thumbnail prefix
-	 *   - <b>make_thumb</b>: bool default false. Whether to create a thumbnail or not
-	 *   - <b>resize</b>: bool default false. Whether to resize the image or not
-	 *   - <b>scale</b>: bool default false. Whether to scale the image or not
-	 *   - <b>resize_enlarge</b>: bool default false. Whether to allow image enlargement during resizing or not
-	 *   - <b>resize_width</b>: int default null. With used to resize the image (if only width or height are given the proportions are maintained)
-	 *   - <b>resize_height</b>: int default null. Height used to resize the image
-	 *   - <b>thumb_width</b>: int default null. With of the thumbnail (if only width or height are given the proportions are maintained)
-	 *   - <b>thumb_height</b>: int default null. Height of the thumbnail
-	 *   - <b>max_file_size</b>: int. Maximum size allowed for the file
+	 *   - **error_query**: string. Query to execute in case of file upload error
+	 *   - **check_content**: string. Whether to check file mime type or not
+	 *   - **contents**: array. List of allowed mime types, if not given the default one is taken
+	 *   - **prefix**: string. Filename prefix
+	 *   - **prefix_thumb**: string default 'thumb_'. Thumbnail prefix
+	 *   - **make_thumb**: bool default false. Whether to create a thumbnail or not
+	 *   - **resize**: bool default false. Whether to resize the image or not
+	 *   - **scale**: bool default false. Whether to scale the image or not
+	 *   - **resize_enlarge**: bool default false. Whether to allow image enlargement during resizing or not
+	 *   - **resize_width**: int default null. With used to resize the image (if only width or height are given the proportions are maintained)
+	 *   - **resize_height**: int default null. Height used to resize the image
+	 *   - **thumb_width**: int default null. With of the thumbnail (if only width or height are given the proportions are maintained)
+	 *   - **thumb_height**: int default null. Height of the thumbnail
+	 *   - **max_file_size**: int. Maximum size allowed for the file
 	 * @return void
 	 */
 	public function uploadImage($name, $valid_extension, $path, $link_error, $opts) {
@@ -1212,7 +1216,7 @@ class form {
 	 * @param string $name file name
 	 * @param string $path absolute path of the upload directory
 	 * @param string $prefix file name prefix
-	 * @return string the file name
+	 * @return the file name
 	 */
 	private function setFileName($name, $path, $prefix) {
 	
@@ -1233,7 +1237,7 @@ class form {
 	 * 
 	 * @param string $filename file name
 	 * @param array $valid_extension list of valid extensions
-	 * @return bool the check result
+	 * @return bool, the check result
 	 */
 	private function checkExtension($filename, $valid_extension) {
 	
@@ -1253,7 +1257,7 @@ class form {
 	 * @param string $tmp_file name of the temporary file
 	 * @param string $filename name of the file saved to filesystem
 	 * @param string $path path of the saving directory
-	 * @return bool result of file uploading
+	 * @return bool, result of file uploading
 	 */
 	private function upload($tmp_file, $filename, $path) {
 	

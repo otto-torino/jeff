@@ -6,24 +6,26 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @ingroup core
  * @brief Global framework registry
  *
- * <p>The registry object acts through all the application like a singleton dictionary.</p>
- * <p>Basically it has a setter and a getter methods by which other objects my create new registry properties.<br />
+ * The registry object acts through all the application like a singleton dictionary.
+ *
+ * Basically it has a setter and a getter methods by which other objects my create new registry properties.
  * Since the registry is a singleton instance, each of them has access to the properties setted by the others 
- * through the __get method.</p>
- * <p>Hence the registry is a <b>global dictionary</b> (actually an associative array, but I'll call it dictionary 
- * since it's what it represents) used to store public and sharable properties and objects.</p>
+ * through the __get method.
+ *
+ * Hence the registry is a **global dictionary** (actually an associative array, but I'll call it dictionary 
+ * since it's what it represents) used to store public and sharable properties and objects.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class registry extends singleton {
 
@@ -71,9 +73,9 @@ class registry extends singleton {
 	 * 
 	 * @param array $meta 
 	 *   associative array:
-	 *   - <b>name</b>: name attribute 
-	 *   - <b>property</b>: property attribute 
-	 *   - <b>content</b>: content attribute 
+	 *   - **name**: name attribute 
+	 *   - **property**: property attribute 
+	 *   - **content**: content attribute 
 	 * @return void
 	 */
 	public function addMeta($meta) {
@@ -86,10 +88,10 @@ class registry extends singleton {
 	 * 
 	 * @param array $link 
 	 *   associative array:
-	 *   - <b>rel</b>: rel attribute 
-	 *   - <b>type</b>: type attribute 
-	 *   - <b>title</b>: title attribute 
-	 *   - <b>href</b>: href attribute 
+	 *   - **rel**: rel attribute 
+	 *   - **type**: type attribute 
+	 *   - **title**: title attribute 
+	 *   - **href**: href attribute 
 	 * @return void
 	 */
 	public function addHeadLink($link) {	

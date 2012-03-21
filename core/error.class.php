@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -20,14 +20,14 @@
  *
  * @brief Abstract class for the management of system errors, errors due to wrong actions of the user, warning messages  
  *
- * <p>System errors are displayed as independent pages, and the information shown depends on the value of the DEBUG setting in the configuration file.</p>
- * <p>Errors and warnings are stored in a session variable and shown after url redirecting.</p>
+ * System errors are displayed as independent pages, and the information shown depends on the value of the DEBUG setting in the configuration file.
  *
- * @abstract
+ * Errors and warnings are stored in a session variable and shown after url redirecting.
+ *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 abstract class Error {
 
@@ -56,7 +56,7 @@ abstract class Error {
 	 * @param string $message the error message
 	 * @param int $line the line number where the error occurs
 	 * @param string $noDebugMsg the message to show if DEBUG mode is disabled
-	 * @return void Prints the system error
+	 * @return prints the system error
 	 */
 	public static function syserrorMessage($class, $function, $message, $line, $noDebugMsg=null) {
 
@@ -105,7 +105,7 @@ abstract class Error {
 	 *   - integer: the message is taken from the default errors dictionary
 	 *   - associative array in the form array('error'=>'error_message', 'hint'=>'error_hint')
 	 * @param mixed $link the redirection url 
-	 * @return void redirects to the given url
+	 * @return redirects to the given url
 	 */
 	public static function errorMessage($message, $link) {
 
@@ -133,7 +133,7 @@ abstract class Error {
 	 * @param mixed $message 
 	 *   associative array in the form array('warning'=>'warning_message', 'hint'=>'warning_hint')
 	 * @param mixed $link the redirection url 
-	 * @return void redirects to the given url
+	 * @return redirects to the given url
 	 */
 	public static function warningMessage($message, $link) {
 
@@ -157,7 +157,7 @@ abstract class Error {
 	/**
 	 * @brief Gets the error message from the active session 
 	 * 
-	 * @return string the error message
+	 * @return the error message
 	 */
 	public static function getErrorMessage() {
 

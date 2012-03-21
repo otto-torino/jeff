@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -16,12 +16,12 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class pagination {
 
 	/**
-	 * @brief A \ref view instance 
+	 * @brief a @ref view instance 
 	 */
 	private $_view;
 
@@ -72,9 +72,9 @@ class pagination {
 	 * @param int $tot total number of items
 	 * @param array $opts 
 	 *   Asociative array of options:
-	 *   - <b>urlp</b>: string default 'p'. The get parameter used to pass page values
-	 *   - <b>npages</b>: int default 2. number of pages displayed next to the current page in the page navigation
-	 *   - <b>permalink</b>: bool default true. Whether to use permalinks whene generating the page navigation links
+	 *   - **urlp**: string default 'p'. The get parameter used to pass page values
+	 *   - **npages**: int default 2. number of pages displayed next to the current page in the page navigation
+	 *   - **permalink**: bool default true. Whether to use permalinks whene generating the page navigation links
 	 * @return void
 	 */
 	function __construct($ifp, $tot, $opts=null) {

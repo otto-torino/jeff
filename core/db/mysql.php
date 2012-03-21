@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -16,32 +16,32 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class mysql implements DbManager {
 
 	/**
-	 * @brief Database host 
+	 * @brief database host 
 	 */
 	private $_db_host;
 
 	/**
-	 * @brief Database user 
+	 * @brief database user 
 	 */
 	private $_db_user;
 
 	/**
-	 * Database password 
+	 * @brief database password 
 	 */
 	private $_db_pass;
 
 	/**
-	 * @brief Database name
+	 * @brief database name
 	 */
 	private $_db_dbname;
 
 	/**
-	 * @brief Database charset 
+	 * @brief database charset 
 	 */
 	private $_db_charset;
 
@@ -74,7 +74,7 @@ class mysql implements DbManager {
 	 * @brief Escapes the input string for safe database insertion 
 	 * 
 	 * @param string $string 
-	 * @return string the input string escaped
+	 * @return the input string escaped
 	 */
 	public function escapeString($string) {
 
@@ -91,9 +91,10 @@ class mysql implements DbManager {
 		
 		if($this->_connection = mysql_connect($this->_db_host, $this->_db_user, $this->_db_pass)) {
 			
-			if($this->_db_charset=='utf8') $this->setUtf8();
 			@mysql_select_db($this->_db_dbname, $this->_connection) 
 				OR exit("Db selection error");
+			
+			if($this->_db_charset=='utf8') $this->setUtf8();
 		
 		} 
 		else 
@@ -245,19 +246,19 @@ class mysql implements DbManager {
 	 *
 	 * @param string $table the database table
 	 * @return 
-	 *   information about the table structure.<br />
-	 *   The returned array is in the form<br />
-	 *   array("field_name" => array("property" => "value"), "primary_key" => "primary_key_name", "keys" => array("keyname1", "keyname2")) <br />
+	 *   information about the table structure. \n
+	 *   The returned array is in the form \n
+	 *   array("field_name" => array("property" => "value"), "primary_key" => "primary_key_name", "keys" => array("keyname1", "keyname2")) \n
 	 *   Returned properties foreach field:
-	 *   - <b>order</b>: the ordinal position
-	 *   - <b>deafult</b>: the default value
-	 *   - <b>null</b>: whether the field is nullable or not
-	 *   - <b>type</b>: the field type (varchar, int, text, ...)
-	 *   - <b>max_length</b>: the field max length
-	 *   - <b>n_int</b>: the number of int digits
-	 *   - <b>n_precision</b>: the number of decimal digits
-	 *   - <b>key</b>: the field key if set
-	 *   - <b>extra</b>: extra information
+	 *   - **order**: the ordinal position
+	 *   - **deafult**: the default value
+	 *   - **null**: whether the field is nullable or not
+	 *   - **type**: the field type (varchar, int, text, ...)
+	 *   - **max_length**: the field max length
+	 *   - **n_int**: the number of int digits
+	 *   - **n_precision**: the number of decimal digits
+	 *   - **key**: the field key if set
+	 *   - **extra**: extra information
 	 */
 	public function getTableStructure($table) {
 

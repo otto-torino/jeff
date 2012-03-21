@@ -6,26 +6,26 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @ingroup core
  * @brief Framework router class
  *
- * <p>This class is used to load/call class methods, it includes the proper class file, instantiates the module's 
+ * This class is used to load/call class methods, it includes the proper class file, instantiates the module's 
  * controller and call its method. Also it exports the url module and method to use for example in the 
- * template factory.</p>
+ * template factory.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class router {
 
 	/**
-	 * @brief The @ref registry singleton instance 
+	 * @brief the @ref registry singleton instance 
 	 */
 	private $_registry;
 	
@@ -60,7 +60,7 @@ class router {
 	/**
 	 * @brief Returns the module called by url 
 	 * 
-	 * @return string the url module
+	 * @return the url module name
 	 */
 	public function module() {
 
@@ -71,7 +71,7 @@ class router {
 	/**
 	 * @brief Returns the method called by url 
 	 * 
-	 * @return string the url method
+	 * @return the url method name
 	 */
 	public function method() {
 
@@ -88,7 +88,7 @@ class router {
 	 *   - null: the class name and method name are taken directly from url
 	 *   if the method is not found or not callable the 'index' method is called
 	 * @access public
-	 * @return string the controller method output or a sys error
+	 * @return the controller method output or a system error
 	 */
 	public function loader($route) {
 
@@ -151,7 +151,7 @@ class router {
 	 * @param array $params associative array of parameters in the form array('param_name'=>'param_value') 
 	 * @param mixed $opts 
 	 *   associative array of oprions:
-	 *   - <b>permalink</b>: whether to use permalinks or not 
+	 *   - **permalink**: whether to use permalinks or not 
 	 *     (i.e. '/class/method/param/value' 'against /index.php?module=class&method=method&param=value'
 	 * @return void
 	 */

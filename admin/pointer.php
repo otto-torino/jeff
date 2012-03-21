@@ -2,12 +2,12 @@
 /**
  * @file admin/pointer.php
  * @ingroup entry_point
- * @brief Entry point to call a specific class method of the administrative area.
+ * @brief Entry point used to call a specific class method in the administrative area (and get its output).
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**

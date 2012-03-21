@@ -5,56 +5,58 @@
  *
  * Defines the mvc view class
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @authors abidibo abidibo@gmail.com
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
  * @ingroup mvc core
  * @brief View class of the MVC pattern, is the class used to manage the module's views. 
  * 
- * This is the general view class used by module controllers.<br />
- *  It acts like an template engine at module level. the module templates are evaluated using the context variables assigned by the controller.<br />
+ * This is the general view class used by module controllers.\n
+ * It acts like an template engine at module level. the module templates are evaluated using the context variables assigned by the controller.
  *
+ * @author abidibo abidibo@gmail.com
  * @version 0.98
- * @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
- * @author abidibo abidibo@gmail.com 
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php) 
  */
 class view {
 	
 	/**
-	 * @brief The standard class objects which contains the view context 
+	 * @brief the standard class objects which contains the view context 
 	 */
 	protected $_data;
 	
 	/**
-	 * @brief The registry singleton instance 
+	 * @brief the registry singleton instance 
 	 */
 	protected $_registry;
 
 	/**
-	 * @brief Associative array containing the js and css to include asynchronously in the document
+	 * @brief associative array containing the js and css to include asynchronously in the document
 	 */
 	protected $_assets;
 
 	/**
-	 * @brief The path to the folder containing the view of the active theme
+	 * @brief the path to the folder containing the view of the active theme
 	 */
 	protected $_view_folder;
 
 	/**
-	 * @brief The path to the folder containing the view of the default theme (fallback purposes)
+	 * @brief the path to the folder containing the view of the default theme (fallback purposes)
 	 */
 	protected $_dft_view_folder;
 
 	/**
-	 * @brief The path to the folder containing the css of the active theme
+	 * @brief the path to the folder containing the css of the active theme
 	 */
 	protected $_css_folder;
 
 	/**
-	 * @brief The path to the folder containing the css of the default theme (fallback purposes)
+	 * @brief the path to the folder containing the css of the default theme (fallback purposes)
 	 */
 	protected $_dft_css_folder;
 
@@ -63,7 +65,7 @@ class view {
 	 *
 	 * Initializes some class members 
 	 * 
-	 * @return void
+	 * @return view instance
 	 */
 	function __construct() {
 
@@ -84,7 +86,7 @@ class view {
 	 * @param string $tpl the template name
 	 * @param array $opts 
 	 *   an associative array of options
-	 *   - 'css': the stylesheet to charge with the template
+	 *   - **css**: the stylesheet to charge with the template
 	 * @return void
 	 */
 	public function setTpl($tpl, $opts=null) {

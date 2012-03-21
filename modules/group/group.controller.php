@@ -6,7 +6,7 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -23,9 +23,19 @@
  * @author abidibo abidibo@gmail.com
  * @version 0.98
  * @date 2011-2012
- * @copyright Otto srl MIT License \see http://www.opensource.org/licenses/mit-license.php 
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 class groupController extends controller {
+
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
+
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
 
 	/**
 	 * @brief Constructs a group controller instance 
@@ -41,9 +51,6 @@ class groupController extends controller {
 
 		// privileges
 		$this->_class_privilege = $this->_mdl_name;
-		/**
- 		 * Module's administration privilege  
- 		 */
 		$this->_admin_privilege = 1;
 	}
 
@@ -55,12 +62,12 @@ class groupController extends controller {
 	 */
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('get', 'id', 'int');
 
 		if($id || cleanInput('get', 'action', 'string')=='new') { 
-			$g = new group($this->_registry, $id);
+			$g = new group($id);
 			return $this->manageGroup($g);
 		}
 		
@@ -69,10 +76,10 @@ class groupController extends controller {
 		$heads = array(__("label"), __("description"), __("privileges"));
 		$rows = array();
 		foreach(group::get($this->_registry) as $gid) {
-			$g = new group($this->_registry, $gid);
+			$g = new group($gid);
 			$gpriv = array();
 			foreach(explode(",", $g->privileges) as $pid) {
-				$p = new privilege($this->_registry, $pid);
+				$p = new privilege($pid);
 				$gpriv[] = $p->label;
 			}
 			$label = $g->id == 1 
@@ -128,7 +135,7 @@ class groupController extends controller {
 	 */
 	private function formGroup($g) {
 
-		$myform = new form($this->_registry, 'post', 'group_form', array("validation"=>true));
+		$myform = new form('post', 'group_form', array("validation"=>true));
 		$myform->load('group_form');
 
 		$required = '';
@@ -193,7 +200,7 @@ class groupController extends controller {
 		$tot = count($privileges_ids);
 		foreach($privileges_ids as $pid) {
 			$i++;
-			$p = new privilege($this->_registry, $pid);
+			$p = new privilege($pid);
 			if($old_ctg != $p->category) {
 				if(!is_null($old_ctg)) {
 					$field = $myform->cmulticheckbox("pids[]", $checked, $mcelements, $label, array("label_class"=>"block"));
@@ -214,7 +221,7 @@ class groupController extends controller {
 
 		}
 
-		$view = new view($this->_registry);
+		$view = new view();
 		$view->setTpl('group_form_privilege');
 		$view->assign('form_left', $form_left);
 		$view->assign('form_right', $form_right);
@@ -232,10 +239,10 @@ class groupController extends controller {
 	 */
 	public function saveGroup() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('post', 'id', 'int');
-		$g = new group($this->_registry, $id);
+		$g = new group($id);
 
 		if($g->id == 1) header("Location: ".$this->_router->linkHref($this->_mdl_name, 'manage'));
 
@@ -259,10 +266,10 @@ class groupController extends controller {
 	 */
 	public function deleteGroup() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('get', 'id', 'int');
-		$g = new group($this->_registry, $id);
+		$g = new group($id);
 
 		if($g->id < 6) header("Location: ".$this->_router->linkHref($this->_mdl_name, 'manage'));
 
