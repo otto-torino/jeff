@@ -1,3 +1,26 @@
+<?php
+/**
+ * @file /var/www/jeff.git/themes/default/view/layout_list.php
+ * @ingroup default_theme layout_module
+ * @brief Template containing the backoffice list of the @ref layout_module, see @ref layoutController::manage
+ *
+ * Available variables:
+ * - **title**: section title
+ * - **text**: information text
+ * - **items**: available themes, associative array with keys:
+ *   - **active**: (bool) is the active theme?
+ *   - **image**: relative path of the theme snapshot
+ *   - **name**: theme name
+ *   - **description**: theme description
+ *   - **link_activate**: link to the activate theme action
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+?>
+<section>
 <h1 class="section_title"><?= $title ?></h1>
 <p><?= $text ?></p>
 <table class="generic wide">
@@ -18,3 +41,4 @@
 <script>
 $$('a[rel=lightbox]').cerabox({group: false});
 </script>
+</section>

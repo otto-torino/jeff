@@ -1,9 +1,47 @@
 <?php
+/**
+ * @file core.class.php
+ * @brief Contains the core class.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
+/**
+ * @defgroup core Framework core
+ * @brief Classes which forms the core of the framework
+ */
+
+/**
+ * @ingroup core
+ * @brief The core of the web application 
+ * 
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class core {
 
-	private $_registry, $_base_path, $_site;
+	/**
+	 * @brief the registry singleton instance 
+	 */
+	protected $_registry;
+	
+	/**
+	 * @brief path used to generate links 
+	 */
+	private $_base_path;
 
+	/**
+	 * @brief Constructs the core instance 
+	 * 
+	 * Initializes many registry properties used throughout the framework, checks for session timeout (if active) and checks for installed plugins. 
+	 * 
+	 * @return void
+	 */
 	function __construct() {
 
 		session_name(SESSIONNAME);
@@ -14,18 +52,18 @@ class core {
 		$this->_base_path = BASE_PATH;
 		
 		// initializing registry variable
-		$this->_registry = new registry();
-		$this->_registry->db = db::getInstance();
+		$this->_registry = registry::instance();
+		$this->_registry->db = db::instance();
+		$this->_registry->url = $_SERVER['REQUEST_URI'];
 		$this->_registry->admin_privilege = 1;
 		$this->_registry->admin_view_privilege = 2;
 		$this->_registry->public_view_privilege = 3;
 		$this->_registry->private_view_privilege = 4;
 		$this->_registry->theme = $this->getTheme();
-		$_SESSION['theme'] = $this->_registry->theme; // translations
 		$this->_registry->lng = language::setLanguage($this->_registry);
 		$this->_registry->site_settings = new siteSettings($this->_registry);
 		$this->_registry->dtime = new dtime($this->_registry);
-		$this->_registry->router = new router($this->_registry, $this->_base_path);
+		$this->_registry->router = new router($this->_base_path);
 		$this->_registry->isHome = preg_match("#^module=index&method=index(&.*)?$#", $_SERVER['QUERY_STRING']) ? true : false;
 		$this->_registry->css = array();
 		$this->_registry->js = array();
@@ -61,28 +99,39 @@ class core {
 
 	}
 
+	/**
+	 * @brief Renders the whole document 
+	 * 
+	 * @param string $site the requested site: main or admin
+	 * @return void
+	 */
 	public function renderApp($site=null) {
-		
+
 		ob_start();
-		
+
 		// some other registry properties
 		$this->_registry->site = $site=='admin' ? 'admin':'main';
 
 		/*
 		 * check login/logout
 		 */
-		authentication::check($this->_registry);
+		authentication::check();
 
 		/*
 		 * create document
 		 */
-		$doc = new document($this->_registry);
+		$doc = new document();
 		$buffer = $doc->render();
 
 		ob_end_flush();
 
 	}
 
+	/**
+	 * @brief Returns the output of the class method invoked through the url 
+	 * 
+	 * @return void
+	 */
 	public function methodPointer() {
 
 		ob_start();
@@ -98,6 +147,11 @@ class core {
 		exit(); 
 	}
 
+	/**
+	 * @brief Retrieves the active theme object. 
+	 * 
+	 * @return the active theme or a sys error message
+	 */
 	public function getTheme() {
 
 		$rows = $this->_registry->db->autoSelect(array("name"), TBL_THEMES, "active='1'", '');
@@ -111,12 +165,11 @@ class core {
 		$theme_class = $theme_name.'Theme';
 
 		if(class_exists($theme_class))
-			return new $theme_class($this->_registry);
+			return new $theme_class();
 		else 
 			Error::syserrorMessage('coew', 'getTheme', sprintf(__("CantLoadThemeError"), $theme_name, __LINE__));
 
 	}
-
 
 }
 

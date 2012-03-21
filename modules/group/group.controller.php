@@ -1,10 +1,50 @@
 <?php
+/**
+ * @file group.controller.php
+ * @brief Contains the controller of the group module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
+/**
+ * @defgroup group_module User groups
+ * @ingroup modules security
+ *
+ * Modules for the management of user groups (the association of privileges and users is done through groups)
+ */
+
+/**
+ * @ingroup group_module
+ * @brief Group module controller
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class groupController extends controller {
 
-	function __construct($registry) {
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
 
-		parent::__construct($registry);
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
+
+	/**
+	 * @brief Constructs a group controller instance 
+	 * 
+	 * @return group controller instance
+	 */
+	function __construct() {
+
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "group";
@@ -14,14 +54,20 @@ class groupController extends controller {
 		$this->_admin_privilege = 1;
 	}
 
+	/**
+	 * @brief User groups backoffice 
+	 * 
+	 * @access public
+	 * @return the user groups table back office
+	 */
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('get', 'id', 'int');
 
 		if($id || cleanInput('get', 'action', 'string')=='new') { 
-			$g = new group($this->_registry, $id);
+			$g = new group($id);
 			return $this->manageGroup($g);
 		}
 		
@@ -30,10 +76,10 @@ class groupController extends controller {
 		$heads = array(__("label"), __("description"), __("privileges"));
 		$rows = array();
 		foreach(group::get($this->_registry) as $gid) {
-			$g = new group($this->_registry, $gid);
+			$g = new group($gid);
 			$gpriv = array();
 			foreach(explode(",", $g->privileges) as $pid) {
-				$p = new privilege($this->_registry, $pid);
+				$p = new privilege($pid);
 				$gpriv[] = $p->label;
 			}
 			$label = $g->id == 1 
@@ -51,7 +97,7 @@ class groupController extends controller {
 
 		$table = $this->_view->render();
 
-		$link_insert = anchor($this->_router->linkHref($this->_mdl_name, 'manage', array("action"=>"new")), __("insertNewRecord"));
+		$link_insert = anchor($this->_router->linkHref($this->_mdl_name, 'manage', array("action"=>"new")), __("insertNewRecord"), array('class'=>'submit'));
 
 		$this->_view->setTpl('group_manage_list');
 		$this->_view->assign('title', __("ManageGroups"));
@@ -62,6 +108,12 @@ class groupController extends controller {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Group insertion or modification management 
+	 * 
+	 * @param group $g the group model instance 
+	 * @return group insertion or modification view
+	 */
 	private function manageGroup($g) {
 		
 		$form = $this->formGroup($g);
@@ -75,9 +127,15 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Group insertion, deletion and modification format 
+	 * 
+	 * @param group $g the group model instance 
+	 * @return group insertion or modification format
+	 */
 	private function formGroup($g) {
 
-		$myform = new form($this->_registry, 'post', 'group_form', array("validation"=>true));
+		$myform = new form('post', 'group_form', array("validation"=>true));
 		$myform->load('group_form');
 
 		$required = '';
@@ -102,6 +160,13 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Descriptive part of the insertion/modification group format
+	 * 
+	 * @param group $g group model instance 
+	 * @param form $myform form object instance 
+	 * @return descriptive form elements
+	 */
 	private function formGroupData($g, $myform) {
 
 		$content = $myform->cinput('label', 'text', $myform->retvar('label', htmlInput($g->label)), __("label"), array("required"=>true, "size"=>40, "maxlength"=>200));
@@ -111,6 +176,13 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Privileges selection part of the insertion/modification group format
+	 * 
+	 * @param group $g group model instance 
+	 * @param form $myform form object instance 
+	 * @return privileges selection form elements
+	 */
 	private function formPrivileges($g, $myform) {
 	
 		$buffer = '';
@@ -128,7 +200,7 @@ class groupController extends controller {
 		$tot = count($privileges_ids);
 		foreach($privileges_ids as $pid) {
 			$i++;
-			$p = new privilege($this->_registry, $pid);
+			$p = new privilege($pid);
 			if($old_ctg != $p->category) {
 				if(!is_null($old_ctg)) {
 					$field = $myform->cmulticheckbox("pids[]", $checked, $mcelements, $label, array("label_class"=>"block"));
@@ -149,7 +221,7 @@ class groupController extends controller {
 
 		}
 
-		$view = new view($this->_registry);
+		$view = new view();
 		$view->setTpl('group_form_privilege');
 		$view->assign('form_left', $form_left);
 		$view->assign('form_right', $form_right);
@@ -160,12 +232,17 @@ class groupController extends controller {
 			
 	}
 
+	/**
+	 * @brief Save group model after form submission 
+	 * 
+	 * @return void
+	 */
 	public function saveGroup() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('post', 'id', 'int');
-		$g = new group($this->_registry, $id);
+		$g = new group($id);
 
 		if($g->id == 1) header("Location: ".$this->_router->linkHref($this->_mdl_name, 'manage'));
 
@@ -182,12 +259,17 @@ class groupController extends controller {
 
 	}
 
+	/**
+	 * @brief Deletes submitted groups
+	 * 
+	 * @return void
+	 */
 	public function deleteGroup() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('get', 'id', 'int');
-		$g = new group($this->_registry, $id);
+		$g = new group($id);
 
 		if($g->id < 6) header("Location: ".$this->_router->linkHref($this->_mdl_name, 'manage'));
 

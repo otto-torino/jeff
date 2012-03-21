@@ -1,47 +1,196 @@
 <?php
+/**
+ * @file adminTable.class.php
+ * @brief Contains the class which manages the auto generation of the backoffice.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
+/**
+ * @defgroup backoffice Backoffice
+ * 
+ * ### Auto generated backoffice functionality
+ * 
+ * With a few lines of code is possible to handle the insertion, modification, deletion and export of data of a database table.
+ *
+ * If there is a need to implement specific behaviour it is possible to extend the adminTable class in order to modify or add the desired functionality.
+ */
+
+/**
+ * @ingroup core backoffice
+ * @brief Class which generates automatically the backoffice for the management of a database table 
+ * 
+ * This class creates a default back-office interface for managing a database table (which has a primary key field). It gets the table structure directly from the database 
+ * and constructs a navigation view to surf through inserted data, an insertion/edit view (the form) to add or update records and all the necessary actions to perform insertion, 
+ * modification, deletion and exportation.
+ *
+ * The adminTable class can also manage automatically foreign keys, some particular fields (password, bool, enum, email, multicheck, file, image), 
+ * html fields (charging dojo html editor if needed) and fields managed by extra plugins.
+ * Also it is possible to automatically add filters for the list view. It's enough to set the filters fields and the class adds for you the filters form and performs the research.
+ * Filters field may be text, int, float, bool and foreign keys fields.
+ *
+ * So if it's not necessary to have a specific logic that regulates the access and actions doable over a database table, 
+ * with few lines of code is possible to create the entire table back office. All you have to do is set the foreign keys and/or special fields if needed
+ * and then call the manage method. Then Jeff shows you a list of inserted records with the possibility to edit/delete them or insert a new one.
+ * All these operations are managed automatically by the manage method.
+ * In alternative you may use only some features of this class, like using only the records paginated list (setting as not editable the fields: edit_deny='all') 
+ * or using only the auto generated form.
+ * Clearly even if the module requires something different, it's always possible to extend this class in order to overwrite only the aspects that need a proper customization.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class adminTable {
+	
+	/**
+	 * @brief the registry singleton instance 
+	 */
+	protected $_registry;
+	
+	/**
+	 * @brief the database table 
+	 */
+	protected $_table;
+	
+	/**
+	 * @brief the primary key name defined for the table 
+	 */
+	protected $_primary_key;
 
-	protected $_registry, $_table;
-	protected $_primary_key, $_fields, $_fkeys, $_sfields, $_pfields, $_html_fields;
+	/**
+	 * @brief the table column names 
+	 */
+	protected $_fields;
+
+	/**
+	 * @brief definition of the foreign keys 
+	 */
+	protected $_fkeys;
+	
+	/**
+	 * @brief definition of the special fields 
+	 */
+	protected $_sfields;
+	
+	/**
+	 * @brief definition of the plugin fields 
+	 */
+	protected $_pfields;
+
+	/**
+	 * @brief definition of the html fields 
+	 */
+	protected $_html_fields;
+	
+	/**
+	 * @brief number of records for page 
+	 */
 	protected $_efp;
-	protected $_cls_cbk_edit, $_mth_cbk_edit;
-	protected $_cls_cbk_del, $_mth_cbk_del;
+	
+	/**
+	 * @brief delete action callback class 
+	 */
+	protected $_cls_cbk_del;
+	
+	/**
+	 * @brief delete action callback method 
+	 */
+	protected $_mth_cbk_del;
+	
+	/**
+	 * @brief allow record insertion 
+	 */
+	protected $_insertion;
+	
+	/**
+	 * @brief allow record deletion 
+	 */
+	protected $_deletion;
 
-	protected $_insertion, $_edit_deny;
+	/**
+	 * @brief deny record modification 
+	 */
+	protected $_edit_deny;
+
+	/**
+	 * @brief array of fields shown in the admin list 
+	 */
 	protected $_changelist_fields;
+	
+	/**
+	 * @brief array of fields used to filter records in the admin list 
+	 */
 	protected $_filter_fields;
+	
+	/**
+	 * @brief charge dojo editor for html fields 
+	 */
 	protected $_editor;
+	
+	/**
+	 * @brief associative array of custom templates 
+	 */
 	protected $_custom_tpl;
-
+	
+	/**
+	 * @brief @ref view instance 
+	 */
 	protected $_view;
-	protected $_arrow_down_path, $_arrow_up_path;
 
-	function __construct($registry, $table, $opts=null) {
+	/**
+	 * @brief relative path to the arrow down icon
+	 */
+	protected $_arrow_down_path;
 
-		$this->_registry = $registry;
+	/**
+	 * @brief relative path to the arrow up icon
+	 */
+	protected $_arrow_up_path;
+
+	/**
+	 * @brief Constructs an adminTable instance 
+	 * 
+	 * @param string $table the database table
+	 * @param array $opts
+	 *   Associative array of options: 
+	 *   - **insertion**: bool default true. Whether to allow records insertion or not. 
+	 *   - **deletion**: bool default true. Whether to allow records deletion or not. 
+	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
+	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
+	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
+	 *   - **export**: bool default false. Add export buttons in the admin list. 
+	 *   - **custom_tpl**: array default array(). Associative array defining custom templates, available keys are 'view', 'insert', 'edit'. 
+	 *   - **efp**: int default 20. Number of records shown in the admin list. 
+	 *   - **cls_callback_delete**: string default null. Class to call when performing a delete action. 
+	 *   - **mth_callback_delete**: string default null. Method to call when performing a delete action. 
+	 *
+	 * @return void
+	 */
+	function __construct($table, $opts=null) {
+
+		$this->_registry = registry::instance();
 		$this->_table = $table;
-		$this->_view = new view($registry);
+		$this->_view = new view();
 
-		// allow record insertion
+		/* options */
 		$this->_insertion = gOpt($opts, 'insertion', true);
-		// allow record deletion
 		$this->_deletion = gOpt($opts, 'deletion', true);
-		// denty all/some pkeys modifications
 		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
-		// fields to show in changelist view (all if null)
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
-		// dojo editor for html fields
 		$this->_editor = gOpt($opts, 'editor', false);
-		// export items
 		$this->_export = gOpt($opts, 'export', false);
-		// set custom views (i.e. array('view'=>'myview', 'edit'=>'otherview'))
-		// views that may be set: view, insert, edit
 		$this->_custom_tpl = gOpt($opts, 'custom_tpl', array());
-
 		$this->_efp = gOpt($opts, "efp", 20);
+		$this->_cls_cbk_del = gOpt($opts, "cls_callback_delete", null);
+	        $this->_mth_cbk_del = gOpt($opts, "mth_callback_delete", null);	
 
 		$structure = $this->_registry->db->getTableStructure($this->_table);
+
 		$this->_primary_key = $structure['primary_key'];
 		$this->_fields = $structure['fields'];
 		$this->_fkeys = array();
@@ -51,14 +200,21 @@ class adminTable {
 
 		$this->_arrow_down_path = ROOT."/img/down_arrow-black.png";
 		$this->_arrow_up_path = ROOT."/img/up_arrow-black.png";
-
-		$this->_cls_cbk_edit = gOpt($opts, "cls_callback_edit", null);
-	        $this->_mth_cbk_edit = gOpt($opts, "mth_callback_edit", null);
-		$this->_cls_cbk_del = gOpt($opts, "cls_callback_delete", null);
-	        $this->_mth_cbk_del = gOpt($opts, "mth_callback_delete", null);	
 	
 	}
 
+	/**
+	 * @brief Sets table foreign keys 
+	 * 
+	 * @param array $fkeys 
+	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
+	 *   - **table**: the table related with the field 
+	 *   - **field**: the representative field of the related table record 
+	 *   - **where**: the where clause used to filter the related table records 
+	 *   - **order**: the order clause used to order the related table records 
+	 *
+	 * @return void
+	 */
 	public function setForeignKeys($fkeys) {
 		$this->_fkeys = $fkeys;
 		foreach($this->_fkeys as $k=>$v) {
@@ -67,6 +223,46 @@ class adminTable {
 		}
 	}
 
+	/**
+	 * @brief Sets table special fields 
+	 *
+	 * The supported special fields types are: password, bool, enum, email, multicheck (many to many), file, image
+	 * 
+	 * @param array $sfields 
+	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
+	 *   - **type**: string. The type of special field. Possible values are: 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image'
+	 *   - **edit_label**: (password type) string. The label displayed in the edit form
+	 *   - **true_label**: (bool type) string. The label tied to the value true
+	 *   - **false_label**: (bool type) string. The label tied to the value false
+	 *   - **default**: (bool type) mixed. The deafult value
+	 *   - **data**: (enum type) array. The associative array containing the allowed values in the form 'value'=>'label'
+	 *   - **key_type**: (enum type) string. The data type of the values (int, string, float, ...)
+	 *   - **list_mailto**: (email type) bool. Whether to show or not a mailto link in the admin list view
+	 *   - **value_type**: (multicheck type) string. The type of the values (int, string, float, ...)
+	 *   - **table**: (multicheck type) string. The name of the related table
+	 *   - **field**: (multicheck type) string. The field of the related table to display in the multicheck form element
+	 *   - **where**: (multicheck type) string. The where clause used to select only some records from the related table
+	 *   - **order**: (multicheck type) string. The order clause used to order the records selected from the related table
+	 *   - **label**: (image and file types) string. The field label
+	 *   - **path**: (image and file types) string. The absolute path of the uploading directory
+	 *   - **rel_path**: (image and file types) string. The relative path of the uploading directory
+	 *   - **preview**: (image and file types) bool. Whether to show file preview in the list view and the edit form view
+	 *   - **extensions**: (image and file types) array. List of allowed extensions (all allowed if empty)
+	 *   - **check_content**: (image and file types) bool default true. Whether to check the file mime-type agains the allowed ones
+	 *   - **contents_allowed**: (image and file types) array. List of allowed mime types in substitution of the default ones
+	 *   - **resize**: (image type) bool. Whether to resize the image or not
+	 *   - **scale**: (image type) mixed. Whether to scale the image or not. Possible values: false or an integer which represents the percentage to scale the image to
+	 *   - **resize_enlarge**: (image type) mixed. Whether to allow image enlargement during resize or not. The enlargement is always allowed for the thumbnail
+	 *   - **make_thumb**: (image type) bool. Whether to make a thumbnail of the image or not
+	 *   - **prefix**: (image type) string. The prefix added to the image filename
+	 *   - **prefix_thumb**: (image type) string default 'thumb_'. The prefix added to the thumbnail file. It sums to the image prefix
+	 *   - **resize_width**: (image type) int. The width of the resized image
+	 *   - **resize_height**: (image type) int. The height of the resized image
+	 *   - **thumb_width**: (image type) int. The width of the thumb image
+	 *   - **thumb_height**: (image type) int. The height of the thumb image
+	 *
+	 * @return void
+	 */
 	public function setSpecialFields($sfields) {
 		$this->_sfields = $sfields;
 		foreach($this->_sfields as $k=>$v) {
@@ -77,6 +273,13 @@ class adminTable {
 		}
 	}
 	
+	/**
+	 * @brief Sets plugin fields 
+	 * 
+	 * @param array $pfields associative array where the key is the name of the "plugin type" field and the value is an array which contains the options required by the plugin itself 
+	 *
+	 * @return void
+	 */
 	public function setPluginFields($pfields) {
 
 		foreach($pfields as $k=>$v) {
@@ -87,20 +290,40 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Sets the $_changelist_field property 
+	 * 
+	 * @param array $fields See @ref adminTable::__construct() options
+	 *
+	 * @return void
+	 */
 	public function setChangelistFields($fields) {
 		
 		if(is_array($fields))
 			$this->_changelist_fields = $fields;
 
 	}
-
+	
+	/**
+	 * @brief Sets the filter fields 
+	 * 
+	 * @param array $filter_fields Array of fields used to filter records in the admin list
+	 *
+	 * @return void
+	 */
 	public function setFilterFields($filter_fields) {
 		
 		$this->_filter_fields = $filter_fields;
 
 	}
 
-	// fields which allow html insertion, only char and text type
+	/**
+	 * @brief Sets the table html fields 
+	 * 
+	 * @param mixed $fields array of fields which allow html content 
+	 *
+	 * @return void
+	 */
 	public function setHtmlFields($fields) {
 		
 		if(is_array($fields))
@@ -108,6 +331,13 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Entry point for the autogenerated backoffice gui
+	 *
+	 * This is the method called by client classes to generate their tables backoffice 
+	 * 
+	 * @return the requested view or action
+	 */
 	public function manage() {
 
 		if(!$this->_primary_key) return __("NoPrimaryKeyTable");
@@ -134,6 +364,11 @@ class adminTable {
 		
 	}
 
+	/**
+	 * @brief The method which returns the admin list view 
+	 * 
+	 * @return the admin list view
+	 */
 	public function view() {
 
 		$order = cleanInput('get', 'order', 'string');
@@ -153,7 +388,7 @@ class adminTable {
 		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
 		
 		$where_pag = $tot_ff ? $this->setWhereClause(false) : null;
-		$pag = new pagination($this->_registry, $this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
+		$pag = new pagination($this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
 		if(count($this->_changelist_fields)) {
@@ -234,7 +469,7 @@ class adminTable {
 		$table = $this->_view->render();
 
 		if($this->_edit_deny!='all' || $this->_export) {
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$myform = new form('post', 'atbl_form', array("validation"=>false));
 			$formstart = $myform->sform('?edit'.($order ? "&order=$order" : ""), null);
 			$formend = $myform->cform();
 		}
@@ -274,7 +509,7 @@ class adminTable {
 			$input_where_query = '';	
 		}
 
-		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord")) : null;
+		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord"), array('class'=>'submit')) : null;
 		
 
 		if(isset($this->_custom_tpl['view'])) {
@@ -305,6 +540,11 @@ class adminTable {
 		return $this->_view->render();
 	}
 
+	/**
+	 * @brief Sets the session variables used to filter records in the admin list 
+	 * 
+	 * @return void
+	 */
 	protected function setSessionSearch() {
 
 		foreach($this->_filter_fields as $fname) {
@@ -342,6 +582,13 @@ class adminTable {
 
 	}
 	
+	/**
+	 * @brief Sets the where clause used to filter records in the admin list view 
+	 * 
+	 * @param bool $fkeysorder Whether records are ordered by a foreign key field or not
+	 *
+	 * @return the where clause
+	 */
 	protected function setWhereClause($fkeysorder) {
 
 		$where_a = array();
@@ -371,9 +618,14 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Form which contains filters in the admin list view 
+	 * 
+	 * @return the filters html form
+	 */
 	protected function formFilters() {
 
-		$myform = new form($this->_registry, 'post', 'atbl_filter_form', array("validation"=>false));
+		$myform = new form('post', 'atbl_filter_form', array("validation"=>false));
 		$myform->load();
 
 		$form = $myform->sform('', null);
@@ -398,6 +650,13 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Parses the results from a database query substituting the foreign keys values with the related fields values of the related table 
+	 * 
+	 * @param array $row associative array deriving from a db query result
+	 *
+	 * @return void
+	 */
 	public function parseForeignKeys($row) {
 
 		$res = array();
@@ -415,6 +674,17 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Parses the results from a database query substituting the special fields values with the way they have to be displayed 
+	 * 
+	 * @param mixed $row associative array deriving from a db query result
+	 * @param mixed $opts 
+	 *   Associative array of options: 
+	 *   - **show_pwd**: bool default false: Whether to show a clear-text password or not
+	 *   - **mailto**: bool default false: Whether to ass a mailto link or not
+	 *
+	 * @return void
+	 */
 	public function parseSpecialFields($row, $opts=null) {
 
 		$res = array();
@@ -441,8 +711,14 @@ class adminTable {
 				}
 				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
-					if($sf['preview'] && $v)
-						$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>$$('a[href=".$sf['rel_path']."/$v]')[0].cerabox();</script>";
+					if($sf['preview'] && $v) {
+						if($this->_sfields[$k]['type']=='image') {
+							$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>$$('a[href=".$sf['rel_path']."/$v]')[0].cerabox();</script>";
+						}
+						else {
+							$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span>";
+						}
+					}
 					else $res[$k] = $v;
 				}
 			}
@@ -453,6 +729,13 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Parses the results from a database query substituting the plugin fields values with the way they have to be displayed 
+	 * 
+	 * @param mixed $row associative array deriving from a db query result 
+	 *
+	 * @return void
+	 */
 	public function parsePluginFields($row) {
 
 		$res = array();
@@ -468,6 +751,13 @@ class adminTable {
 		return $res;
 	}
 	
+	/**
+	 * @brief Parses the results from a database query substituting the date/datetime fields values with format set in the site configuration 
+	 * 
+	 * @param mixed $row associative array deriving from a db query result 
+	 *
+	 * @return void
+	 */
 	public function parseDateFields($row) {
 
 		$res = array();
@@ -485,6 +775,11 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Checks if at least one of the special fields requires a file upload 
+	 * 
+	 * @return bool, true if there's at least an image or file special field set.
+	 */
 	protected function checkUpload() {
 		
 		foreach($this->_sfields as $fname=>$finfo) if($finfo['type']=='file' || $finfo['type']=='image') return true;
@@ -492,6 +787,17 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief The method which returns the admin insertion/modification/deletion/export views and functionality 
+	 * 
+	 * @param mixed $opts 
+	 *   associative array of options
+	 *   - **insert**: bool default null. Force a record insertion 
+	 *   - **action**: string default '?save'. The url of the form action
+	 *   - **f_s**: array default null. Array containing the identifiers of the records that have to be managed. By default are taken from POST or SESSION.
+	 *
+	 * @return string the requested view (insertion form, modification form) or the requested action (export, deletion)
+	 */
 	public function editFields($opts=null) {
 
 		$insert = (isset($_GET['insert']) || gOpt($opts, 'insert')) ? true : false;
@@ -535,7 +841,7 @@ class adminTable {
 			exit();
 		}
 
-		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
+		$myform = new form('post', 'atbl_form', array("validation"=>true));
 		$myform->load();
 
 		$buffer = $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
@@ -585,6 +891,13 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Checks if the given records are associated to files and deletes them.  
+	 * 
+	 * @param array $f_s Array containing the identifiers of the records that have to be deleted
+	 *
+	 * @return int 0 if there aren't special fields or 1
+	 */
 	protected function deleteFiles($f_s) {
 	
 		if(!count($this->_sfields)) return 0;
@@ -608,16 +921,29 @@ class adminTable {
 			}
 		}
 
-		return 0;
+		return 1;
 
 	}
 
+	/**
+	 * @brief The insertion/modification form of the given record 
+	 *
+	 * This method can return all the form elements without the start and end form tags, or a complete form.<br />
+	 * The complete form is generally used when calling this method outside from the adminTable class. In this case it is possible to set 
+	 * the form action which by default is '?save'
+	 * 
+	 * @param mixed $pk the value of the record primary key 
+	 * @param form $myform a form instance default null. If the form is started and closed independently by this method.
+	 * @param string $formaction default null. The url of the form action if the method starts the form
+	 *
+	 * @return void
+	 */
 	public function formRecord($pk, $myform=null, $formaction=null) {
 
 		$buffer = '';
 		if(!$myform) {
 			if(!$formaction) $formaction = '?save';
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>true));
+			$myform = new form('post', 'atbl_form', array("validation"=>true));
 			$myform->load();
 			$buffer .= $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
 		}	
@@ -634,7 +960,21 @@ class adminTable {
 
 	}
 
-	 protected function formElement($myform, $fname, $field, $id, $opts=null) {
+	/**
+	 * @brief The html form element for the given field 
+	 * 
+	 * @param form $myform the form instance
+	 * @param mixed $fname the field name 
+	 * @param array $field associative array containing the database structure information for the field (null, max_length, int...)  
+	 * @param mixed $id the value of the primary key
+	 * @param mixed $opts  
+	 *   Associative array of options
+	 *   - **value**: mixed. The field value 
+	 *   - **size**: int default 40. The size attribute of the input element 
+	 *
+	 * @return the html form element
+	 */
+	protected function formElement($myform, $fname, $field, $id, $opts=null) {
 	
 		$id_f = preg_replace("#\s#", "_", $id); // replace spaces with '_' in form names as POST do itself
 
@@ -650,8 +990,8 @@ class adminTable {
 
 		if(array_key_exists($fname, $this->_sfields)) {
 			if($this->_sfields[$fname]['type']=='password') { 
-				$label = ($id && isset($this->_sfields[$fname]['edit_lable'])) 
-					? $this->_sfields[$fname]['edit_lable'] 
+				$label = ($id && isset($this->_sfields[$fname]['edit_label'])) 
+					? $this->_sfields[$fname]['edit_label'] 
 					: (isset($this->_sfields[$fname]['insert_label']) ? $this->_sfields[$fname]['insert_label']:'');
 				$req = $id ? false : true;
 				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar(__($fname)), $label), array("required"=>$req, "size"=>gOpt($opts, 'size', 40), "maxlength"=>$field['max_length']));
@@ -713,9 +1053,14 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Saves the form submitted data (one or more records) 
+	 * 
+	 * @return void
+	 */
 	public function saveFields() {
 
-		$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+		$myform = new form('post', 'atbl_form', array("validation"=>false));
 		$myform->save();
 
 		// save and continue editing clear session
@@ -749,27 +1094,29 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Saves the given record 
+	 * 
+	 * @param mixed $pk the primary key value
+	 * @param mixed $pkeys List of primary keys of the records edited in the form 
+	 *
+	 * @return void
+	 */
 	protected function saveRecord($pk, $pkeys) {
-		
+
 		if(!in_array($pk, $this->_edit_deny)) {
 			$res = array();
 			if(is_null($pk)) {
-				$fields = $this->_registry->db->getFieldsName($this->_table);
-				foreach($fields as $f) $res[$f] = null;	
-				$data = $res;
 				$pkf = $pk;
 				$insert = true;
 			}
 			else {
 				$pkf = preg_replace("#\s#", "_", $pk); // POST replaces spaces with '_'
-				$res = $this->_registry->db->autoSelect(array("*"), array($this->_table), $this->_primary_key."='$pk'", null);
-				$data = $res[0];
 				$insert = false;
 			}
-			$model = new model($data);
-			$model->setRegistry($this->_registry);
+
+			$model = new model($pk, $this->_table);
 			$model->setIdName($this->_primary_key);
-			$model->setTable($this->_table);
 
 			$structure = $this->_registry->db->getTableStructure($this->_table);
 
@@ -814,6 +1161,17 @@ class adminTable {
 		}
 	}
 
+	/**
+	 * @brief Cleans inputs from the user
+	 * 
+	 * @param string $name the field name 
+	 * @param string $type the field data type 
+	 * @param mixed $opts 
+	 *   Associative array of options
+	 *   - **escape** bool default true. Whether to escape values or not.
+	 *
+	 * @return cleaned input
+	 */
 	protected function cleanField($name, $type, $opts=null) {
 
 		if(isset($opts['escape'])) {
@@ -832,6 +1190,17 @@ class adminTable {
 
 	}
 
+	/**
+	 * @brief Cleans special fields inputs from the user and sets the model properties 
+	 * 
+	 * @param mixed $model the model instance
+	 * @param string $fname the field name
+	 * @param mixed $pk the primary key value
+	 * @param string $type the field data type
+	 * @param bool $insert whether the user action is an insertion or not. 
+	 *
+	 * @return void
+	 */
 	protected function cleanSpecialField($model, $fname, $pk, $type, $insert) {
 		
 		if($this->_sfields[$fname]['type']=='password') {
@@ -851,8 +1220,10 @@ class adminTable {
 		elseif($this->_sfields[$fname]['type']=='file') {
 			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
 			$sf = $this->_sfields[$fname];
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
-			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, null);
+			$opts['check_content'] = isset($sf['check_content']) ? $sf['check_content'] : true;
+			$opts['contents'] = isset($sf['contents_allowed']) ? $sf['contents_allowed'] : null;
+			$myform = new form('post', 'atbl_form', array("validation"=>false));
+			$model->{$fname} = $myform->uploadFile($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
 		}
 		elseif($this->_sfields[$fname]['type']=='image') {
 			$link_error = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
@@ -867,12 +1238,20 @@ class adminTable {
 			$opts['resize_height'] = isset($sf['resize_height']) ? $sf['resize_height'] : null;
 			$opts['thumb_width'] = isset($sf['thumb_width']) ? $sf['thumb_width'] : null;
 			$opts['thumb_height'] = isset($sf['thumb_height']) ? $sf['thumb_height'] : null;
-			$myform = new form($this->_registry, 'post', 'atbl_form', array("validation"=>false));
+			$myform = new form('post', 'atbl_form', array("validation"=>false));
 			$model->{$fname} = $myform->uploadImage($fname.'_'.$pk, $sf['extensions'], $sf['path'], $link_error, $opts);
 		}
 
 	}
 
+	/**
+	 * @brief Exports the given records 
+	 * 
+	 * @param mixed $f_s the id of the fields that have to be exported. Possible values are 'all' or an array of fields' id 
+	 * @param string $where the where clause used to select records if the $f_s parameter is null 
+	 *
+	 * @return void
+	 */
 	protected function export($f_s, $where='') {
 
 		if(!is_array($f_s) && $f_s!='all') {

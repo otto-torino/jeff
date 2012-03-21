@@ -1,3 +1,29 @@
+<?php
+/**
+ * @file /var/www/jeff.git/themes/default/view/table.php
+ * @ingroup default_theme
+ * @brief Template used for displaying tables
+ *
+ * Available variables:
+ * - **class**: table css class
+ * - **caption**: (optional) table caption
+ * - **heads**: array of table headers, each element may be a string (header text) or an associative array:
+ *   - **class**: css class of the th element 
+ *   - **text**: header text 
+ * - **rows**: array of table rows. Each row is an array of cells. Each cell may be a string (cell text) or an array:
+ *   - **header**: (bool) is the cell an header? 
+ *   - **colspan**: (int) cell colspan attribute 
+ *   - **title**: title attribute of the cell 
+ *   - **class**: css calss of the cell 
+ *   - **text**: cell text 
+ * - **foots**: table footer, may be an array of texts (one foreach cell), or a string (is displayed in an unique cell with a colspan attribute) 
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+?>
 <table class="<?= $class ?>">
 <? if(isset($caption)): ?>
 <caption><?= $caption ?></caption>

@@ -70,8 +70,8 @@ div.header_bottom {
 	height:30px;
 	padding-top:10px;
 }
-.credits div {
-	height:1px;
+.credits .line {
+	height: 1px;
 	background: #ef3125;
 	background: -moz-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
 	background: -webkit-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
@@ -109,7 +109,7 @@ caption { font-style: italic; }
 .title { font-size: 1.2em; }
 .subtitle { font-size: 1.1em; font-style:italic; color: #880000;  }
 
-input[type=submit], input[type=button] {
+input[type=submit], input[type=button], .submit {
 	cursor: pointer;
 	background: url('../img/genericBtn_bkg.jpg') repeat-x;
 	background-position: top left;
@@ -117,7 +117,11 @@ input[type=submit], input[type=button] {
 	font-weight: bold;
 	height: 20px;
 	padding: 2px 5px;
+	color: #000 !important;	
+	text-decoration: none !important; 
+	border: 2px outset #cdcdcd;
 }
+
 table.generic tr.selected td {
 	background-color: #f99391;
 	color: #fff;

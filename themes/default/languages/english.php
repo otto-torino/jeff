@@ -1,4 +1,14 @@
 <?php
+/**
+ * @file /var/www/jeff.git/themes/default/languages/english.php
+ * @ingroup default_theme localization
+ * @brief Contains the english translations dictionary
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.99
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
 return array(
 
@@ -127,6 +137,24 @@ return array(
 	"filter"=>"filter",
 	"reset"=>"reset",
 	"insertValidEmail"=>"insert a valid email address",
+	"CannotCloneSingleton"=>"Singleton instance can not be cloned",
+	"CannotSerializeSingleton"=>"Singleton instance can not be serialized",
+	"sameWindow"=>"same window",
+	"newWindow"=>"new window",
+	"startingFromSiteRoot"=>"starting from site root <b>%s</b>",
+	"menuGroupsAdminExp"=>"to have a public voice do not select any group, to make it visible only to certain groups, select the desired ones",
+	"addSubvoice"=>"add subvoice",
+	// jeff fields
+	"app_title"=>"application title",
+	"app_description"=>"application description",
+	"app_keywords"=>"application keywords",
+	"session_timeout"=>"session timeout (s)",
+	"date_format"=>"date format",
+	"time_format"=>"time format",
+	"datetime_format"=>"date and time format",
+	"class_id"=>"class identifier",
+	"active"=>"active",
+	"position"=>"position",
 
 )
 

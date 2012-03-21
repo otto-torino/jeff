@@ -121,6 +121,10 @@ section {
 	width: 32px;
 }
 
+.hidden {
+	display: none;
+}
+
 /*
  * IMG
  */

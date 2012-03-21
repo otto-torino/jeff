@@ -26,14 +26,10 @@
 	<div class="docbody">
 		
 		<div class="col1 left">
-			<section>
-				{module:index method:index}
-			</section>
+			{module:index method:index}
 		</div>
 		<div class="col2 right">
-			<section class="login box">
-				{module:login method:login}
-			</section>
+			{module:login method:login}
 		</div>
 		<div class="clear"></div>
 	</div>
