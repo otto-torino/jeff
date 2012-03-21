@@ -1,29 +1,95 @@
 <?php
+/**
+ * @file router.class.php
+ * @brief Contains the router class.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
+/**
+ * @ingroup core
+ * @brief Framework router class
+ *
+ * This class is used to load/call class methods, it includes the proper class file, instantiates the module's 
+ * controller and call its method. Also it exports the url module and method to use for example in the 
+ * template factory.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class router {
 
-	private $_registry, $_base_path;
-	private $_module, $_method;
+	/**
+	 * @brief the @ref registry singleton instance 
+	 */
+	private $_registry;
+	
+	/**
+ 	 * @brief base path for link generation 
+ 	 */
+	private $_base_path;
+	
+	/**
+ 	 * @brief module called by url 
+ 	 */
+	private $_module;
+	
+	/**
+ 	 * @brief method called by url 
+ 	 */
+       	private	$_method;
 
-	function __construct($registry, $base_path) {
+	/**
+	 * @brief Constructs a router instance 
+	 * 
+	 * @param string $base_path the base path 
+	 * @return void
+	 */
+	function __construct($base_path) {
 
-		$this->_registry = $registry;
+		$this->_registry = registry::instance();
 		$this->_base_path = $base_path;
 
 	}
 
+	/**
+	 * @brief Returns the module called by url 
+	 * 
+	 * @return the url module name
+	 */
 	public function module() {
 
 		return $this->_module;
 
 	}
-
+	
+	/**
+	 * @brief Returns the method called by url 
+	 * 
+	 * @return the url method name
+	 */
 	public function method() {
 
 		return $this->_method;
 
 	}
 
+	/**
+	 * @brief Loads a module controller and returns its called method 
+	 * 
+	 * @param array $route 
+	 *   the class and method to call. Possible values are:
+	 *   - associative array in the form array('module'=>'module_name', 'method'=>'method_name')
+	 *   - null: the class name and method name are taken directly from url
+	 *   if the method is not found or not callable the 'index' method is called
+	 * @access public
+	 * @return the controller method output or a system error
+	 */
 	public function loader($route) {
 
 		/*** check the route ***/
@@ -39,18 +105,29 @@ class router {
 		include_once(ABS_MDL.DS.$this->_module.DS.$this->_module.'.controller.php');
 
 		if($route == null) $this->_registry->urlModule = $this->_module;
+
 		/*** a new controller class instance ***/
 		$class = $this->_module."Controller";
-		$controller = new $class($this->_registry);
+		$controller = new $class();
 
 		/*** check if the method is callable ***/
 		$method = is_callable(array($controller, $this->_method)) ? $this->_method : 'index';
 
 		$params = gOpt($route, 'params');
 		/*** run the action ***/
+
 		return $controller->$method($params);
  	}
 
+	/**
+	 * @brief Sets the module and method properties 
+	 * 
+	 * @param array $route 
+	 *   the class and method to set. Possible values are:
+	 *   - associative array in the form array('module'=>'module_name', 'method'=>'method_name')
+	 *   - null: the class name and method name are taken directly from url 
+	 * @return void
+	 */
 	public function getModule($route) {
 
 		if(is_array($route) && isset($route['module']) && isset($route['method'])) {
@@ -63,6 +140,21 @@ class router {
 		}
 	}
 
+	/**
+	 * @brief Link generation 
+	 *
+	 * This method is used to generate links starting from a module name, one of its methods 
+	 * and additional parameters
+	 * 
+	 * @param string $module module name (the name of the model class) 
+	 * @param string $method method name
+	 * @param array $params associative array of parameters in the form array('param_name'=>'param_value') 
+	 * @param mixed $opts 
+	 *   associative array of oprions:
+	 *   - **permalink**: whether to use permalinks or not 
+	 *     (i.e. '/class/method/param/value' 'against /index.php?module=class&method=method&param=value'
+	 * @return void
+	 */
 	public function linkHref($module, $method, $params=array(), $opts=null) {
 
 		$permalink = gOpt($opts, 'permalink', true);
@@ -81,6 +173,17 @@ class router {
 		return $this->_base_path.($permalink ? $href : "/?".substr($href, 1));
 	}
 	
+	/**
+	 * @brief Ajax link generation 
+	 *
+	 * This method is used to generate links which points directly to a controller class method, without considering
+	 * the whole document (themes, templates and so on). Generally used to perform ajax requests.
+	 * 
+	 * @param string $module module name (the name of the model class) 
+	 * @param string $method method name
+	 * @param array $params associative array of parameters in the form array('param_name'=>'param_value') 
+	 * @return void
+	 */
 	public function linkAjax($module, $method, $params=array()) {
 
 		$href = $this->_base_path."/pointer.php?module=$module&method=$method";
@@ -94,3 +197,5 @@ class router {
 	}
 
 }
+
+?>

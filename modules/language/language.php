@@ -1,42 +1,92 @@
 <?php
+/**
+ * @file language.php
+ * @brief Contains the model of the language module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+
+/**
+ * @ingroup language_module
+ * @brief language model class
+ *
+ * <p>Model fields:</p>
+ * - **id** int(8): primary key
+ * - **label** varchar(10): short label, i.e. 'I', 'GB'
+ * - **language** varchar(50): language full name
+ * - **code** varchar(5): language code, i.e. 'en_EN'
+ * - **main** int(1): is the main language?
+ * - **active** int(1): is active?
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class language extends model {
-
-
-	function __construct($registry, $id) {
 	
-		$this->_registry = $registry;
+	/**
+	 * @brief Constructs a language model instance
+	 * 
+	 * @param mixed $id the object id (primary key value of the record)
+	 * @return language instance
+	 */
+	function __construct($id) {
+	
 		$this->_tbl_data = TBL_LNG;
-		parent::__construct($this->initP($id));
+
+		parent::__construct($id);
 
 	}
 
-	private function initP($id) {
-
-		return $this->initDbProp($id);
-
-	}
-	
+	/**
+	 * @brief Get language objects 
+	 * 
+	 * @param array $opts associative array of options:
+	 * - **where**: where clause for the select statement
+	 * @return array language objects
+	 */
 	public static function get($registry, $opts=null) {
 	
 		$objs = array();
 		$where = gOpt($opts, "where", ''); 
 		$rows = $registry->db->autoSelect("id", TBL_LNG, $where, 'language');
-		foreach($rows as $row) $objs[] = new language($registry, $row['id']);
+		foreach($rows as $row) $objs[] = new language($row['id']);
 
 		return $objs;
 	
 	}
+	
+	/**
+	 * @brief Get language object from label 
+	 * 
+	 * @param string $label language label
+	 * @return mixed language object or null if not found
+	 */
+	public static function getFromLabel($label) {
 
-	public static function getFromLabel($registry, $label) {
+		$registry = registry::instance();
 
 		$rows = $registry->db->autoSelect("id", TBL_LNG, "label='$label'", 'language');
-		if(count($rows)) return new language($registry, $rows[0]['id']);
+		if(count($rows)) return new language($rows[0]['id']);
 
 		return null;
 	
 	}
 
-	public static function setLanguage($registry) {
+	/**
+	 * @brief Set the active language 
+	 *
+	 * Looks for $_GET 'lng' parameter, existing session value or sets the default language
+	 * 
+	 * @return string language name
+	 */
+	public static function setLanguage() {
+
+		$registry = registry::instance();
 	
 		$language = null;
 		if($code = cleanInput('get', 'lng', 'string')) {

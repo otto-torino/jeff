@@ -1,5 +1,27 @@
 <?php
+/**
+ * @file functions.php
+ * @ingroup php_lib core
+ * @brief PHP functions used a bit everywhere 
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
+/**
+ * @defgroup php_lib PHP functions library
+ * Set of php functions used by many classes and of general interest.
+ */
+
+/**
+ * @ingroup localization
+ * @brief String localization 
+ * 
+ * @param string $id string identifier
+ * @return the localized string
+ */
 function __($id) {
 	
 	$language = isset($_SESSION['lng']) ? $_SESSION['lng'] : 'english';
@@ -21,6 +43,20 @@ function __($id) {
 
 };
 
+/**
+ * @brief Anchor link 
+ * 
+ * @param string $link link's url
+ * @param string $text link's text
+ * @param array $opts 
+ *   associative array of options:
+ *   - **over**: onmouseover attribute
+ *   - **out**: onmouseout function
+ *   - **class**: css class
+ *   - **title**: title attribute
+ *   - **target**: target attribute
+ * @return the anchor element
+ */
 function anchor($link, $text, $opts=null) {
 
 	$buffer = "<a href=\"$link\"";
@@ -36,11 +72,36 @@ function anchor($link, $text, $opts=null) {
 	return $buffer;
 }  
 
+/**
+ * @brief Layer window link 
+ *
+ * Returns a link which opens a js layer window
+ * 
+ * @param string $title window title
+ * @param string $url content's url 
+ * @param string $text link's text
+ * @param array $opts 
+ *   associative array of options, see @ref layerWindowCall
+ * @return the link element
+ */
 function layerWindow($title, $url, $text, $opts=null) {
 
 	return "<span class=\"link\" onclick=\"".layerWindowCall($title, $url, $opts)."\">$text</span>";
 }
 
+/**
+ * @brief Javascript code to open a layer window 
+ * 
+ * @param string $title window title
+ * @param string $url content's url
+ * @param array $opts 
+ *   associative array of options:
+ *   - **width**: int default 800. The window width
+ *   - **height**: int default null. The window height. If null the window height depends on its contents.
+ *   - **bodyId**: string default 'bid'. Id attribute of the window body.
+ *   - **reloadZindex**: bool default false. Whether to check the maximum z-index in the document or not. If not the maximum z-index is considered equal to 1.
+ * @return the javascript code
+ */
 function layerWindowCall($title, $url, $opts=null) {
 
 	$width = gOpt($opts, 'width', 800);
@@ -56,15 +117,37 @@ function layerWindowCall($title, $url, $opts=null) {
 
 }
 
+/**
+ * @brief Span element with tooltip 
+ * 
+ * @param string $label element text
+ * @param string $title tooltip title
+ * @param string $text tooltip text
+ * @param array $opts 
+ *   associative array of options:
+ *   - **class**: element css class
+ * @return the tooltip element
+ */
 function tooltip($label, $title, $text, $opts=null) {
-	$class = gOpt($opts, 'class', 'string');
+	$class = gOpt($opts, 'class', '');
 	return "<span class=\"$class tooltip\" title=\"$title::$text\">$label</span>";
 }
 
+/**
+ * @brief Element used to clear css float 
+ * 
+ * @return the clear float element
+ */
 function clearFloat() {
 	return "<div class=\"clear\"></div>";
 }
 
+/**
+ * @brief Relative path from absolute path 
+ * 
+ * @param array $abspath absolute path
+ * @return relative path
+ */
 function relativePath($abspath) {
 
 	$path = ROOT.preg_replace("#".preg_quote(ABS_ROOT)."#", "", $abspath);
@@ -75,13 +158,32 @@ function relativePath($abspath) {
 
 }
 
+/**
+ * @brief Retrieve value from associative array by key. 
+ *
+ * It's also possible to set a default value if the requested key is not set 
+ * 
+ * @param array $opts associative array
+ * @param string $name key name
+ * @param mixed $dft default value 
+ * @return array value or default
+ */
 function gOpt($opts, $name, $dft=null) {
 
 	return isset($opts[$name]) ? $opts[$name] : $dft;
 
 }
 
-function floatcomp($a,$comp,$b,$decimals=2) {
+/**
+ * @brief Comparation of floating numbers 
+ * 
+ * @param float $a first number
+ * @param string $comp comparation type
+ * @param float $b second number
+ * @param int $decimals number of decimals
+ * @return comparation result
+ */
+function floatcomp($a, $comp, $b, $decimals=2) {
 	$res = bccomp($a,$b,$decimals); // php function for comparing floating point numbers with a specified level of precision
 	switch ($comp) {
 		case ">":
@@ -98,7 +200,17 @@ function floatcomp($a,$comp,$b,$decimals=2) {
 	}
 }
 
-function chargeEditor($registry, $selector) {
+/**
+ * @brief Charge dojo editor 
+ *
+ * Charges the dojo editor in the elements selected through the given css selector
+ * 
+ * @param string $selector css selector
+ * @return javascript code which charges the editor
+ */
+function chargeEditor($selector) {
+
+	$registry = registry::instance();
 
 	$stylesheets = '';
 	foreach($registry->css as $css) 
@@ -147,7 +259,24 @@ function chargeEditor($registry, $selector) {
 
 }
 
-function share($registry, $social, $url, $title=null, $description=null) {
+/**
+ * @brief Social sharing 
+ * 
+ * @param mixed $social 
+ *   "all" or an array of social site names. Supported ones are:
+ *   - **facebook**
+ *   - **twitter**
+ *   - **linkedin**
+ *   - **digg**
+ *   - **googleplus**
+ * @param string $url the url to share
+ * @param string $title title to share
+ * @param string $description description to share
+ * @return share links
+ */
+function share($social, $url, $title=null, $description=null) {
+
+	$registry = registry::instance();
 
 	$ss = new siteSettings($registry);
 	$source = $ss->app_title;
@@ -178,7 +307,21 @@ function share($registry, $social, $url, $title=null, $description=null) {
 	return "<div class=\"share\">".$buffer."</div>";
 }
 
-function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_images, $options=null) {
+/**
+ * @brief Cut html strings without truncating tags 
+ * 
+ * @param string $html html string
+ * @param int $length cut string length
+ * @param string $ending cut string ending characters 
+ * @param bool $strip_tags whether to remove all html tags or not
+ * @param bool $cut_words whether to allow words cut or not
+ * @param bool $cut_images whether to remove image tags or not
+ * @param array $opts 
+ *   associative array of options:
+ *   - **endingPosition** "in" or "out". Whether to add the ending characters inside or outside the outer tag
+ * @return void
+ */
+function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_images, $opts = null) {
 	
 	/*
 		regular expressions to intercept tags
@@ -310,7 +453,7 @@ function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_imag
 		}
 	}
 	else {
-		// considero solamente il testo puro
+		// onlly pure text
      		$partial_html = substr($text, 0, $length);
 	}
 	
@@ -326,11 +469,11 @@ function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_imag
        		}
     	}
 	
-	if(isset($options['endingPosition']) && $options['endingPosition']=='in')
+	if(gOpt($opts, 'endingPosition') == 'in')
 		$partial_html .= $ending;
 
 	/*
-		Se non ho strippato i tag devo chiudere tutti quelli rimasti aperti
+		close all opened tags (if strip tags is false)
 	*/
 	if(!$strip_tags) 
     		// close all unclosed html tags
@@ -338,7 +481,7 @@ function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_imag
     			$partial_html .= '</' . $tag . '>';
 	
 	// add the ending characters to the partial text
-	if(!isset($options['endingPosition']) || $options['endingPosition']=='out')
+	if(gOpt($opts, 'endingPosition') != 'in')
 		$partial_html .= $ending;
    
     	return $partial_html;	

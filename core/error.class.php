@@ -1,7 +1,42 @@
 <?php
+/**
+ * @file error.class.php
+ * @brief Contains the error class
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
-class Error {
+/**
+ * @defgroup errors Errors management
+ *
+ * <p>System errors and user errors management</p>
+ */
 
+/**
+ * @ingroup core errors
+ *
+ * @brief Abstract class for the management of system errors, errors due to wrong actions of the user, warning messages  
+ *
+ * System errors are displayed as independent pages, and the information shown depends on the value of the DEBUG setting in the configuration file.
+ *
+ * Errors and warnings are stored in a session variable and shown after url redirecting.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+abstract class Error {
+
+	/**
+	 * @brief List of system default errors coded by int keys 
+	 * 
+	 * @static
+	 * @return array dictionary of default errors
+	 */
 	public static function codeMessages() {
 
 		return	array(
@@ -10,6 +45,19 @@ class Error {
 
 	}
 
+	/**
+	 * @brief Management of system errors
+	 *
+	 * If the DEBUG setting in the configuration.php is set to true displays the error with all the information, 
+	 * otherwise displays a custom message. 
+	 * 
+	 * @param string $class the class which triggers the error
+	 * @param string $function the function which triggers the error
+	 * @param string $message the error message
+	 * @param int $line the line number where the error occurs
+	 * @param string $noDebugMsg the message to show if DEBUG mode is disabled
+	 * @return prints the system error
+	 */
 	public static function syserrorMessage($class, $function, $message, $line, $noDebugMsg=null) {
 
 		@ob_clean();
@@ -49,6 +97,16 @@ class Error {
 
 	}
 	
+	/**
+	 * @brief Saves the error in the active session and redirect to the given url (where the error will be shown) 
+	 * 
+	 * @param mixed $message 
+	 *   the error message. Possible values are:
+	 *   - integer: the message is taken from the default errors dictionary
+	 *   - associative array in the form array('error'=>'error_message', 'hint'=>'error_hint')
+	 * @param mixed $link the redirection url 
+	 * @return redirects to the given url
+	 */
 	public static function errorMessage($message, $link) {
 
 		ob_clean();
@@ -69,6 +127,14 @@ class Error {
 
 	}
 	
+	/**
+	 * @brief Saves the warning in the active session and redirect to the given url (where the warning will be shown) 
+	 * 
+	 * @param mixed $message 
+	 *   associative array in the form array('warning'=>'warning_message', 'hint'=>'warning_hint')
+	 * @param mixed $link the redirection url 
+	 * @return redirects to the given url
+	 */
 	public static function warningMessage($message, $link) {
 
 		ob_clean();
@@ -88,6 +154,11 @@ class Error {
 
 	}
 
+	/**
+	 * @brief Gets the error message from the active session 
+	 * 
+	 * @return the error message
+	 */
 	public static function getErrorMessage() {
 
 		$errorMsg = (isset($_SESSION['ERRORMSG']))?$_SESSION['ERRORMSG']:"";

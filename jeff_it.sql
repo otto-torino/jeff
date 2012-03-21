@@ -40,6 +40,31 @@ INSERT INTO `languages` (`id`, `label`, `language`, `code`, `main`, `active`) VA
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `menu`
+--
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `parent` int(4) DEFAULT NULL,
+  `label` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `url` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `target` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `position` int(3) NOT NULL,
+  `groups` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `menu`
+--
+
+INSERT INTO `menu` (`id`, `parent`, `label`, `url`, `target`, `position`, `groups`) VALUES
+(1, 0, 'Home', '/', '_self', 1, NULL),
+(2, 0, 'Home Admin', '/admin/', '_self', 2, '1,2,3');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sys_datetime_settings`
 --
 
@@ -115,7 +140,8 @@ INSERT INTO `sys_privileges` (`id`, `category`, `class`, `class_id`, `label`, `d
 (8, 'Utenze', 'group', 1, 'Amministrazione gruppi', 'Inserimento, modifica, eliminazione di gruppi e associazione a privilegi'),
 (9, 'Utenze', 'privileges', 1, 'Visualizzazione privilegi', 'Visualizza elenco di privilegi associabili ai gruppi con relativa descrizione'),
 (10, 'Lingue', 'language', 1, 'Amministrazione lingue', 'inserimento modifica ed eliminazione delle lingue gestite dal sistema'),
-(11, 'Layout', 'layout', 1, 'Gestione temi', 'Gestione temi installati sul sistema, modifica tema corrente');
+(11, 'Layout', 'layout', 1, 'Gestione temi', 'Gestione temi installati sul sistema, modifica tema corrente'),
+(12, 'Menu', 'menu', 1, 'Gestione menu', 'Inserimento modifica ed eliminazione delle voci di menu');
 
 -- --------------------------------------------------------
 

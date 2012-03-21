@@ -24,9 +24,7 @@
 			{module:menu method:mainMenu}
 		</nav>
 		<div class="col">
-			<section>
-				{module:url_module method:url_method}
-			</section>
+			{module:url_module method:url_method}
 		</div>
 	</div>
 	<div class="docbottom">

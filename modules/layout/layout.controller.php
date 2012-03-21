@@ -1,12 +1,52 @@
 <?php
+/**
+ * @file layout.controller.php
+ * @brief Contains the controller of the layout module
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
+
+/**
+ * @defgroup layout_module Layout
+ * @ingroup modules themes
+ *
+ * Module for the selection of the active theme
+ */
 
 require_once('layout.php');
 
+/**
+ * @ingroup layout_module
+ * @brief Layout module controller
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class layoutController extends controller {
+	
+	/**
+	 * module's administration privilege class 
+	 */
+	private $_class_privilege;
 
-	function __construct($registry) {
+	/**
+	 * module's administration privilege id 
+	 */
+	private $_admin_privilege;
 
-		parent::__construct($registry);
+	/**
+	 * @brief Constructs a layout controller instance 
+	 * 
+	 * @return layout controller instance
+	 */
+	function __construct() {
+
+		parent::__construct();
 
 		$this->_cpath = dirname(__FILE__);
 		$this->_mdl_name = "layout";
@@ -15,10 +55,16 @@ class layoutController extends controller {
 		$this->_class_privilege = $this->_mdl_name;
 		$this->_admin_privilege = 1;
 	}
-
+	
+	/**
+	 * @brief Layout module backoffice 
+	 * 
+	 * @access public
+	 * @return the layout module backoffice
+	 */
 	public function manage() {
 	
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$items = array();
 		foreach(layout::getThemes($this->_registry) as $theme) {
@@ -43,12 +89,19 @@ class layoutController extends controller {
 
 	}
 
+	/**
+	 * @brief Theme activation
+	 *
+	 * The theme to activate is taken from the $_GET parameter 'id' 
+	 * 
+	 * @return void
+	 */
 	public function activateTheme() {
 
-		access::check($this->_registry, $this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
+		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
 		$id = cleanInput('get', 'id', 'int');
-		layout::activateTheme($this->_registry, $id);
+		layout::activateTheme($id);
 
 		header("Location: ".$this->_router->linkHref($this->_mdl_name, 'manage'));
 

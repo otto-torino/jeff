@@ -1,36 +1,78 @@
 <?php
-
-/*
- * SQL CODE TO LOUNCH IN MYSQL SERVER (case unsensitive replace function)
+/**
+ * @file search.class.php
+ * @brief Contains the search class.
  *
-DELIMITER $$
-
-DROP FUNCTION IF EXISTS `replace_ci`$$
-CREATE FUNCTION `replace_ci` ( str TEXT,needle CHAR(255),str_rep CHAR(255))
-RETURNS TEXT
-DETERMINISTIC
-BEGIN
-DECLARE return_str TEXT;
-SELECT replace(lower(str),lower(needle),str_rep) INTO return_str;
-RETURN return_str;
-END$$
-
-DELIMITER ;
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 
+/**
+ * @ingroup core
+ * @brief Full text search tool (mysql DBMS)
+ *
+ * This class is used to perform full text seraches optionally indicating different weights 
+ * for different search fields.
+ *
+ * In order to work correctly the database engine must have defined the following function which is 
+ * a case insensitive replace function. here is the SQL code necessary to create the replace_ci function:
+ *
+ * 	DELIMITER $$
+ * 	DROP FUNCTION IF EXISTS `replace_ci`$$
+ * 	CREATE FUNCTION `replace_ci` ( str TEXT,needle CHAR(255),str_rep CHAR(255)) 
+ * 	RETURNS TEXT
+ * 	DETERMINISTIC
+ * 	BEGIN
+ * 	DECLARE return_str TEXT;
+ * 	SELECT replace(lower(str),lower(needle),str_rep) INTO return_str;
+ * 	RETURN return_str;
+ * 	END$$
+ * 	DELIMITER ;
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 class search {
 
+	/**
+	 * @brief the @ref registry singleton instance 
+	 */
 	private $_registry;
+	
+	/**
+	 * @brief the database table 
+	 */
 	private $_table;
 
-	function __construct($registry, $table, $opts=null) {
+	/**
+	 * @brief Constructs a search instance 
+	 * 
+	 * @param string $table table name
+	 * @param mixed $opts 
+	 *   associative array of options:
+	 *   - **highlight_range**: int default 120. Number of characters which surrounds search keyword in the search result
+	 * @return void
+	 */
+	function __construct($table, $opts=null) {
 	
-		$this->_registry = $registry;
+		$this->_registry = registry::instance();
 		$this->_table = $table;
 		$this->_highlight_range = gOpt($opts, 'highlight_range', 120);
 
 	}
 
+	/**
+	 * @brief Clear the search string
+	 *
+	 * Removes words with no meaning
+	 * 
+	 * @param string $search_string search string
+	 * @return the cleaned search string
+	 */
 	private function clearSearchString($search_string) {
 
 		$unconsidered = array("lo", "l", "il", "la", "i", "gli", "le", "uno", "un", "una", "un", "su", "sul", "sulla", "sullo", "sull", "in", "nel", "nello", "nella", "nell", "con", "di", "da", "dei", "d",  "della", "dello", "del", "dell", "che", "a", "dal", "è", "e", "per", "non", "si", "al", "ai", "allo", "all", "al", "o", "the", "a", "an", "on", "in", "with", "of", "which", "that", "is", "for", "to");
@@ -46,6 +88,12 @@ class search {
 
 	}
 
+	/**
+	 * @brief Gets keywords from a search string
+	 * 
+	 * @param string $search_string search string
+	 * @return array keywords list
+	 */
 	private function getKeywords($search_string) {
 		
 		$clean_string = $this->clearSearchString($search_string);
@@ -56,6 +104,27 @@ class search {
 
 	}
 
+	/**
+	 * @brief Creation of the search query 
+	 * 
+	 * @param array $selected_fields fields to select. Each array element may be the field name or an array with the field name as value of the key 'field'.
+	 * @param array $required_clauses 
+	 *   associative array of required clauses in the form array('field_name'=>'field_clause')<br />
+	 *   'field_clause' may be directly the field value to search for or an associative array specifying the 
+	 *   search type (inside, start, end or field) and the value:
+	 *   - **inside**: bool. Matches fields which contain value
+	 *   - **start**: bool. Matches fields which starts with value
+	 *   - **end**: bool. Matches fields which ends with value
+	 *   - **field**: bool. matches fields equal to value
+	 *   - **value**: mixed. field value
+	 * @param array $weight_clauses 
+	 *   associative array of weighted clauses in the form array('field_name'=>'field_clause')<br />
+	 *   'field_clause' is an associative array:
+	 *   - **value**: the string to search for (will be divided into keywords)
+	 *   - **inside** bool: Wheather to match also words which contains a keyword 
+	 *   - **weight** int: field weight 
+	 * @return the search query string
+	 */
 	public function makeQuery($selected_fields, $required_clauses, $weight_clauses){
 	
 		$final_keywords = 0;
@@ -112,6 +181,36 @@ class search {
 
 	}
 
+	/**
+	 * @brief Return the search results
+	 *
+	 * The returned text is an array whose elements are associative arrays with the following keys:
+	 * - **relevance** relevance of the result (due to field weights)  
+	 * - **occurences** keywords occurences  
+	 * - **<selected_field_name>** search result:<br /> 
+	 *   if the selected field has the option 'highlight' returns the highlighted text (the first occurrence of a keyword surrounded by two highlight ranges) if found or an empty string.<br />
+	 *   If the option highlight is false returns the content stored in the database. 
+	 * 
+	 * @param array $selected_fields fields to select. Each array element may be the field name or an array:
+	 *   - **highlight**: whether to highlight search keywords in the result or not
+	 *   - **field**: the field name
+	 * @param array $required_clauses 
+	 *   associative array of required clauses in the form array('field_name'=>'field_clause')<br />
+	 *   'field_clause' may be directly the field value to search for or an associative array specifying the 
+	 *   search type (inside, start, end or field) and the value:
+	 *   - **inside**: bool. Matches fields which contain value
+	 *   - **start**: bool. Matches fields which starts with value
+	 *   - **end**: bool. Matches fields which ends with value
+	 *   - **field**: bool. matches fields equal to value
+	 *   - **value**: mixed. field value
+	 * @param array $weight_clauses 
+	 *   associative array of weighted clauses in the form array('field_name'=>'field_clause')<br />
+	 *   'field_clause' is an associative array:
+	 *   - **value**: the string to search for (will be divided into keywords)
+	 *   - **inside** bool: Wheather to match also words which contains a keyword 
+	 *   - **weight** int: field weight
+	 * @return array of search results
+	 */
 	public function getSearchResults($selected_fields, $required_clauses, $weight_clauses) {
 	
 		$res = array();

@@ -1,12 +1,43 @@
 <?php
+/**
+ * @file varFilters.php
+ * @ingroup php_lib core
+ * @brief PHP functions used a to work with strings 
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
 /*
  * Input filters
+ */
+
+/**
+ * @brief Clean variables
+ * @todo Not used by now, but should be implemented looking at @ref cleanInput 
+ * 
+ * @param mixed $var variable to clean
+ * @param string $type variable type
+ * @param array $opts associative array of options
+ * @return cleaned var
  */
 function cleanVar($var, $type, $opts=array()) {
 	return $var;
 }
 
+/**
+ * @brief Sanitize user inputs 
+ * 
+ * @param string $method input method ('get', 'post' or 'request')
+ * @param string $name input name 
+ * @param string $type input type ('string', 'int', 'float', 'date', 'datetime', 'email', 'html') 
+ * @param array $opts 
+ *   associative array of options:
+ *   - **escape**: bool default true. Whether to escape input for db insertion or not
+ * @return the sanitized input
+ */
 function cleanInput($method, $name, $type, $opts=array()) {
 
 	$db = db::instance();
@@ -57,7 +88,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	if(is_null($filter)) exit($input);
 	settype($input, $type);
 
-	if(!(gOpt($opts, 'escape')===false)) {
+	if(!(gOpt($opts, 'escape', true)===false)) {
 		$input = $db->escapeString($input);
 	}
 
@@ -65,6 +96,17 @@ function cleanInput($method, $name, $type, $opts=array()) {
 
 }
 
+/**
+ * @brief Sanitize user array inputs 
+ * 
+ * @param string $method input method ('get', 'post' or 'request')
+ * @param string $name input name 
+ * @param string $type input array elements type ('string', 'int', 'float') 
+ * @param array $opts 
+ *   associative array of options:
+ *   - **escape**: bool default true. Whether to escape inputs for db insertion or not
+ * @return the sanitized array
+ */
 function cleanInputArray($method, $name, $type=null, $opts=array()) {
 	
 	$db = db::instance();
@@ -96,7 +138,7 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 
 	$input = filter_input($method_string, $name, $filter, $options);
 
-	if(!(gOpt($opts, 'escape')===false) && count($input)) 
+	if(!(gOpt($opts, 'escape', true)===false) && count($input)) 
 		foreach($input as $k=>$in) {
 			if(get_magic_quotes_gpc()) $input[$k] = stripslashes($in);	// magic_quotes_gpc = On
 			$input[$k] = $db->escapeString($in);
@@ -106,6 +148,13 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 
 }
 
+/**
+ * @brief Sanitize html content 
+ * @todo strip dangerous tags if needed, check user privileges or which tags are allowed for the input
+ * 
+ * @param string $html html string 
+ * @return the sanitized string
+ */
 function sanitizeHtml($html) {
 
 	// strip dangerous tags here
@@ -116,15 +165,37 @@ function sanitizeHtml($html) {
 /*
  * Output filters
  */
-function htmlVar($var) {
-	return $var;
+
+/**
+ * @brief Filters text coming from database before rendering it in the html document 
+ * @todo maybe useful to strip dangerous tags to avoid XSS or similar if the db insertion sanitization process fails
+ * 
+ * @param string $string string to filter 
+ * @return filtered string
+ */
+function htmlVar($string) {
+	return $string;
 }
 
-function htmlInput($var) {
-	$var = preg_replace('#"#', '&#34;', $var);
-	return $var;
+/**
+ * @brief Prepares a string which has to be inserted in an input field 
+ * 
+ * @param string $string string to prepare 
+ * @return prepared string
+ */
+function htmlInput($string) {
+	$string = preg_replace('#"#', '&#34;', $string);
+	return $string;
 }
 
+/**
+ * @brief Javascript variable escaping
+ *
+ * Escapes strings that has to be used as javascript variables
+ * 
+ * @param string $string string to escape
+ * @return escaped string
+ */
 function jsVar($string) {
 
 	$string = preg_replace("#\n|\r|\t#", "", $string);

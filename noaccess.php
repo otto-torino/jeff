@@ -1,25 +1,28 @@
 <?php
 /**
-* \file noaccess.php
-* Page shown when the user cannot access the requested content.
-*
-* @version 0.98
-* @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
-* @authors abidibo abidibo@gmail.com
+ * @file noaccess.php
+ * @brief No access page
+ *
+ * Page shown when the user cannot access the requested content.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
 */
 
 /**
- * absolute path to the ROOT directory 
+ * @brief absolute path to the ROOT directory 
  */
 define('ABS_ROOT', realpath(dirname(__FILE__)));
 
 /**
- * relative path to the ROOT directory
+ * @brief relative path to the ROOT directory
  */
 define('ROOT', preg_replace("#".$_SERVER['DOCUMENT_ROOT']."#", "", ABS_ROOT));
 
 /**
- * operating system directory separator 
+ * @brief operating system directory separator 
  */
 define( 'DS', DIRECTORY_SEPARATOR );
 ?>

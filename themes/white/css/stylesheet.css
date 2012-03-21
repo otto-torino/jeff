@@ -70,8 +70,8 @@ div.header_bottom {
 	height:30px;
 	padding-top:10px;
 }
-.credits div {
-	height:1px;
+.credits .line {
+	height: 1px;
 	background: #ef3125;
 	background: -moz-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);
 	background: -webkit-radial-gradient(center center, circle, #ef3125 5%, #fff 60%);

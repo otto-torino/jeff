@@ -1,67 +1,78 @@
 <?php
 /**
-* \file configuration.php
-* Jeff configuration file.
-*
-* @version 0.98
-* @copyright 2011 Otto srl MIT License http://www.opensource.org/licenses/mit-license.php
-* @authors abidibo abidibo@gmail.com
-*/
+ * @file configuration.php
+ * @ingroup configurations
+ * @brief Jeff configuration file.
+ *
+ * @author abidibo abidibo@gmail.com
+ * @version 0.98
+ * @date 2011-2012
+ * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
+ */
 
 /**
- * session name
+ * @defgroup configurations Configuration
+ *
+ * ### Configuration of the web application
+ * 
+ * Includes the configuration of the database parameters, the configuration of some general properties of the web application, like TITLE and DESCRIPTION 
+ * appearing in the head of the document, and the configuration of the date and time formats.
+ */
+
+/**
+ * @brief session name
  */
 define('SESSIONNAME', 'JEFF_SID');
 
 /**
- *  application language (head meta tag)
+ * @brief application language (head meta tag)
  */
 define('APP_LANGUAGE', 'it_IT');
 
 /**
- * Database Management System
+ * @brief Database Management System
  */
 define('DBMS', 'mysql');
 
 /**
- * Database hostname 
+ * @brief Database hostname 
  */
 define('DB_HOST', 'localhost');
 
 /**
- * Database name 
+ * @brief Database name 
  */
 define('DB_DBNAME', 'db_jeff');
 
 /**
- * Database username 
+ * @brief Database username 
  */
 define('DB_USER', 'root');
 
 /**
- * Database user password 
+ * @brief Database user password 
  */
 define('DB_PASSWORD', '');
 
 /**
- * Database schema
+ * @brief Database schema
  */
 define('DB_SCHEMA', '');
 
 /**
- * Database charset 
+ * @brief Database charset 
  */
 define('DB_CHARSET', 'utf8'); 
 
 /**
- *  System passwords cryptation method
+ * @brief System passwords cryptation method
  */
 define('PWD_HASH', 'md5'); // md5 | sha1 | "empty"(-> no cryptation)
 
 /**
- * Debug mode.
+ * @brief Debug mode.
  *
- * View more detailed information when error occurs 
+ * View detailed information when system error occurs 
  */
 define('DEBUG', true);
 

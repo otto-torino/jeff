@@ -21,9 +21,7 @@
 		</nav>
 	</div>
 	<div class="docbody">
-		<section>
-			{module:url_module method:url_method}
-		</section>
+		{module:url_module method:url_method}
 	</div>
 	<div class="docbottom">
 	</div>
