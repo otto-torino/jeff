@@ -4,7 +4,7 @@
  * @brief Contains the model of the siteSettings module
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -21,7 +21,7 @@
  * - **session_timeout** int(8): session timeout managed by the application (no management if empty or 0)
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */

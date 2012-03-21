@@ -6,7 +6,7 @@
  * @details Every request passes from here, except from the ajax requests which points tio single class methods.
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */

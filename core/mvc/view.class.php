@@ -6,7 +6,7 @@
  * Defines the mvc view class
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -19,7 +19,7 @@
  * It acts like an template engine at module level. the module templates are evaluated using the context variables assigned by the controller.
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php) 
  */

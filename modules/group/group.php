@@ -4,7 +4,7 @@
  * @brief Contains the model of the group module
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -20,7 +20,7 @@
  * - **privileges** varchar(128): comma separated list of @ref privilege ids
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */

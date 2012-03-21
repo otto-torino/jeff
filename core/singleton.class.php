@@ -4,7 +4,7 @@
  * @brief Contains the singleton class.
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -16,7 +16,7 @@
  * Class which implemets the singleton pattern and assures the existence of only one object instance
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */

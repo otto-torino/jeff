@@ -4,7 +4,7 @@
  * @brief Contains the model of the menu module
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
@@ -23,7 +23,7 @@
  * - **groups** varchar(128): comma separated list of user groups which can see the voice (everyone can see it if this field is null or empty)
  *
  * @author abidibo abidibo@gmail.com
- * @version 0.98
+ * @version 0.99
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
