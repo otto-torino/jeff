@@ -873,7 +873,7 @@ class adminTable {
 
 		$buffer .= $myform->cform();
 		
-		if($this->_editor) $buffer .= chargeEditor($this->_registry, "#atbl_form div[class=html]");
+		if($this->_editor) $buffer .= chargeEditor("#atbl_form div[class=html]");
 
 		if($insert && isset($this->_custom_tpl['insert'])) {
 			$this->_view->setTpl($this->_custom_tpl['insert']);
