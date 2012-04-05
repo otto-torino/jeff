@@ -95,20 +95,9 @@ class router {
 		/*** check the route ***/
 		$this->getModule($route);
 
-		/*** if the file is not there diaf ***/
-		if(!is_readable(ABS_MDL.DS.$this->_module.DS.$this->_module.'.controller.php'))
-		{
-			Error::syserrorMessage('router', 'laoder', sprintf(__("CantChargeModuleControllerError"), $this->_module, ABS_MDL.DS.$this->_module.DS.$this->_module.'.controller.php'), __LINE__);
-		}
-
-		/*** include the controller ***/
-		include_once(ABS_MDL.DS.$this->_module.DS.$this->_module.'.controller.php');
+		$controller = $this->loadController($this->_module);
 
 		if($route == null) $this->_registry->urlModule = $this->_module;
-
-		/*** a new controller class instance ***/
-		$class = $this->_module."Controller";
-		$controller = new $class();
 
 		/*** check if the method is callable ***/
 		$method = is_callable(array($controller, $this->_method)) ? $this->_method : 'index';
@@ -194,6 +183,31 @@ class router {
 		}
 
 		return $href;
+	}
+
+	/**
+	 * #brief Loads and returns the controller of the given module 
+	 * 
+	 * @param string $module module name
+	 * @return module's controller
+	 */
+	public function loadController($module) {
+
+		/*** if the file is not there diaf ***/
+		if(!is_readable(ABS_MDL.DS.$module.DS.$module.'.controller.php'))
+		{
+			Error::syserrorMessage('router', 'laodController', sprintf(__("CantChargeModuleControllerError"), $module, ABS_MDL.DS.$module.DS.$module.'.controller.php'), __LINE__);
+		}
+
+		/*** include the controller ***/
+		require_once(ABS_MDL.DS.$module.DS.$module.'.controller.php');
+
+		/*** a new controller class instance ***/
+		$class = $module."Controller";
+		$controller = new $class();
+
+		return $controller;
+
 	}
 
 }
