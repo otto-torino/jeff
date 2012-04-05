@@ -3,6 +3,12 @@ CHANGELOG
 
 2012-03-21, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
+Preparing new version: v1.0
+
+Added 'no_form_fields' option to adminTable class to avoid some fields manipulation through form (i.e insertion_date, last_edit_date, ...)
+
+2012-03-21, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
 New version: v0.99
  
 Full code documentation, menu and singleton pattern application and some minor adjustments

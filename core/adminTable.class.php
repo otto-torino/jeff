@@ -118,6 +118,11 @@ class adminTable {
 	protected $_edit_deny;
 
 	/**
+	 * @brief fields not inserted and edit directly by form elements 
+	 */
+	protected $_no_form_fields;
+
+	/**
 	 * @brief array of fields shown in the admin list 
 	 */
 	protected $_changelist_fields;
@@ -162,6 +167,7 @@ class adminTable {
 	 *   - **deletion**: bool default true. Whether to allow records deletion or not. 
 	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
+	 *   - **no_form_fields**: array default null. Array of fields not controlled directly by form elements. 
 	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
 	 *   - **export**: bool default false. Add export buttons in the admin list. 
 	 *   - **custom_tpl**: array default array(). Associative array defining custom templates, available keys are 'view', 'insert', 'edit'. 
@@ -182,6 +188,7 @@ class adminTable {
 		$this->_deletion = gOpt($opts, 'deletion', true);
 		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
+		$this->_no_form_fields = gOpt($opts, 'no_form_fields', array());
 		$this->_editor = gOpt($opts, 'editor', false);
 		$this->_export = gOpt($opts, 'export', false);
 		$this->_custom_tpl = gOpt($opts, 'custom_tpl', array());
@@ -975,6 +982,8 @@ class adminTable {
 	 * @return the html form element
 	 */
 	protected function formElement($myform, $fname, $field, $id, $opts=null) {
+
+		if(in_array($fname, $this->_no_form_fields)) return null;
 	
 		$id_f = preg_replace("#\s#", "_", $id); // replace spaces with '_' in form names as POST do itself
 
