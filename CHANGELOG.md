@@ -7,6 +7,7 @@ Preparing new version: v1.0
 
 Added 'no_form_fields' option to adminTable class to avoid some fields manipulation through form (i.e insertion_date, last_edit_date, ...)
 Added loadController method to router class
+Added model_name parameter to adminTable::saveField in order to use it instead of the general model class if given (custom saveData function)
 
 2012-03-21, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    

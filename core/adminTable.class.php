@@ -1065,9 +1065,11 @@ class adminTable {
 	/**
 	 * @brief Saves the form submitted data (one or more records) 
 	 * 
+	 * @param string $model_name the class name of the model (if given is used instead of the parent object model)
+	 *
 	 * @return void
 	 */
-	public function saveFields() {
+	public function saveFields($model_name = null) {
 
 		$myform = new form('post', 'atbl_form', array("validation"=>false));
 		$myform->save();
@@ -1095,7 +1097,7 @@ class adminTable {
 
 		if(count($pkeys)) {
 			foreach($pkeys as $pk) {
-				$res[] = $this->saveRecord($pk, $pkeys);
+				$res[] = $this->saveRecord($pk, $pkeys, $model_name);
 			}
 		}
 
@@ -1108,10 +1110,11 @@ class adminTable {
 	 * 
 	 * @param mixed $pk the primary key value
 	 * @param mixed $pkeys List of primary keys of the records edited in the form 
+	 * @param string $model_name the class name of the model (if given is used instead of the parent object model)
 	 *
 	 * @return void
 	 */
-	protected function saveRecord($pk, $pkeys) {
+	protected function saveRecord($pk, $pkeys, $model_name = null) {
 
 		if(!in_array($pk, $this->_edit_deny)) {
 			$res = array();
@@ -1124,8 +1127,13 @@ class adminTable {
 				$insert = false;
 			}
 
-			$model = new model($pk, $this->_table);
-			$model->setIdName($this->_primary_key);
+			if(is_null($model_name)) {
+				$model = new model($pk, $this->_table);
+				$model->setIdName($this->_primary_key);
+			}
+			else {
+				$model = new $model_name($pk, $this->_table);
+			}
 
 			$structure = $this->_registry->db->getTableStructure($this->_table);
 
