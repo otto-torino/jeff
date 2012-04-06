@@ -210,6 +210,22 @@ function floatcomp($a, $comp, $b, $decimals=2) {
  */
 function chargeEditor($selector) {
 
+	$buffer = "<script>";
+	$buffer .= prepareJsEditor($selector);
+	$buffer .= "</script>";
+
+	return $buffer;
+
+}
+
+/**
+ * @brief Charges js and css and constructs the function call 
+ * 
+ * @param string css selector 
+ * @return call to the function which charges the editor
+ */
+function prepareJsEditor($selector) {
+	
 	$registry = registry::instance();
 
 	$stylesheets = '';
@@ -222,40 +238,7 @@ function chargeEditor($selector) {
 	$registry->addCss(ROOT."/css/dojo.css");
 
 
-	$buffer = "<script>";
-	$buffer .= "var dojo_textareas = [];";
-	$buffer .= "dojo.ready(function(){
-		      	var textareas = dojo.query(\"$selector\");
-  			if(textareas && textareas.length){
-    				dojo.addClass(dojo.body(), \"claro\");
-				for(var i=0; i<textareas.length; i++) {
-					var textarea = textareas[i];
-					var key = $(textarea).getParents('form')[0].get('name')+'_'+$(textarea).get('id');
-					dojo_textareas[key] = new dijit.Editor({
-      					styleSheets: \"$stylesheets\",
-      					plugins: [
-        					\"collapsibletoolbar\",
-        					\"fullscreen\", \"viewsource\", \"|\",
-        					\"undo\", \"redo\", \"|\",
-        					\"cut\", \"copy\", \"paste\", \"|\",
-        					\"bold\", \"italic\", \"underline\", \"strikethrough\", \"|\",
-        					\"insertOrderedList\", \"insertUnorderedList\", \"indent\", \"outdent\", \"||\",
-        					\"formatBlock\", \"fontName\", \"fontSize\", \"||\",
-        					\"findreplace\", \"insertEntity\", \"blockquote\", \"|\",
-        					\"createLink\", \"insertImage\", \"insertanchor\", \"|\",
-       					 	\"foreColor\", \"hiliteColor\", \"|\",
-       	 					\"showblocknodes\", \"pastefromword\",
-        					// headless plugins
-        					\"normalizeindentoutdent\", \"prettyprint\",
-        					\"autourllink\", \"dijit._editor.plugins.EnterKeyHandling\"
-      					]
-    					}, textareas[i]);
-				}
-  			}
-		});";
-	$buffer .= "</script>";
-
-	return $buffer;
+	return "chargeEditor('$selector', '$stylesheets')";
 
 }
 
