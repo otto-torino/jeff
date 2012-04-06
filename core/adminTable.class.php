@@ -106,6 +106,11 @@ class adminTable {
 	 * @brief allow record insertion 
 	 */
 	protected $_insertion;
+
+	/**
+	 * @brief show save and continue editing button 
+	 */
+	protected $_save_and_continue;
 	
 	/**
 	 * @brief allow record deletion 
@@ -164,6 +169,7 @@ class adminTable {
 	 * @param array $opts
 	 *   Associative array of options: 
 	 *   - **insertion**: bool default true. Whether to allow records insertion or not. 
+	 *   - **save_and_continue**: bool default true. Whether to show the save and continue editing option in forms. 
 	 *   - **deletion**: bool default true. Whether to allow records deletion or not. 
 	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
@@ -185,6 +191,7 @@ class adminTable {
 
 		/* options */
 		$this->_insertion = gOpt($opts, 'insertion', true);
+		$this->_save_and_continue = gOpt($opts, 'save_and_continue', true);
 		$this->_deletion = gOpt($opts, 'deletion', true);
 		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
@@ -876,7 +883,9 @@ class adminTable {
 		}
 
 		$buffer .= $myform->input('submit_'.($insert ? "insert" : "modify"), 'submit', __('save'), array());
-		$buffer .= "&#160;".$myform->input('submit_c_'.($insert ? "insert" : "modify"), 'submit', __('saveContinueEditing'), array());
+		if($this->_save_and_continue) {
+			$buffer .= "&#160;".$myform->input('submit_c_'.($insert ? "insert" : "modify"), 'submit', __('saveContinueEditing'), array());
+		}
 
 		$buffer .= $myform->cform();
 		
@@ -1137,15 +1146,23 @@ class adminTable {
 
 			$structure = $this->_registry->db->getTableStructure($this->_table);
 
-			foreach($this->_fields as $fname=>$field) 
-				if(array_key_exists($fname, $this->_sfields)) 
+			foreach($this->_fields as $fname=>$field) { 
+
+				$required = $field['null']=='NO' ? true : false;
+
+				if(array_key_exists($fname, $this->_sfields)) { 
 					$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
-				elseif(array_key_exists($fname, $this->_pfields)) 					
+				}
+				elseif(array_key_exists($fname, $this->_pfields)) { 					
 					$this->_registry->plugins[$this->_pfields[$fname]['plugin']]->cleanField($this->_pfields[$fname], $model, $fname, $pkf, $insert);
-				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment' && in_array($fname, $this->_html_fields)) 
+				}
+				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment' && in_array($fname, $this->_html_fields)) { 
 					$model->{$fname} = $this->cleanField($fname."_".$pkf, 'html');
-				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') 
+				}
+				elseif(isset($_POST[$fname."_".$pkf]) && ($fname != $this->_primary_key || is_null($pk)) && $field['extra']!='auto_increment') {
 					$model->{$fname} = $this->cleanField($fname."_".$pkf, $field['type']);
+				}
+			}
 			
 			$res = $model->saveData($insert);
 

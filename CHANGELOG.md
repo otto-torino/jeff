@@ -10,6 +10,8 @@ Splitted the function.php chargeEditor function into prepareJsEditor and chargeE
 
 Both changes allow to charge the editor dinamycally for example through a callback of an ajaxRequest
 
+Added save_and_continue option to adminTable class to show or not the save and continue button (useless with ajax)
+
 2012-03-21, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0
