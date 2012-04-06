@@ -1148,8 +1148,6 @@ class adminTable {
 
 			foreach($this->_fields as $fname=>$field) { 
 
-				$required = $field['null']=='NO' ? true : false;
-
 				if(array_key_exists($fname, $this->_sfields)) { 
 					$this->cleanSpecialField($model, $fname, $pkf, $field['type'], $insert);
 				}
