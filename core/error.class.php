@@ -168,6 +168,20 @@ abstract class Error {
 
 	}
 
+	/**
+	 * @brief Redirects to 404 error page 
+	 * 
+	 * @return void
+	 */
+	public static function raise404() {
+
+		$registry = registry::instance();
+
+		header("Location: ".$registry->router->linkHref('page', 'view', array('id'=>'http404')));
+		exit();
+
+	}
+
 
 }
 
