@@ -165,6 +165,8 @@ return array(
 	"class_id"=>"identificativo classe",
 	"active"=>"attiva",
 	"position"=>"posizione",
+	"msg404"=>"Il contenuto richiesto non è stato trovato.",
+	"title404"=>"404 Pagina non trovata",
 )
 
 ?>

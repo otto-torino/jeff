@@ -1,6 +1,12 @@
 CHANGELOG
 ===========================================================================================
 
+2012-07-12, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
+Preparing new version: v1.0
+
+Added raise404 method to the error class to manage 404 errors (inexistent objects, pages, files...)
+
 2012-03-21, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0

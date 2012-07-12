@@ -155,6 +155,8 @@ return array(
 	"class_id"=>"class identifier",
 	"active"=>"active",
 	"position"=>"position",
+	"msg404"=>"The requested page was not found on this server.",
+	"title404"=>"404 Page not found",
 
 )
 
