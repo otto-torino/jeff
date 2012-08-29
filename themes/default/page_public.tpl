@@ -12,28 +12,24 @@
 {JAVASCRIPT}
 </head>
 <body>
-<div class="container">
-	<div class="doctop">
-		<div class="header_logo">
-		</div>
-		<div class="header_bottom">
-		</div>
-	</div>
-	<div class="docbody">
-		<nav class="menu">
-			{module:menu method:mainMenu}
-		</nav>
-		<div class="col">
-			{module:url_module method:url_method}
-		</div>
-	</div>
-	<div class="docbottom">
-		<footer id="footer"></footer>
-	</div>
-	<div>{ERRORS}</div>
+<div id="top_site">
+	<header>
+		<div class="header_logo"></div>
+	</header>
 </div>
-<div class="credits">
-	{module:page method:view params:credits}	
+<nav class="main_menu">
+	{module:menu method:mainMenu}
+</nav>
+<div class="site_content">
+	<div id="content">
+		{module:url_module method:url_method}
+	</div>
 </div>
+<div id="site_bottom">
+	<footer>
+		{module:page method:view params:credits}
+	</footer>
+</div>
+<div>{ERRORS}</div>
 </body>
 </html>

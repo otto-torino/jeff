@@ -9,8 +9,10 @@
 #nav a, #subMenusContainer a{
 	text-decoration:none;
 	display:block;
-	padding:0px 20px;
-	line-height: 28px;
+	padding:0px 30px;
+	line-height: 35px;
+	font-weight: bold;
+	font-size: 1.4em;
 }
 #nav a {
 }
@@ -32,7 +34,7 @@
 
 /* All menu links on hover or focus */
 #nav a:hover, #nav a:focus, #subMenusContainer a:hover, #subMenusContainer a:focus, #nav a.mainMenuParentBtnFocused, #subMenusContainer a.subMenuParentBtnFocused{
-	background-color:#ef3125 ;
+	background-color:#984428 ;
 	color:#fff;
 }
 
@@ -117,7 +119,6 @@
 
 /* main menu ul or ol elment */
 #nav{
-	background: url('../img/menu_bkg.png') repeat-x top left;
 	display:block;
 	list-style:none;
 	margin:0 0 0 0;
@@ -125,6 +126,8 @@
 	text-align: center;
 	display:block;
 	height:28px;
+	margin:auto;
+	width: 1000px;
 }
 
 #subMenusContainer{	display:block; 	position:absolute;	top:0;	left:0;	width:100%;	height:0;	overflow:visible;	z-index:1000000000; }
@@ -160,3 +163,4 @@
 #nav li li li a:focus {left:0; margin-left: 2010em; width: 10em;  margin-top:-1em;}
 #nav li:hover a:focus{ margin-left: 0; }
 #nav li li:hover a:focus + ul { margin-left: 10em; }
+

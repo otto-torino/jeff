@@ -115,7 +115,10 @@ class languageController extends controller {
 			$lngs[] = $link;
 		}
 
-		return implode(" | ", $lngs);
+		$this->_view->setTpl('language_choose');
+		$this->_view->assign('lngs', $lngs);
+
+		return $this->_view->render();
 	}
 
 }

@@ -2,3 +2,4 @@
 *.out
 tags
 bump_version.sh
+.sass-cache

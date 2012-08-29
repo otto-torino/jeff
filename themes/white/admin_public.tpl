@@ -12,24 +12,21 @@
 {JAVASCRIPT}
 </head>
 <body>
-<div id="top_site">
-	<header>
-		<div class="header_logo"></div>
-	</header>
-</div>
-<nav class="main_menu">
-	{module:menu method:mainMenu}
-</nav>
-<div class="site_content">
-	<div id="content">
-		{module:url_module method:url_method}
+<table class="login_container">
+<tr>
+<td>
+	<div class="logo">
 	</div>
+</td>
+<td>
+	<div class="box" style="padding: 10px;">
+	<div class="login">{module:login method:adminLogin}</div>
 </div>
-<div id="site_bottom">
-	<footer>
-		{module:page method:view params:credits}
-	</footer>
-</div>
+</td>
+</tr>
+</table>
 <div>{ERRORS}</div>
 </body>
 </html>
+
+
