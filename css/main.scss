@@ -1,0 +1,322 @@
+$vmargin: 20px;
+
+body {
+	font: normal normal 14px/1.5em Times Verdana, Tahoma, Arial;
+	margin:0;
+	padding:0;
+}
+
+form {
+	margin: 0;
+}
+
+nav, section, header, footer, hgroup {
+	display: block;
+}
+
+.normal {
+	font-style: normal;
+	font-weight: normal;
+}
+
+.left {
+	float:left;
+}
+
+.right {
+	float:right;
+}
+
+.clear {
+	clear:both;
+}
+
+.center {
+	text-align:center;
+	margin: auto;
+}
+
+.wide {
+	width: 100%;
+}
+
+.vmargin {
+	margin-top: $vmargin;
+	margin-bottom: $vmargin;
+}
+
+.block {
+	float:none;
+	display:block;
+}
+
+.noBkg {
+	background: transparent !important;
+}
+
+.noBorder {
+	border-width: 0px !important;
+}
+
+.no_results {
+	font-style:italic;
+}
+
+.noaccess {
+	margin:auto;
+	width:382px;
+	height:313px;
+	background:url('../img/noaccess.png') no-repeat center center;
+}
+
+.noaccess + p {
+	font-size: 1.4em;
+}
+
+.help {
+	color: #ff0000;
+	cursor: help; 
+}
+
+.loading {
+	background: url('../img/loading.gif') no-repeat center center;
+	height: 32px;
+	width: 32px;
+}
+
+.hidden {
+	display: none;
+}
+
+/*
+ * IMG
+ */
+img.border {
+	border: 1px solid #666;
+}
+/*
+ * Tables
+ */
+tr, th, td {
+	vertical-align: top;
+}
+table.generic {
+	border-collapse: collapse;
+	th {
+		background-color: #ccc;
+		border: 1px solid #ccc;
+		padding: 5px;
+		text-align:left;
+	}
+	td {
+		border: 1px solid #ccc;
+		padding: 5px;
+	}
+	a {
+		text-decoration: none;
+	}
+}
+
+/*
+ * Tabs
+ */
+div.tabContainer { margin: 10px 0px;} /* left-right margin affects IE <= 7 behaviour */
+div.tabTop {
+	font-size:12px;
+	background: url('../img/linea.jpg') bottom center no-repeat;
+}
+div.tabContent {
+	border-bottom:1px solid #333;
+	border-left:1px solid #333;
+	border-right:1px solid #333;
+	padding: 5px;
+}
+div.tabExt {
+	background-image: url('../img/tab_ext_left.png');
+	background-position: top right;
+	background-repeat:no-repeat;
+}
+div.tabInt {
+	background-image: url('../img/tab_int_left.png');
+	background-position: top left;
+	background-repeat:no-repeat;
+	padding: 6px 0px 5px 15px;
+	margin-right:15px;
+}
+div.extSelected {
+	background-image: url('../img/tab_ext_left_sel.png');
+}
+
+div.intSelected {
+	background-image: url('../img/tab_int_left_sel.png');
+	padding-bottom: 6px;
+}
+
+div.tabInt a:link, div.tabInt a:visited {
+	color: #666;
+	text-decoration: none;
+}
+div.tabInt a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+div.intSelected a:link, div.intSelected a:visited {
+	color: #000;
+	text-decoration: none;
+}
+
+.tabTitle {
+	font-weight: bold;
+	padding: 4px 8px;
+	letter-spacing: 2px;
+	
+
+}
+.tabImgLeft { background:url('../img/title_marker_sx.png');background-repeat: no-repeat;background-position: left top }
+.tabImgRight { background:url('../img/title_marker_dx.png');background-repeat: no-repeat;background-position: right top }
+
+/*
+ * Form
+ */
+label {
+	display:block;
+	float:left;
+	margin:2px 5px 10px 5px;
+	width:250px;
+}
+label.required {
+	font-weight: bold;
+}
+label.empty {
+	background: url('../img/icons/ico_alert.png') no-repeat;
+	padding: 2px 0 2px 26px;
+	width:224px;
+}
+br.formRowBreak {
+	clear:both;
+}
+.formlabel_exp {
+	font-style: italic;
+	font-weight: normal;
+}
+input[type=text], input[type=password], input[type=email] {
+	border:1px solid #aaa;
+}
+textarea {
+	border:1px solid #aaa;
+}
+.formErrMsg {
+	color:#ff0000;
+	font-weight:bold;
+	margin:0 0 5px;
+}
+.fleft {
+	margin:0px 5px;
+	width:250px;
+	padding:0;
+}
+.fright {
+	margin:0px;
+	padding:0px 8px;
+}
+.form_multicheck {
+	max-height: 200px;
+	overflow:auto;
+	padding: 0 10px 0 0;
+	float:left;
+}
+
+form .html {
+	display: none;
+	margin-bottom: 10px;
+}
+
+form .captcha {
+	margin-bottom: 10px;
+}
+
+/* TOOLTIPS */
+.tips {
+}
+.tip-top {
+	background: url('../img/tip-top.png') no-repeat top left;
+	width: 271px;
+	height: 8px;
+}
+.tip {
+	background: url('../img/tip-text.png') top left;
+	width: 271px;
+	text-align:left;
+}
+.tip-title {
+	margin: 0 20px;
+	font-size: 0.9em;
+	line-height: 1.2em;
+	font-weight: bold;
+	color: #000;
+	padding: 10px 0;
+}
+.tip-text {
+	margin: 0 20px;
+	font-size: 0.8em;
+	line-height: 1.2em;
+	padding-bottom: 10px;
+}
+.tip-bottom {
+	background: url('../img/tip-bottom.png') top left;
+	width: 271px;
+	height: 17px;
+}
+
+/*
+ * Javascript layerWindow styles
+ */
+div.abiWinOverlay {
+	position: absolute;
+	background: #000;
+	opacity: 0.8;
+	filter: alpha(opacity = 80);
+}
+
+div.abiWin {
+	position: absolute;
+	padding: 5px;
+	background-color: #72c58f;
+	border: 1px solid #000;
+	header.abiHeader {
+		font-weight: bold;
+		text-align:center;
+		margin: 0 0 5px;	
+		color:#fff;
+	}
+	div.body {
+
+		clear: both;
+		text-align: left;
+		padding: 8px;
+		border: 1px solid #000;
+		background-color: #fff;
+		overflow: auto;
+	}
+	span.close {
+		background-color: #fff;
+       		border: 1px solid #000;
+		cursor: pointer;
+		padding: 2px;
+        	position: absolute;
+       		right: 5px;
+       		top: 4px;
+	}
+	img.close {
+		cursor: pointer;
+		padding: 2px;
+		position: absolute;
+		right: 5px;
+		top: 4px;
+	}
+	footer {
+		text-align: center;
+		margin: 0px 0px;
+	}
+}

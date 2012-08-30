@@ -12,15 +12,19 @@
 {JAVASCRIPT}
 </head>
 <body>
-<div id="top_site">
-	<header>
-		<div class="header_logo"></div>
-		{module:language method:choose}
-	</header>
-</div>
-{module:menu method:mainMenu}
-<div class="site_content">
-	<div id="content">
+<div class="container">
+	<div class="doctop">
+		<div class="header_logo">
+		</div>
+		<div class="header_lng">
+			{module:language method:choose}
+		</div>
+		<nav class="menu">
+			{module:menu method:mainMenu}
+		</nav>
+	</div>
+	<div class="docbody">
+		
 		<div class="col1 left">
 			{module:index method:index}
 		</div>
@@ -29,12 +33,14 @@
 		</div>
 		<div class="clear"></div>
 	</div>
+	<div class="docbottom">
+	</div>
 </div>
-<div id="site_bottom">
-	<footer>
-		{module:page method:view params:credits}
-	</footer>
+<div class="credits">
+	{module:page method:view params:credits}
 </div>
 <div>{ERRORS}</div>
 </body>
 </html>
+
+

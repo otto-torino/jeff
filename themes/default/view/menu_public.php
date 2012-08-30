@@ -29,7 +29,7 @@ function printVoice($v, $selected_url, $i) {
 	}
 }
 ?>
-<nav class="menu">
+<nav class="main_menu">
 <h1 class="hidden">Main menu</h1>
 <ul id="nav">
 <?php
