@@ -199,8 +199,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(20) NOT NULL,
   `password` varchar(50) NOT NULL,
   `groups` varchar(64) NOT NULL,
+  `active` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `users`

@@ -77,6 +77,12 @@ class userController extends controller {
 				"field"=>"label",
 				"where"=>null,
 				"order"=>"id"
+			),
+			'active'=>array(
+				'type'=>'bool',
+				'required'=>true,
+				'true_label'=>__('yes'),
+				'false_label'=>__('no')
 			)
 		);
 
