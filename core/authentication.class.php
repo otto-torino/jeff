@@ -70,6 +70,7 @@ class authentication {
 				$registry->user = new StdClass();
 				$registry->user->groups = 5;
 				$registry->user->id = 0;
+				$registry->user->active = 1;
 			}
 		}
 
@@ -88,11 +89,11 @@ class authentication {
 
 		$registry = registry::instance();
 
-		if(!$user) return false;
+		if(!$user || !$user->active) return false;
 
 		$registry->user = $user;
 		if( ($user && $registry->site=='main') || 
-		    ($registry->site=='admin' && access::check($registry, 'main', $registry->admin_view_privilege))) 
+		    ($registry->site=='admin' && access::check('main', $registry->admin_view_privilege))) 
 		    return true;
 
 		return false;
