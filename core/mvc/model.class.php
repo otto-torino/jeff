@@ -155,6 +155,19 @@ class model {
 	}
 
 	/**
+	 * @brief ToString method
+	 *
+	 * Method called when doing a casting to string of the object, by default it returns the object id. 
+	 * 
+	 * @return the object id
+	 */
+	public function __toString() {
+
+		return (string) $this->id;
+
+	}
+
+	/**
 	 * @brief Getter method 
 	 * 
 	 * Returns the value of the given property. Calls the specific property getter method if exists, otherwise returns directly its value. 

@@ -42,7 +42,7 @@ class router {
 	/**
  	 * @brief method called by url 
  	 */
-       	private	$_method;
+    private	$_method;
 
 	/**
 	 * @brief Constructs a router instance 
@@ -183,6 +183,40 @@ class router {
 		}
 
 		return $href;
+	}
+
+	/**
+	 * @brief Download files
+	 *
+	 * This method is used to download files
+	 * 
+	 * @param string $path the file path
+	 * @return void
+	 */
+	public function download($path) {
+		
+		if($fp = fopen($path, "r")) {
+			$fsize = filesize($path);
+			$path_parts = pathinfo($path);
+			$extension = strtolower($path_parts["extension"]);
+
+			header("Pragma: public");
+			header('Expires: 0');
+			header('Content-Description: File Transfer');
+			header("Content-type: application/download");
+			header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\"");
+			header("Content-length: ".$fsize);
+			header("Cache-control: private");
+
+			ob_clean();
+			flush();
+
+			@readfile($path);
+			fclose($fp);
+		}
+		else {
+			error::raise404();
+		}
 	}
 
 	/**

@@ -99,7 +99,7 @@ class access {
 			}
 		}
 
-		if(!$access && gOpt($opts, 'exitOnFailure')) {
+		if((!$access || !$user->active) && gOpt($opts, 'exitOnFailure')) {
 		    header("Location: ".$registry->router->linkHref('noaccess', null));
 		    exit();
 		}
@@ -118,6 +118,10 @@ class access {
 		$registry = registry::instance();
 
 		$user = $registry->user;
+
+		if(!is_array($group_ids)) {
+			$group_ids = array($group_ids);
+		}
 
 		foreach($group_ids as $group_id) {
 			if(preg_match("#\b".preg_quote($group_id)."\b#", $user->groups)) return true;

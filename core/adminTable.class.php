@@ -27,7 +27,7 @@
  * and constructs a navigation view to surf through inserted data, an insertion/edit view (the form) to add or update records and all the necessary actions to perform insertion, 
  * modification, deletion and exportation.
  *
- * The adminTable class can also manage automatically foreign keys, some particular fields (password, bool, enum, email, multicheck, file, image), 
+ * The adminTable class can also manage automatically foreign keys, some particular fields (constant, password, bool, enum, email, multicheck, file, image, date, datetime), 
  * html fields (charging dojo html editor if needed) and fields managed by extra plugins.
  * Also it is possible to automatically add filters for the list view. It's enough to set the filters fields and the class adds for you the filters form and performs the research.
  * Filters field may be text, int, float, bool and foreign keys fields.
@@ -56,6 +56,16 @@ class adminTable {
 	 * @brief the database table 
 	 */
 	protected $_table;
+
+	/**
+	 * @brief the table model 
+	 */
+	protected $_model;
+
+	/**
+	 * @brief text displayed before the list of records 
+	 */
+	protected $_backoffice_text;
 	
 	/**
 	 * @brief the primary key name defined for the table 
@@ -86,6 +96,16 @@ class adminTable {
 	 * @brief definition of the html fields 
 	 */
 	protected $_html_fields;
+
+	/**
+	 * @brief definition tables and some properties which have the model as foreign key 
+	 */
+	protected $_is_foreign;
+
+	/**
+	 * @brief definition of form fieldsets 
+	 */
+	protected $_fieldsets;
 	
 	/**
 	 * @brief number of records for page 
@@ -180,6 +200,7 @@ class adminTable {
 	 *   - **efp**: int default 20. Number of records shown in the admin list. 
 	 *   - **cls_callback_delete**: string default null. Class to call when performing a delete action. 
 	 *   - **mth_callback_delete**: string default null. Method to call when performing a delete action. 
+	 *   - **backoffice_text**: string default null. Introduction text displayed before the list of records. 
 	 *
 	 * @return void
 	 */
@@ -201,7 +222,8 @@ class adminTable {
 		$this->_custom_tpl = gOpt($opts, 'custom_tpl', array());
 		$this->_efp = gOpt($opts, "efp", 20);
 		$this->_cls_cbk_del = gOpt($opts, "cls_callback_delete", null);
-	        $this->_mth_cbk_del = gOpt($opts, "mth_callback_delete", null);	
+	        $this->_mth_cbk_del = gOpt($opts, "mth_callback_delete", null);
+		$this->_backoffice_text = gOpt($opts, 'backoffice_text', '');	
 
 		$structure = $this->_registry->db->getTableStructure($this->_table);
 
@@ -211,11 +233,29 @@ class adminTable {
 		$this->_sfields = array();
 		$this->_pfields = array();
 		$this->_html_fields = array();
+		$this->_model = null;
+		$this->_is_foreign = array();
+		$this->_fieldsets = array();
 
 		$this->_arrow_down_path = ROOT."/img/down_arrow-black.png";
 		$this->_arrow_up_path = ROOT."/img/up_arrow-black.png";
 	
 	}
+
+	/**
+	 * @brief Sets the table model 
+	 * 
+	 * @param string $model the model class 
+	 *
+	 * @return void
+	 */
+	public function setModel($model) {
+
+		if(!class_exists($model)) {
+			error::syserrorMessage('adminTable', 'setModel', __('modelDosntExist'), __LINE__);
+		}
+		$this->_model = $model;
+	} 
 
 	/**
 	 * @brief Sets table foreign keys 
@@ -240,11 +280,13 @@ class adminTable {
 	/**
 	 * @brief Sets table special fields 
 	 *
-	 * The supported special fields types are: password, bool, enum, email, multicheck (many to many), file, image
+	 * The supported special fields types are: constant, password, bool, enum, email, multicheck (many to many), file, image, date, datetime.    
+	 * Date and datetime types are automatically recognized, so they have to be used as special fields only if some behaviors are needed, like the autonow (last edit date), or the autonow_add (insertion date)
 	 * 
 	 * @param array $sfields 
 	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
-	 *   - **type**: string. The type of special field. Possible values are: 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image'
+	 *   - **type**: string. The type of special field. Possible values are: 'constant', 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image', 'date', 'datetime'
+	 *   - **value**: mixed. (constant type) The value of the field
 	 *   - **edit_label**: (password type) string. The label displayed in the edit form
 	 *   - **true_label**: (bool type) string. The label tied to the value true
 	 *   - **false_label**: (bool type) string. The label tied to the value false
@@ -252,7 +294,7 @@ class adminTable {
 	 *   - **data**: (enum type) array. The associative array containing the allowed values in the form 'value'=>'label'
 	 *   - **key_type**: (enum type) string. The data type of the values (int, string, float, ...)
 	 *   - **list_mailto**: (email type) bool. Whether to show or not a mailto link in the admin list view
-	 *   - **value_type**: (multicheck type) string. The type of the values (int, string, float, ...)
+	 *   - **value_type**: (multicheck and constant types) string. The type of the values (int, string, float, ...)
 	 *   - **table**: (multicheck type) string. The name of the related table
 	 *   - **field**: (multicheck type) string. The field of the related table to display in the multicheck form element
 	 *   - **where**: (multicheck type) string. The where clause used to select only some records from the related table
@@ -274,6 +316,8 @@ class adminTable {
 	 *   - **resize_height**: (image type) int. The height of the resized image
 	 *   - **thumb_width**: (image type) int. The width of the thumb image
 	 *   - **thumb_height**: (image type) int. The height of the thumb image
+	 *   - **autonow: (date and datetime type) bool, default false. Whether to automatically set the field to now when the record is saved or not
+	 *   - **autonow_add: (date and datetime type) bool, default true. Whether to automatically set the field to now when the record is saved for the first time or not
 	 *
 	 * @return void
 	 */
@@ -303,6 +347,44 @@ class adminTable {
 		$this->_pfields = $pfields;
 
 	}
+
+	/**
+	 * @brief Sets the tables which have such model has foreign 
+	 *
+	 * When deleting records of the table cheks aer done in order to test if the given record is present as a foreign key in other 
+	 * tables. SO that if it is, deletion is avoided.
+	 * 
+	 * @param array $is_foreign 
+	 *   Associative array in the form 'tbl_name'=>properties. Properties is an associative array having keys:
+	 *   - **hide_where**: whether or not to hide which related records have it as a foreign.
+	 *   - **this_model**: this model which is a foreign for another model
+	 *   - **label**: the label of the model which uses this model as foreign key 
+	 *   - **field_name**: the field_name of the foreign key which refers to this model 
+	 *   - **model**: the model which has a foreign key over this model 
+	 *
+	 * @return void
+	 */
+	public function setIsForeign($is_foreign) {
+		if(!$this->_model) {
+			error::syserrorMessage('adminTable', 'setIsForeign', __('modelUnsetAdminTable'), __LINE__);
+		}
+		$this->_is_foreign = $is_foreign;
+	}
+
+	/**
+	 * @brief Sets the form fieldsets 
+	 * 
+	 * @param array $fieldsets 
+	 *   Associative array in the form 'first_field'=>legend
+	 *
+	 * @return void
+	 */
+	public function setFieldsets($fieldsets) {
+
+		$this->_fieldsets = $fieldsets;
+
+	}
+
 
 	/**
 	 * @brief Sets the $_changelist_field property 
@@ -379,36 +461,29 @@ class adminTable {
 	}
 
 	/**
-	 * @brief The method which returns the admin list view 
+	 * @brief Returns the records to display and the pagination object 
 	 * 
-	 * @return the admin list view
+	 * @return an array where the first element is the pagination object and the second the array of the records selected from the table
 	 */
-	public function view() {
+	protected function viewRecords() {
 
 		$order = cleanInput('get', 'order', 'string');
 
-		$tot_fk = count($this->_fkeys);
-		$tot_sf = count($this->_sfields);
-		$tot_pf = count($this->_pfields);
 		$tot_ff = count($this->_filter_fields);
-
-		if($tot_ff) $this->setSessionSearch();
 
 		// get order field and direction
 		preg_match("#^([^ ,]*)\s?((ASC)|(DESC))?.*$#", $order, $matches);
 		$field_order = isset($matches[1]) ? $matches[1] : null;
 		$order_dir = isset($matches[2]) ? $matches[2] : null;
 
-		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
-		
 		$where_pag = $tot_ff ? $this->setWhereClause(false) : null;
 		$pag = new pagination($this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
 		if(count($this->_changelist_fields)) {
 			if(!in_array($this->_primary_key, $this->_changelist_fields)) { 
+				// always select the primary key
 				array_unshift($this->_changelist_fields, $this->_primary_key);
-				array_unshift($fields_names, $this->_primary_key);
 			}
 			$field_selection = isset($this->_fkeys[$field_order]) 
 					? 'a.'.implode(', a.', $this->_changelist_fields)
@@ -425,6 +500,25 @@ class adminTable {
 		}
 		else 
 			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, $where, $order, $limit);
+
+		return array($pag, $records);
+
+	}
+
+	/**
+	 * @brief Returns the table of the records to be displayed 
+	 * 
+	 * @param array $fields_names the fields to be displayed 
+	 * @return the table
+	 */
+	protected function viewTable($fields_names, $records) {
+
+		$order = cleanInput('get', 'order', 'string');
+
+		$tot_fk = count($this->_fkeys);
+		$tot_sf = count($this->_sfields);
+		$tot_pf = count($this->_pfields);
+		$tot_ff = count($this->_filter_fields);
 
 		$all = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').setProperty('checked', 'checked');\">".__("all")."</span>";
 		$none = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').removeProperty('checked');\">".__("none")."</span>";
@@ -468,8 +562,14 @@ class adminTable {
 			if($tot_sf) $r = $this->parseSpecialFields($r);
 			if($tot_pf) $r = $this->parsePluginFields($r);
 			$r = $this->parseDateFields($r);
+
+			$pk = $r[$this->_primary_key];
+			if(!in_array($this->_primary_key, $fields_names)) {
+				// remove primary key
+				array_shift($r);
+			}
 			if($this->_edit_deny=='all' && !$this->_export) $rows[] = $r;
-			elseif(is_array($this->_edit_deny) && in_array($r[$this->_primary_key], $this->_edit_deny)) $rows[] = array_merge(array(""), $r);
+			elseif(is_array($this->_edit_deny) && in_array($pk, $this->_edit_deny)) $rows[] = array_merge(array(""), $r);
 			else $rows[] = array_merge(array($input), $r);
 		}
 		
@@ -480,8 +580,29 @@ class adminTable {
 		$this->_view->assign('heads', $heads);
 		$this->_view->assign('rows', $rows);
 
-		$table = $this->_view->render();
+		return $this->_view->render();
 
+	}
+
+	/**
+	 * @brief The method which returns the admin list view 
+	 * 
+	 * @return the admin list view
+	 */
+	public function view() {
+
+		$order = cleanInput('get', 'order', 'string');
+
+		$tot_ff = count($this->_filter_fields);
+
+		if($tot_ff) $this->setSessionSearch();
+
+		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
+
+		list($pag, $records) = $this->viewRecords();
+
+		$table = $this->viewTable($fields_names, $records);
+		
 		if($this->_edit_deny!='all' || $this->_export) {
 			$myform = new form('post', 'atbl_form', array("validation"=>false));
 			$formstart = $myform->sform('?edit'.($order ? "&order=$order" : ""), null);
@@ -539,6 +660,7 @@ class adminTable {
 		}
 
 		$this->_view->setTpl($tpl_name);
+		$this->_view->assign('backoffice_text', $this->_backoffice_text);
 		$this->_view->assign('table', $table);
 		$this->_view->assign('link_insert', $link_insert);
 		$this->_view->assign('formstart', $formstart);
@@ -574,7 +696,10 @@ class adminTable {
 				$type = $this->_fields[$fname]['type'];
 
 				if(isset($_POST[$fname.'_filter'])) {
-					if($type=='int' || $type=='float') {
+					if(isset($this->_sfields[$fname]) && $this->_sfields[$fname]['type'] == 'multicheck') {
+						$_SESSION[$this->_table.'_'.$fname.'_filter'] = $this->cleanField($fname."_filter", 'array');
+					}
+					elseif($type=='int' || $type=='float') {
 						if($_POST[$fname.'_filter']==='') {
 							$_SESSION[$this->_table.'_'.$fname.'_filter'] = null;
 						}
@@ -609,7 +734,18 @@ class adminTable {
 		$prefix = $fkeysorder ? "a." : "";
 
 		foreach($this->_filter_fields as $fname) {
-			if($this->_fields[$fname]['type']=='varchar' || $this->_fields[$fname]['type']=='text') {
+			if(isset($this->_sfields[$fname]) && $this->_sfields[$fname]['type'] == 'multicheck') {
+				$value = $_SESSION[$this->_table.'_'.$fname.'_filter'];
+				$where_part = array();
+				if($value) {
+					foreach($value as $v) {
+						$where_part[] = $prefix.$fname." REGEXP '[[:<:]]".$v."[[:>:]]'";
+
+					}
+					$where_a[] = "(".implode(' OR ', $where_part).")";
+				}
+			}
+			elseif($this->_fields[$fname]['type']=='varchar' || $this->_fields[$fname]['type']=='text') {
 				if(isset($_SESSION[$this->_table.'_'.$fname.'_filter']) && $_SESSION[$this->_table.'_'.$fname.'_filter']) {
 					$value = $_SESSION[$this->_table.'_'.$fname.'_filter'];
 					if(preg_match("#^\"([^\"]*)\"$#", $value, $matches))
@@ -647,14 +783,27 @@ class adminTable {
 		foreach($this->_filter_fields as $fname) {
 			$field = $this->_fields[$fname];
 			$field['null'] = '';
-			$form .= $this->formElement($myform, $fname, $field, 'filter', array("size"=>20, "value"=>htmlInput($_SESSION[$this->_table.'_'.$fname.'_filter'])));
+			if(isset($this->_sfields[$fname]) && $this->_sfields[$fname]['type'] == 'multicheck') {
+				if($_SESSION[$this->_table.'_'.$fname.'_filter']) {
+					$value = implode(',', $_SESSION[$this->_table.'_'.$fname.'_filter']); 
+				}
+				else {
+					$value = '';
+				}
+			}
+			else {
+				$value = htmlInput($_SESSION[$this->_table.'_'.$fname.'_filter']);
+			}
+			$form .= $this->formElement($myform, $fname, $field, 'filter', array("size"=>20, "value"=>$value));
 		}
 
-		$onclick = "onclick=\"$$('#atbl_filter_form *[name$=_filter]').each(function(el) { 
+		$onclick = "onclick=\"$$('#atbl_filter_form *[name*=_filter]').each(function(el) { 
 			if(el.get('type')==='text') el.value='';
 			else if(el.get('type')==='radio') el.removeProperty('checked');
+			else if(el.get('type')==='checkbox') el.removeProperty('checked');
 			else if(el.get('tag')=='select') el.getChildren('option').removeProperty('selected');
-			});\"";
+			});
+			\"";
 
 		$input_reset = $myform->input('ats_reset', 'button', __("reset"), array("js"=>$onclick)); 
 		$form .= $myform->cinput('ats_submit', 'submit', __("filter"), '', array("text_add"=>' '.$input_reset)); 
@@ -725,7 +874,7 @@ class adminTable {
 				}
 				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
-					if($sf['preview'] && $v) {
+					if(isset($sf['preview']) && $sf['preview'] && $v) {
 						if($this->_sfields[$k]['type']=='image') {
 							$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>$$('a[href=".$sf['rel_path']."/$v]')[0].cerabox();</script>";
 						}
@@ -734,6 +883,9 @@ class adminTable {
 						}
 					}
 					else $res[$k] = $v;
+				}
+				else {
+					$res[$k] = $v;
 				}
 			}
 			else $res[$k] = $v;
@@ -834,26 +986,7 @@ class adminTable {
 		if((!$insert && !$submit_export_all) && !$f_s) header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
 		if($submit_export_selected) $this->export($f_s);
 		if($submit_export_all) $this->export('all', cleanInput('post', 'where_query', 'string', array("escape"=>false)));
-		if($submit_delete) {
-			if(!$this->_deletion || $this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
-			if(count($f_s)) {
-				if($this->_cls_cbk_del && $this->_mth_cbk_del)
-					call_user_func(array($this->_cls_cbk_del,$this->_mth_cbk_del), $this->_registry, $f_s);
-				else {
-					if(is_array($this->_edit_deny) && count($this->_edit_deny)) $f_s = array_diff($f_s, $this->_edit_deny);
-					$this->deleteFiles($f_s);
-					if(count($this->_pfields)) {
-						foreach($this->_pfields as $k=>$v) {
-							$this->_registry->plugins[$v['plugin']]->adminDelete($v, $f_s);
-						}
-					}
-					$where = $this->_primary_key."='".implode("' OR ".$this->_primary_key."='", $f_s)."'";
-					$this->_registry->db->delete($this->_table, $where);
-				}
-			}
-			header("Location: ".preg_replace("#\?.*$#", $order_param, $_SERVER['REQUEST_URI']));
-			exit();
-		}
+		if($submit_delete) $this->deleteFields($f_s);
 
 		$myform = new form('post', 'atbl_form', array("validation"=>true));
 		$myform->load();
@@ -862,9 +995,7 @@ class adminTable {
 		$buffer .= $myform->hidden('order', $order);
 
 		if($insert) {
-			foreach($this->_fields as $fname=>$field) {
-				if($field['extra']!='auto_increment') $buffer .= $this->formElement($myform, $fname, $field, null);
-			}
+			$buffer .= $this->formRecord(null, $myform);
 		}
 		elseif(count($f_s)) {
 			if($this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
@@ -905,6 +1036,73 @@ class adminTable {
 			return $buffer;
 		}
 
+	}
+
+	/**
+	 * @brief Tries to delete the given records from the table  
+	 * 
+	 * @param array $f_s Array containing the identifiers of the records that have to be deleted
+	 * @return void
+	 */
+	protected function deleteFields($f_s) {
+
+		if(!$this->_deletion || $this->_edit_deny=='all') header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
+		if(count($f_s)) {
+			if($this->_cls_cbk_del && $this->_mth_cbk_del) {
+				call_user_func(array($this->_cls_cbk_del,$this->_mth_cbk_del), $this->_registry, $f_s);
+			}
+			else {
+				if(is_array($this->_edit_deny) && count($this->_edit_deny)) $f_s = array_diff($f_s, $this->_edit_deny);
+				if(count($this->_is_foreign)) {
+					$wngs = 0;
+					$wngs_exp = array();
+					foreach($this->_is_foreign as $tbl=>$prop) {
+						$where = $prop['field_name']."='".implode("' OR ".$prop['field_name']."='", $f_s)."'";
+						$selection = array('id', $prop['field_name']);
+						$res = $this->_registry->db->autoSelect($selection, $tbl, $where, null, null);
+	
+						if(count($res)) {
+							$wngs++;
+							$wng_exp = array();
+							if(!gOpt($prop, 'hide_where', false)) {
+								foreach($res as $row) {
+									$model_id = $row['id'];
+									$field_name_value = $row[$prop['field_name']];
+									$this_model = new $this->_model($field_name_value);
+									$model = new $prop['model']($model_id);
+									$wng_exp[] = sprintf(__('warningForeignPresentInWithReference'), jsVar((string) $this_model), jsVar((string) $model)); 
+								}		
+							}
+							else {
+								$wng_exp[] = __('tooManyValuesToDisplay');
+							}
+							$wngs_exp[$prop['label']] = $wng_exp;
+						}
+					}
+					if($wngs) {
+						$warning = '\n'.__('cantDeleteRecordsForeign').'\n';
+						foreach($wngs_exp as $lb=>$ws) {
+							$warning .= '\n'.jsVar($lb).'\n';
+							foreach($ws as $w) {
+								$warning .= ' - '.$w.'\n';
+							}
+						}
+						exit(error::warningMessage(array('warning'=>$warning), preg_replace("#\?.*$#", $order_param, $_SERVER['REQUEST_URI'])));
+					}
+				}
+				$this->deleteFiles($f_s);
+				if(count($this->_pfields)) {
+					foreach($this->_pfields as $k=>$v) {
+						$this->_registry->plugins[$v['plugin']]->adminDelete($v, $f_s);
+					}
+				}
+				$where = $this->_primary_key."='".implode("' OR ".$this->_primary_key."='", $f_s)."'";
+				$this->_registry->db->delete($this->_table, $where);
+			}
+		}
+
+		header("Location: ".preg_replace("#\?.*$#", $order_param, $_SERVER['REQUEST_URI']));
+		exit();
 	}
 
 	/**
@@ -965,9 +1163,23 @@ class adminTable {
 		}	
 
 		$buffer .= $myform->hidden($this->_primary_key."[]", $pk);
+		$open_fieldset = false;
 		foreach($this->_fields as $fname=>$field) {
-			if($fname != $this->_primary_key && $field['extra']!='auto_increment') 
+			if($fname != $this->_primary_key && $field['extra']!='auto_increment') { 
+				if(array_key_exists($fname, $this->_fieldsets)) {
+					if($open_fieldset) {
+						$buffer .= "</fieldset>\n";
+					}
+					$open_fieldset = true;
+					$buffer .= "<fieldset class=\"inside_record\">\n";
+					$buffer .= "<legend>".htmlVar($this->_fieldsets[$fname])."</legend>\n";
+				}
 				$buffer .= $this->formElement($myform, $fname, $field, $pk);
+			}
+		}
+
+		if($open_fieldset) {
+			$buffer .= "</fieldset>\n";
 		}
 
 		if(!$myform) $buffer .= $myform->cform();
@@ -1022,6 +1234,12 @@ class adminTable {
 			}
 			elseif($this->_sfields[$fname]['type']=='enum') {
 				return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $this->_sfields[$fname]['data'], htmlVar(__($fname)), array("required"=>$required));
+			}
+			elseif($this->_sfields[$fname]['type']=='constant') {
+				return $myform->hidden($fname."_".$id_f, $this->_sfields[$fname]['value']);
+			}
+			elseif($this->_sfields[$fname]['type']=='date' || $this->_sfields[$fname]['type']=='datetime') {
+				return $myform->hidden($fname."_".$id_f, '');
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
 				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required)); 
@@ -1213,7 +1431,8 @@ class adminTable {
 			$options = array();
 		}
 	
-		if($type=='int') return cleanInput('post', $name, 'int');
+		if($type=='array') return cleanInputArray('post', $name, 'int');
+		elseif($type=='int') return cleanInput('post', $name, 'int');
 		elseif($type=='float' || $type=='double' || $type=='decimal') return cleanInput('post', $name, 'float');
 		elseif($type=='varchar' || $type=='text') return cleanInput('post', $name, 'string', $options);
 		elseif($type=='html') return cleanInput('post', $name, 'html', $options);
@@ -1243,7 +1462,13 @@ class adminTable {
 			else $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'string');	
 		}
 		elseif($this->_sfields[$fname]['type']=='bool') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'int');
+		elseif($this->_sfields[$fname]['type']=='constant') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
 		elseif($this->_sfields[$fname]['type']=='enum') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, $this->_sfields[$fname]['key_type']);
+		elseif($this->_sfields[$fname]['type']=='date' || $this->_sfields[$fname]['type']=='datetime') {
+			if($this->_sfields[$fname]['autonow'] || ($this->_sfields[$fname]['autonow_add'] && !$model->{$this->_primary_key})) {
+				$model->{$fname} = $this->_sfields[$fname]['type']=='date' ? date("Y-m-d") : date("Y-m-d H:i:s");
+			}
+		}
 		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email', $options);
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);

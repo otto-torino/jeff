@@ -471,4 +471,22 @@ function cutHtmlText($html, $length, $ending, $strip_tags, $cut_words, $cut_imag
 
 }
 
+/**
+ * @brief Sanitizes strings for url and filenames 
+ * 
+ * @param string $string the string to sanitize
+ * @param bool $is_filename whether the string has to be used as a filename or not
+ * @return the sanitized string
+ */
+function sanitize($string = '', $is_filename = false) {
+ 	
+	// Replace all weird characters with dashes
+	 $string = preg_replace('/[^\w\-'. ($is_filename ? '~_\.' : ''). ']+/u', '-', $string);
+
+	 // Only allow one dash separator at a time (and make string lowercase)
+	 return mb_strtolower(preg_replace('/--+/u', '-', $string), 'UTF-8');
+
+}
+
+
 ?>
