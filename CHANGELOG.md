@@ -1,6 +1,28 @@
 CHANGELOG
 ===========================================================================================
 
+2013-01-28, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
+Preparing new version: v1.0
+
+Added is_foreign property to adminTable class, allows to check foreign keys before record deletion
+
+Added __toString method to models
+
+View method in adminTable class splitted (easier to subclass)
+
+Added fieldsets support in auto generated backoffice
+
+Added multicheck support to filter fields in adminTable
+
+Added some special fields (constant, date, datetime)
+
+Added download method to the router class
+
+Added sanitize function to php functions lib
+
+Some minor changes and fixes
+
 2012-07-12, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0

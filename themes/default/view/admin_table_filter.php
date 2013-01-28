@@ -5,6 +5,7 @@
  * @brief Template of the admin list view with filters (list of model items in back office), see @ref adminTable::view
  *
  * Available variables:
+ * - **backoffice_text**: Introduction text
  * - **link_insert**: anchor element redirecting to the insertion form
  * - **formstart**: form beginning tag
  * - **formend**: form ending tag
@@ -24,6 +25,7 @@
  */
 ?>
 <div class="left" style="width:75%">
+<?= $backoffice_text ?>
 <p><?= $link_insert ?></p>
 <?= $formstart ?>
 <?= $input_where_query ?>
