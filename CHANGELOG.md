@@ -23,6 +23,8 @@ Added sanitize function to php functions lib
 
 Some minor changes and fixes
 
+Added user active field
+
 2012-07-12, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0
