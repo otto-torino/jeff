@@ -22,7 +22,7 @@ function printVoice($v, $selected_url, $i) {
 	if(!count($v['sub'])) return "<li".$class."><a href=\"".$v['href']."\" target=\"".$v['target']."\"$class>".$v['label']."</a></li>\n";
 	else {
 		$buffer = "<li".$class."><a href=\"".$v['href']."\" target=\"".$v['target']."\"$class>".$v['label']."</a><ul>\n";
-		foreach($v['sub'] as $sv) $buffer .= printVoice($sv);
+		foreach($v['sub'] as $sv) $buffer .= printVoice($sv, null, null);
 		$buffer .= "</ul></li>\n"; 
 
 		return $buffer;
