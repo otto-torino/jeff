@@ -144,7 +144,6 @@ class menuController extends controller {
 				'type' => 'enum',
 				'key_type' => 'string',
 				'data' => $target_data
-				
 			)
 		);
 

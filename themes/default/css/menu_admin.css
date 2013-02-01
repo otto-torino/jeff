@@ -109,7 +109,7 @@
 	float:left;
 	margin-right: 0px;
 	border-right: 1px solid #fff;
-	height:28px;
+	height:35px;
 }
 
 #subMenusContainer li{
@@ -125,7 +125,7 @@
 	z-index:5;
 	text-align: center;
 	display:block;
-	height:28px;
+	height:35px;
 	margin:auto;
 	width: 1000px;
 }
