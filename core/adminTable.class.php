@@ -156,6 +156,11 @@ class adminTable {
 	 * @brief array of fields shown in the admin list 
 	 */
 	protected $_changelist_fields;
+
+	/**
+	 * @brief information to show before the insert and edit form 
+	 */
+	protected $_backoffice_form_text;
 	
 	/**
 	 * @brief array of fields used to filter records in the admin list 
@@ -198,6 +203,7 @@ class adminTable {
 	 *   - **deletion**: bool default true. Whether to allow records deletion or not. 
 	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
+	 *   - **backoffice_form_text**: string default ''. A brief information to show before the edit and insert form. 
 	 *   - **no_form_fields**: array default null. Array of fields not controlled directly by form elements. 
 	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
 	 *   - **export**: bool default false. Add export buttons in the admin list. 
@@ -229,6 +235,7 @@ class adminTable {
 		$this->_cls_cbk_del = gOpt($opts, "cls_callback_delete", null);
 	        $this->_mth_cbk_del = gOpt($opts, "mth_callback_delete", null);
 		$this->_backoffice_text = gOpt($opts, 'backoffice_text', '');	
+		$this->_backoffice_form_text = gOpt($opts, 'backoffice_form_text', '');	
 
 		$structure = $this->_registry->db->getTableStructure($this->_table);
 
@@ -1012,7 +1019,13 @@ class adminTable {
 		$myform = new form('post', 'atbl_form', array("validation"=>true));
 		$myform->load();
 
-		$buffer = $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
+    $buffer = '';
+
+    if($this->_backoffice_form_text) {
+      $buffer .= $this->_backoffice_form_text;
+    }
+
+		$buffer .= $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
 		$buffer .= $myform->hidden('order', $order);
 
 		if($insert) {
