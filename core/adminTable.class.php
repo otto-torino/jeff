@@ -78,6 +78,11 @@ class adminTable {
 	protected $_fields;
 
 	/**
+	 * @brief the table column labels to use in form and visualization
+	 */
+	protected $_fields_labels;
+
+	/**
 	 * @brief definition of the foreign keys 
 	 */
 	protected $_fkeys;
@@ -229,6 +234,7 @@ class adminTable {
 
 		$this->_primary_key = $structure['primary_key'];
 		$this->_fields = $structure['fields'];
+    $this->_fields_labels = array();
 		$this->_fkeys = array();
 		$this->_sfields = array();
 		$this->_pfields = array();
@@ -256,6 +262,20 @@ class adminTable {
 		}
 		$this->_model = $model;
 	} 
+
+	/**
+	 * @brief Sets the fields' labels 
+	 * 
+	 * @param array $fields_labels 
+	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
+	 *   - **label**: the field label
+	 *   - **helptext**: the help text shown in the label of the input form 
+	 *
+	 * @return void
+	 */
+  public function setFieldsLabels($fields_labels) {
+    $this->_fields_labels = $fields_labels;
+  }
 
 	/**
 	 * @brief Sets table foreign keys 
@@ -287,7 +307,6 @@ class adminTable {
 	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
 	 *   - **type**: string. The type of special field. Possible values are: 'constant', 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image', 'date', 'datetime'
 	 *   - **value**: mixed. (constant type) The value of the field
-	 *   - **edit_label**: (password type) string. The label displayed in the edit form
 	 *   - **true_label**: (bool type) string. The label tied to the value true
 	 *   - **false_label**: (bool type) string. The label tied to the value false
 	 *   - **default**: (bool type) mixed. The deafult value
@@ -299,7 +318,6 @@ class adminTable {
 	 *   - **field**: (multicheck type) string. The field of the related table to display in the multicheck form element
 	 *   - **where**: (multicheck type) string. The where clause used to select only some records from the related table
 	 *   - **order**: (multicheck type) string. The order clause used to order the records selected from the related table
-	 *   - **label**: (image and file types) string. The field label
 	 *   - **path**: (image and file types) string. The absolute path of the uploading directory
 	 *   - **rel_path**: (image and file types) string. The relative path of the uploading directory
 	 *   - **preview**: (image and file types) bool. Whether to show file preview in the list view and the edit form view
@@ -550,7 +568,10 @@ class adminTable {
 
 				$link = preg_replace("#/p/\d+/#", "/", $_SERVER['REQUEST_URI']);
 				$link = preg_replace("#\?.*#", "", $link);
-				$head_t = anchor($link."?order=$ord", __($fn), array('over'=>$jsover, 'out'=>$jsout));
+
+        $label = isset($this->_fields_labels[$fn]['label']) ? $this->_fields_labels[$fn]['label'] : __($fn);
+
+				$head_t = anchor($link."?order=$ord", $label, array('over'=>$jsover, 'out'=>$jsout));
 				$heads[] = $head_t." <img src=\"$apath\" alt=\"down\" style=\"$a_style\" />";
 			}
 		}
@@ -1218,22 +1239,22 @@ class adminTable {
 			$value = count($records) ? $records[0][$fname] : null;
 		}
 
+    $label = isset($this->_fields_labels[$fname]['label']) ? htmlVar($this->_fields_labels[$fname]['label']) : htmlVar(__($fname));
+    $helptext = isset($this->_fields_labels[$fname]['helptext']) ? htmlVar($this->_fields_labels[$fname]['helptext']) : htmlVar('');
+
 		if(array_key_exists($fname, $this->_sfields)) {
 			if($this->_sfields[$fname]['type']=='password') { 
-				$label = ($id && isset($this->_sfields[$fname]['edit_label'])) 
-					? $this->_sfields[$fname]['edit_label'] 
-					: (isset($this->_sfields[$fname]['insert_label']) ? $this->_sfields[$fname]['insert_label']:'');
 				$req = $id ? false : true;
-				return $myform->cinput($fname."_".$id_f, 'password', '', array(htmlVar(__($fname)), $label), array("required"=>$req, "size"=>gOpt($opts, 'size', 40), "maxlength"=>$field['max_length']));
+				return $myform->cinput($fname."_".$id_f, 'password', '', array($label, $helptext), array("required"=>$req, "size"=>gOpt($opts, 'size', 40), "maxlength"=>$field['max_length']));
 			}
 			elseif($this->_sfields[$fname]['type']=='bool') {
 				$t_l = 	$this->_sfields[$fname]['true_label'];
 				$f_l = 	$this->_sfields[$fname]['false_label'];
 				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
-				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, htmlVar(__($fname)), array("required"=>$required));
+				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, array($label, $helptext), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='enum') {
-				return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $this->_sfields[$fname]['data'], htmlVar(__($fname)), array("required"=>$required));
+				return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $this->_sfields[$fname]['data'], array($label, $helptext), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='constant') {
 				return $myform->hidden($fname."_".$id_f, $this->_sfields[$fname]['value']);
@@ -1242,18 +1263,18 @@ class adminTable {
 				return $myform->hidden($fname."_".$id_f, '');
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
-				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required)); 
+				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required)); 
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
 				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
-				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, htmlVar(__($fname)), array("required"=>$required));
+				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, array($label, $helptext), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
 				$sf = $this->_sfields[$fname];
 				$preview = isset($sf['preview']) ? $sf['preview'] : false;
 				$rel_path = $sf['rel_path'];
-				return $myform->cinput_file($fname."_".$id_f, $myform->retvar($fname, $value), $sf['label'], array("required"=>$required, "extensions"=>$sf['extensions'], "preview"=>$preview, "rel_path"=>$rel_path));
+				return $myform->cinput_file($fname."_".$id_f, $myform->retvar($fname, $value), array($label, $helptext), array("required"=>$required, "extensions"=>$sf['extensions'], "preview"=>$preview, "rel_path"=>$rel_path));
 			}
 		}
 		elseif(array_key_exists($fname, $this->_fkeys)) {
@@ -1262,29 +1283,29 @@ class adminTable {
 			$data = array();
 			foreach($options as $rec) 
 				$data[htmlInput($rec[$fk['key']])] = htmlVar($rec[$fk['field']]);
-			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, htmlVar(__($fname)), array("required"=>$required));
+			return $myform->cselect($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), $data, array($label, $helptext), array("required"=>$required));
 		}
 		elseif(array_key_exists($fname, $this->_pfields)) {
 			return $this->_registry->plugins[$this->_pfields[$fname]['plugin']]->formAdmin($this->_pfields[$fname], $fname."_".$id_f, $fname, $field, $myform, $myform->retvar($fname."_".$id_f, $value));
 		}
 		elseif($field['type'] == 'int') {
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), htmlVar(__($fname)), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname, $value), array($label, $helptext), array("required"=>$required, "size"=>$field['n_int'], "maxlength"=>$field['n_int']));
 		}
 		elseif($field['type'] == 'float' || $field['type'] == 'double' || $field['type'] == 'decimal') {
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required, "size"=>($field['n_int']+1+$field['n_precision']), "maxlength"=>($field['n_int']+1+$field['n_precision'])));
 		}
 		elseif($field['type'] == 'varchar') {
 			$size = gOpt($opts, 'size', null) ? gOpt($opts, 'size') : ($field['max_length']<40 ? $field['max_length'] : 40);
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
 		}
 		elseif($field['type'] == 'text') {
-                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
+                	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
 		}
 		elseif($field['type'] == 'date') {
-                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required));
+                	return $myform->cinput_date($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required));
 		}
 		elseif($field['type'] == 'datetime') {
-			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), htmlVar(__($fname)), array("required"=>$required));
+			return $myform->cinput_datetime($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required));
 		}
 
 	}

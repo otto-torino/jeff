@@ -1,6 +1,11 @@
 CHANGELOG
 ===========================================================================================
 
+2013-02-07, abidibo  <abidibo@gmail.com>
+Preparing new version: v1.0
+
+Added fields labels support in adminTable, with label and helptext
+
 2013-01-28, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0
