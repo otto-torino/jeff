@@ -66,8 +66,7 @@ class userController extends controller {
 
 		$s_fields = array(
 			"password"=>array(
-				"type"=>"password",
-				"edit_lable"=>__("userEditPwdLabel")
+				"type"=>"password"
 			),
 			"groups"=>array(
 				"type"=>"multicheck",
@@ -86,8 +85,18 @@ class userController extends controller {
 			)
 		);
 
+    $helptext = isset($_GET['edit']) ? __("userEditPwdLabel") : '';
+
+    $fields_labels = array(
+      'password' => array(
+        'label' => __('password'),
+        'helptext' => $helptext
+      )
+    );
+
 		$at = new adminTable(TBL_USERS, array("edit_deny"=>array(1)));
 		$at->setSpecialFields($s_fields);
+    $at->setFieldsLabels($fields_labels);
 
 		$table = $at->manage();
 
