@@ -249,6 +249,7 @@ class adminTable {
 		$this->_model = null;
 		$this->_is_foreign = array();
 		$this->_fieldsets = array();
+    $this->_filter_fields = array();
 
 		$this->_arrow_down_path = ROOT."/img/down_arrow-black.png";
 		$this->_arrow_up_path = ROOT."/img/up_arrow-black.png";
@@ -501,7 +502,7 @@ class adminTable {
 		$field_order = isset($matches[1]) ? $matches[1] : null;
 		$order_dir = isset($matches[2]) ? $matches[2] : null;
 
-		$where_pag = $tot_ff ? $this->setWhereClause(false) : null;
+		$where_pag = $this->setWhereClause(false);
 		$pag = new pagination($this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
@@ -517,7 +518,7 @@ class adminTable {
 		else 
 			$field_selection = isset($this->_fkeys[$field_order]) ? "a.*" : "*"; 
 
-		$where = $tot_ff ? $this->setWhereClause(isset($this->_fkeys[$field_order])) : null;
+		$where = $this->setWhereClause(isset($this->_fkeys[$field_order]));
 
 		// different queries if the order field is a foreign key
 		if(isset($this->_fkeys[$field_order])) {
@@ -792,7 +793,7 @@ class adminTable {
 			}
 		}
 
-		return implode(" AND ", $where_a);
+		return count($where_a) ? implode(" AND ", $where_a) : null;
 
 	}
 
