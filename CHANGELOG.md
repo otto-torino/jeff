@@ -4,6 +4,11 @@ CHANGELOG
 2013-02-07, abidibo  <abidibo@gmail.com>
 Preparing new version: v1.0
 
+Added possibility for super admin to change its account properties (pwd)
+
+2013-02-07, abidibo  <abidibo@gmail.com>
+Preparing new version: v1.0
+
 Added fields labels support in adminTable, with label and helptext
 
 Added custom text option before adminTable form (edit and insert)
