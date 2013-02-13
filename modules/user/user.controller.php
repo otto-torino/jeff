@@ -94,7 +94,9 @@ class userController extends controller {
       )
     );
 
-		$at = new adminTable(TBL_USERS, array("edit_deny"=>array(1)));
+    $edit_deny = $this->_registry->user->id === 1 ? array() : array(1);
+
+		$at = new adminTable(TBL_USERS, array("edit_deny" => $edit_deny));
 		$at->setSpecialFields($s_fields);
     $at->setFieldsLabels($fields_labels);
 
