@@ -1,6 +1,11 @@
 CHANGELOG
 ===========================================================================================
 
+2013-02-15, abidibo  <abidibo@gmail.com>
+Preparing new version: v1.0
+
+Added toggle checkbox images in adminTable
+
 2013-02-07, abidibo  <abidibo@gmail.com>
 Preparing new version: v1.0
 

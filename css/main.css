@@ -71,7 +71,7 @@ nav, section, header, footer, hgroup {
  * IMG
  */
 img.border {
-  border: 1px solid #666; }
+  border: 1px solid #666666; }
 
 /*
  * Tables
@@ -83,11 +83,11 @@ table.generic {
   border-collapse: collapse; }
   table.generic th {
     background-color: #ccc;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     padding: 5px;
     text-align: left; }
   table.generic td {
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     padding: 5px; }
   table.generic a {
     text-decoration: none; }
@@ -104,9 +104,9 @@ div.tabTop {
   background: url("../img/linea.jpg") bottom center no-repeat; }
 
 div.tabContent {
-  border-bottom: 1px solid #333;
-  border-left: 1px solid #333;
-  border-right: 1px solid #333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #333333;
+  border-right: 1px solid #333333;
   padding: 5px; }
 
 div.tabExt {
@@ -180,10 +180,10 @@ br.formRowBreak {
   font-weight: normal; }
 
 input[type=text], input[type=password], input[type=email] {
-  border: 1px solid #aaa; }
+  border: 1px solid #aaaaaa; }
 
 textarea {
-  border: 1px solid #aaa; }
+  border: 1px solid #aaaaaa; }
 
 .formErrMsg {
   color: #ff0000;
@@ -211,6 +211,24 @@ form .html {
 
 form .captcha {
   margin-bottom: 10px; }
+
+/* ADMIN TABLE */
+#atbl_form table tr td:first-child, #atbl_form table tr th:first-child {
+  text-align: center; }
+#atbl_form input[type=checkbox] {
+  margin: 2px; }
+
+.uncheck_all_toggle {
+  display: inline-block;
+  width: 21px;
+  height: 21px;
+  background: url("../img/uncheck_all.png") no-repeat center center; }
+
+.check_all_toggle {
+  display: inline-block;
+  width: 21px;
+  height: 21px;
+  background: url("../img/check_all.png") no-repeat center center; }
 
 /* TOOLTIPS */
 .tip-top {
@@ -255,7 +273,7 @@ div.abiWin {
   position: absolute;
   padding: 5px;
   background-color: #72c58f;
-  border: 1px solid #000; }
+  border: 1px solid black; }
   div.abiWin header.abiHeader {
     font-weight: bold;
     text-align: center;
@@ -265,12 +283,12 @@ div.abiWin {
     clear: both;
     text-align: left;
     padding: 8px;
-    border: 1px solid #000;
+    border: 1px solid black;
     background-color: #fff;
     overflow: auto; }
   div.abiWin span.close {
     background-color: #fff;
-    border: 1px solid #000;
+    border: 1px solid black;
     cursor: pointer;
     padding: 2px;
     position: absolute;
