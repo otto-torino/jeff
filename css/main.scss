@@ -236,6 +236,28 @@ form .captcha {
 	margin-bottom: 10px;
 }
 
+/* ADMIN TABLE */
+#atbl_form {
+  table tr td:first-child, table tr th:first-child {
+    text-align: center;
+  }
+  input[type=checkbox] {
+    margin: 2px;
+  }
+}
+.uncheck_all_toggle {
+  display: inline-block;
+  width: 21px;
+  height: 21px;
+  background: url('../img/uncheck_all.png') no-repeat center center;
+}
+.check_all_toggle {
+  display: inline-block;
+  width: 21px;
+  height: 21px;
+  background: url('../img/check_all.png') no-repeat center center;
+}
+
 /* TOOLTIPS */
 .tips {
 }

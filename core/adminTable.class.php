@@ -546,9 +546,8 @@ class adminTable {
 		$tot_pf = count($this->_pfields);
 		$tot_ff = count($this->_filter_fields);
 
-		$all = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').setProperty('checked', 'checked');\">".__("all")."</span>";
-		$none = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').removeProperty('checked');\">".__("none")."</span>";
-		$heads = ($this->_edit_deny != 'all' || $this->_export) ? array("0"=>"$all | $none") : array();
+    $toggle = "<span class=\"uncheck_all_toggle\" onclick=\"toggleAllChecks($('atbl_form'), this)\"></span>";
+		$heads = ($this->_edit_deny != 'all' || $this->_export) ? array("0"=>$toggle) : array();
 		foreach($fields_names as $fn) {
 			if(!$this->_changelist_fields || in_array($fn, $this->_changelist_fields)) {
 				$ord = $order == $fn." ASC" ? $fn." DESC" : $fn." ASC";
