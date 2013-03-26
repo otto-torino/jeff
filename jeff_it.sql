@@ -207,6 +207,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `lastname`, `firstname`, `username`, `password`, `groups`) VALUES
-(1, 'Amministratore', 'Utente', 'admin', '21232f297a57a5a743894a0e4a801fc3', '1');
+INSERT INTO `users` (`id`, `lastname`, `firstname`, `username`, `password`, `groups`, `active`) VALUES
+(1, 'Amministratore', 'Utente', 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', '1');
 
