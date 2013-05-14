@@ -6,8 +6,11 @@ CHANGELOG
 Preparing new version: v1.0
 
 Updated dijit editor version to 1.9.0
+
 Raise 404 when calling a not callable module's method
+
 Implementation of 403 error
+
 Caching of getTableStructure query to avoid mysql bad performance
 
 2013-02-15, abidibo  <abidibo@gmail.com>
