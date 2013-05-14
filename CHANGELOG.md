@@ -2,6 +2,7 @@ CHANGELOG
 ===========================================================================================
 
 2013-05-14, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
 Preparing new version: v1.0
 
 Updated dijit editor version to 1.9.0
@@ -10,16 +11,19 @@ Implementation of 403 error
 Caching of getTableStructure query to avoid mysql bad performance
 
 2013-02-15, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
 Preparing new version: v1.0
 
 Added toggle checkbox images in adminTable
 
 2013-02-07, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
 Preparing new version: v1.0
 
 Added possibility for super admin to change its account properties (pwd)
 
 2013-02-07, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
 Preparing new version: v1.0
 
 Added fields labels support in adminTable, with label and helptext
