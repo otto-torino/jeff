@@ -233,7 +233,7 @@ function prepareJsEditor($selector) {
 		$stylesheets .= $css.";";
 	$stylesheets .= ROOT."/css/dojo_frame.css";
 
-	$registry->addJs("https://ajax.googleapis.com/ajax/libs/dojo/1.6.0/dojo/dojo.xd.js");
+	$registry->addJs("https://ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js");
 	$registry->addJs(ROOT."/lib/js/dojo.js");
 	$registry->addCss(ROOT."/css/dojo.css");
 
