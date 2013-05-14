@@ -30,7 +30,7 @@ class pageController extends controller {
 	/**
 	 * @brief allowed pages id 
 	 */
-	private $_white_list = array("http404", "credits");
+	private $_white_list = array("http404", "http403", "credits");
 
 	/**
 	 * @brief Constructs a page controller instance 

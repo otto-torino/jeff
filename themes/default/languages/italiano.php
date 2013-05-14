@@ -167,6 +167,8 @@ return array(
 	"position"=>"posizione",
 	"msg404"=>"Il contenuto richiesto non è stato trovato.",
 	"title404"=>"404 Pagina non trovata",
+	"msg403"=>"Non hai i privilegi per visualizzare il contenuto richiesto.",
+	"title403"=>"403 Accesso negato",
 )
 
 ?>

@@ -157,6 +157,8 @@ return array(
 	"position"=>"position",
 	"msg404"=>"The requested page was not found on this server.",
 	"title404"=>"404 Page not found",
+	"msg403"=>"You don't have the permissions to view the requested content.",
+	"title403"=>"403 Forbidden",
 
 )
 

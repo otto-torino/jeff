@@ -182,6 +182,19 @@ abstract class Error {
 
 	}
 
+  /**
+	 * @brief Redirects to 403 error page 
+	 * 
+	 * @return void
+	 */
+	public static function raise403() {
+
+		$registry = registry::instance();
+
+		header("Location: ".$registry->router->linkHref('page', 'view', array('id'=>'http403')));
+		exit();
+
+	}
 
 }
 
