@@ -1,6 +1,11 @@
 CHANGELOG
 ===========================================================================================
 
+2013-05-14, abidibo  <abidibo@gmail.com>
+Preparing new version: v1.0
+
+Updated dijit editor version to 1.9.0
+
 2013-02-15, abidibo  <abidibo@gmail.com>
 Preparing new version: v1.0
 
