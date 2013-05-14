@@ -122,19 +122,30 @@ class model {
 	 */
 	protected function initDbProp($id) {
 
-		$qr = $this->_registry->db->autoSelect(array("*"), array($this->_tbl_data), "id='$id'", null);
-		if(count($qr)) {
-		    $structure = $this->_registry->db->getTableStructure($this->_tbl_data);
-		    $res = array();
-		    foreach($qr[0] as $fname=>$fvalue) {
-		    	if($structure['fields'][$fname]['type']=='int') setType($fvalue, 'int');
-			elseif($structure['fields'][$fname]['type']=='float' || $structure['fields'][$fname]['type']=='double' || $structure['fields'][$fname]['type']=='decimal') setType($fvalue, 'float');
-			else setType($fvalue, 'string');
-			$res[$fname] = $fvalue;
-		    }
-		    return $res;
-		}
-		else return $this->initNullProp();
+    $qr = $this->_registry->db->autoSelect(array("*"), array($this->_tbl_data), "id='$id'", null);
+
+    if(count($qr)) {
+      $cache = new dataCache();
+      if(!$structure = $cache->get('table_structure', $this->_tbl_data, 36000)) {
+        $structure = $this->_registry->db->getTableStructure($this->_tbl_data);
+        $cache->save($structure);
+      }
+      $res = array();
+      foreach($qr[0] as $fname=>$fvalue) {
+        if($structure['fields'][$fname]['type']=='int') {
+          setType($fvalue, 'int');
+        }
+        elseif($structure['fields'][$fname]['type']=='float' || $structure['fields'][$fname]['type']=='double' || $structure['fields'][$fname]['type']=='decimal') {
+          setType($fvalue, 'float');
+        }
+        else {
+          setType($fvalue, 'string');
+        }
+        $res[$fname] = $fvalue;
+      }
+      return $res;
+    }
+    else return $this->initNullProp();
 
 	}
 
