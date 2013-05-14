@@ -86,7 +86,7 @@ class router {
 	 *   the class and method to call. Possible values are:
 	 *   - associative array in the form array('module'=>'module_name', 'method'=>'method_name')
 	 *   - null: the class name and method name are taken directly from url
-	 *   if the method is not found or not callable the 'index' method is called
+	 *   if the method is not callable a 404 error is raised
 	 * @access public
 	 * @return the controller method output or a system error
 	 */
@@ -100,7 +100,9 @@ class router {
 		if($route == null) $this->_registry->urlModule = $this->_module;
 
 		/*** check if the method is callable ***/
-		$method = is_callable(array($controller, $this->_method)) ? $this->_method : 'index';
+    if(!is_callable(array($controller, $this->_method))) {
+      error::raise404();
+    }
 
 		$params = gOpt($route, 'params');
 		/*** run the action ***/
