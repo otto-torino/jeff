@@ -104,10 +104,10 @@ class router {
       error::raise404();
     }
 
-		$params = gOpt($route, 'params');
+		$params = gOpt($route, 'params', '');
 		/*** run the action ***/
 
-		return $controller->$method($params);
+		return $controller->{$this->_method}($params);
  	}
 
 	/**
