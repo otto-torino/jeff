@@ -57,6 +57,11 @@ class export {
 	 */
 	private $_fkeys;
 
+  /**
+	 * @brief field labels  
+	 */
+	private $_flabels;
+
 	/**
 	 * @brief whether or not to print fields' headings  
 	 */
@@ -93,6 +98,7 @@ class export {
 	 *   - **pkey**: string default 'id'. Table primary key field 
 	 *   - **sfields**: array default array(). Special fields, same as \ref adminTable::setSpecialFields 
 	 *   - **fkeys**: array default array(). Foreign keys, same as \ref adminTable::setForeignKeys 
+	 *   - **flabels**: array default array(). Field labels, same as \ref adminTable::setFieldsLabels 
 	 *   - **head**: bool default true. Whether or not to print fields' headings 
 	 *   - **fields**: mixed default '*'. Fields to export. Possible values are: 
 	 *     - *****: all fields
@@ -123,6 +129,7 @@ class export {
 		$this->_pkey = gOpt($opts, 'pkey', 'id');
 		$this->_sfields = gOpt($opts, 'sfields', array());
 		$this->_fkeys = gOpt($opts, 'fkeys', array());
+		$this->_flabels = gOpt($opts, 'flabels', array());
 		$this->_head = gOpt($opts, 'head', true);
 		$this->_fields = gOpt($opts, 'fields', '*');
 		$this->_rids = gOpt($opts, 'rids', '*');
@@ -159,6 +166,16 @@ class export {
 	 */
 	public function setFkeys($fkeys) {
 		$this->_fkeys = $fkeys;	
+	}
+
+  /**
+	 * @brief Set the $_flabels property 
+	 * 
+	 * @param array $flabels field labels. An associative array 'field_name' => array('label' => 'label_value', 'helptext' => 'helptext_value')
+	 * @return void
+	 */
+	public function setFlabels($flabels) {
+		$this->_flabels = $flabels;	
 	}
 
 	/**
@@ -305,7 +322,15 @@ class export {
 		$table_structure = $this->_registry->db->getTableStructure($this->_table);
 
 		$head_fields = $this->getHeadFields($table_structure);
-		if(count($head_fields) && $this->_head) $data[] = $head_fields;
+    if(count($head_fields) && $this->_head) {
+      //translate
+      $tr_head_fields = array();
+      foreach($head_fields as $f) {
+        $label = isset($this->_flabels[$f]['label']) ? $this->_flabels[$f]['label'] : __($f);
+        $tr_head_fields[] = $label;
+      }
+      $data[] = $tr_head_fields;
+    }
 
 		if($this->_rids=='*') $where = '';
 		elseif(is_array($this->_rids) && count($this->_rids)) 
@@ -315,13 +340,13 @@ class export {
 
 		$order = $this->_order ? $this->_order : null;
 
-		$at = new adminTable($this->_registry, $this->_table);
+		$at = new adminTable($this->_table);
 		$at->setForeignKeys($this->_fkeys);
 		$at->setSpecialFields($this->_sfields);
 		$results = $this->_registry->db->autoSelect($head_fields, $this->_table, $where, $order);
 		foreach($results as $r) { 
 			if($tot_fk) $r = $at->parseForeignKeys($r);
-			if($tot_sf) $r = $at->parseSpecialFields($r, array("show_pwd"=>true, "mailto"=>false));
+			if($tot_sf) $r = $at->parseSpecialFields($r, array("show_pwd"=>true, "mailto"=>false, "preview" => false));
 			$data[] = $r;
 		}
 
