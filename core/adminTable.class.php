@@ -527,7 +527,7 @@ class adminTable {
 		else 
 			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, $where, $order, $limit);
 
-		return array($pag, $records);
+		return array($pag, $records, $where);
 
 	}
 
@@ -627,7 +627,7 @@ class adminTable {
 
 		$fields_names = $this->_changelist_fields ? $this->_changelist_fields : $this->_registry->db->getFieldsName($this->_table);
 
-		list($pag, $records) = $this->viewRecords();
+		list($pag, $records, $where) = $this->viewRecords();
 
 		$table = $this->viewTable($fields_names, $records);
 		
@@ -902,7 +902,7 @@ class adminTable {
 				}
 				elseif($this->_sfields[$k]['type']=='file' || $this->_sfields[$k]['type']=='image') {
 					$sf = $this->_sfields[$k];
-					if(isset($sf['preview']) && $sf['preview'] && $v) {
+					if(isset($sf['preview']) && $sf['preview'] && $v && gOpt($opts, 'preview', true)) {
 						if($this->_sfields[$k]['type']=='image') {
 							$res[$k] = "<a title=\"$v\" href=\"".$sf['rel_path']."/$v\">".$v."</span><script>$$('a[href=".$sf['rel_path']."/$v]')[0].cerabox();</script>";
 						}
@@ -1559,7 +1559,7 @@ class adminTable {
 			$rids = implode(",", $rids_a);
 		}		
 
-		$expObj = new export($this->_registry, array("table"=>$this->_table, "pkey"=>$this->_primary_key, "sfields"=>$this->_sfields, "fkeys"=>$this->_fkeys));
+		$expObj = new export(array("table"=>$this->_table, "pkey"=>$this->_primary_key, "sfields"=>$this->_sfields, "fkeys"=>$this->_fkeys, 'flabels'=>$this->_fields_labels));
 		$expObj->setRids($rids);
 
 		$expObj->exportData($this->_table.'_'.$this->_registry->dtime->now('%Y%m%d').'.csv', 'csv');
