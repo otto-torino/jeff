@@ -1,6 +1,25 @@
 CHANGELOG
 ===========================================================================================
 
+2013-05-15, abidibo  <abidibo@gmail.com>
+---------------------------------------------    
+Preparing new version: v1.0
+
+Bug fixed in adminTable exportation functionality
+
+Added translations in export functionality
+
+Added a mobile framework:    
+- mobile detection
+- mobile site activation through site settings
+- mobile condition implemented in the core class, change condition to fit your needs, default returns true is mobile_site setting is true and a mobile client is detected
+- site template <template_name>_mobile.tpl is loaded (if exist) when the mobile site is requested (searched in the current theme directory, fallback to default theme occurs only if no-mobile theme also fallbacks)
+- current theme css 'stylesheet_mobile.css' is added (if exists) after the no-mobile 'stylesheet.css'
+- site templates specific css <template_name>_mobile.css are added (if exist) after no-mobile css when the mobile site is requested, 
+  (searched in the current theme directory, fallback to default theme occurs only if no-mobile css also fallbacks)
+- modules templates <tpl_name>_mobile.php are loaded (if exist) when the mobile site is requested, (searched in the current theme view directory, fallback to default theme occurs only if no-mobile tpl also fallbacks)
+- modules' specific css with '_mobile' suffix are added (if exist) when the mobile site is requested, (searched in the current theme css directory, fallback to default theme occurs only if no-mobile css also fallbacks)
+
 2013-05-14, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0

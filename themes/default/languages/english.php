@@ -159,6 +159,7 @@ return array(
 	"title404"=>"404 Page not found",
 	"msg403"=>"You don't have the permissions to view the requested content.",
 	"title403"=>"403 Forbidden",
+	"mobileSite"=>"mobile site",
 
 )
 

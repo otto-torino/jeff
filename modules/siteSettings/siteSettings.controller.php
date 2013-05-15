@@ -54,26 +54,43 @@ class siteSettingsController extends controller {
 		$this->_admin_privilege = 1;
 
 	}
-	
-	/**
-	 * @brief Site settings backoffice 
-	 * 
-	 * @return the site settings back office
-	 */
-	public function manage() {
-	
-		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
-		$at = new adminTable(TBL_SYS_SETTINGS, array('insertion'=>false, 'deletion'=>false));
+  /**
+   * @brief Site settings backoffice 
+   * 
+   * @return the site settings back office
+   */
+  public function manage() {
 
-		$table = $at->manage();
+    access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
-		$this->_view->setTpl('manage_table');
-		$this->_view->assign('title', __("ManageTable")." ".TBL_SYS_SETTINGS);
-		$this->_view->assign('table', $table);
+    $s_fields = array(
+      'mobile_site'=>array(
+        'type'=>'bool',
+        'required'=>true,
+        'true_label'=>__('yes'),
+        'false_label'=>__('no')
+      )
+    );
 
-		return $this->_view->render();
-	}
+    $fields_labels = array(
+      'mobile_site' => array(
+        'label' => __('mobileSite')
+      )
+    );
+
+    $at = new adminTable(TBL_SYS_SETTINGS, array('insertion'=>false, 'deletion'=>false));
+    $at->setSpecialFields($s_fields);
+    $at->setFieldsLabels($fields_labels);
+
+    $table = $at->manage();
+
+    $this->_view->setTpl('manage_table');
+    $this->_view->assign('title', __("ManageTable")." ".TBL_SYS_SETTINGS);
+    $this->_view->assign('table', $table);
+
+    return $this->_view->render();
+  }
 
 }
 
