@@ -19,6 +19,7 @@
  * - **app_description** text: application description (meta tag in the html head element)
  * - **app_keywords** varchar(255): application keywords (meta tag in the html head element)
  * - **session_timeout** int(8): session timeout managed by the application (no management if empty or 0)
+ * - **mobile_site** int(1): whether or not to activate the mobile site
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.99

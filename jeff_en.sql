@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `sys_site_settings` (
   `app_description` text NOT NULL,
   `app_keywords` varchar(256) NOT NULL,
   `session_timeout` int(8) DEFAULT NULL,
+  `mobile_site` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -162,8 +163,8 @@ CREATE TABLE IF NOT EXISTS `sys_site_settings` (
 -- Dumping data for table `sys_site_settings`
 --
 
-INSERT INTO `sys_site_settings` (`id`, `app_title`, `app_description`, `app_keywords`) VALUES
-(1, 'JEFF framework', 'A PHP framework', 'PHP,framework,LAMP,CMS');
+INSERT INTO `sys_site_settings` (`id`, `app_title`, `app_description`, `app_keywords`, `session_timeout`, `mobile_site`) VALUES
+(1, 'JEFF framework', 'A PHP framework', 'PHP,framework,LAMP,CMS', NULL, 0);
 
 -- --------------------------------------------------------
 

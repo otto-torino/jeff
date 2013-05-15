@@ -154,48 +154,64 @@ class theme {
 	
 	}
 
-	/**
-	 * @brief Sets the document template to render 
-	 * 
-	 * @param string $tpl the template name
-	 * @return the template instance if the template file exists, null otherwise.
-	 */
-	public function setTpl($tpl) {
+  /**
+   * @brief Sets the document template to render 
+   * @description if the mobile_site setting is true and a mobile client is detected searches for a mobile template
+   * 
+   * @param string $tpl the template name
+   * @return the template instance if the template file exists, null otherwise.
+   */
+  public function setTpl($tpl) {
 
-		$this->_tpl_name = $tpl;
+    $this->_tpl_name = $tpl;
 
-		if(is_readable($this->path().DS.$tpl.".tpl"))
-			$tpl_path = $this->path().DS.$tpl.".tpl";
-		elseif(is_readable($this->dftPath().DS.$tpl.".tpl"))
-			$tpl_path = $this->dftPath().DS.$tpl.".tpl";
-		else $tpl_path = null;
+    if(is_readable($this->path().DS.$tpl.".tpl"))
+      $tpl_path = $this->path().DS.$tpl;
+    elseif(is_readable($this->dftPath().DS.$tpl.".tpl"))
+      $tpl_path = $this->dftPath().DS.$tpl;
+    else $tpl_path = null;
 
-		$this->_tpl = $tpl_path ? new template($tpl_path) : null;
+    if($this->_registry->is_mobile and $tpl_path and is_readable($tpl_path.'_mobile.tpl')) {
+      $tpl_path = $tpl_path.'_mobile.tpl';
+    }
+    elseif($tpl_path) {
+      $tpl_path = $tpl_path.'.tpl';
+    }
 
-	}
+    $this->_tpl = $tpl_path ? new template($tpl_path) : null;
 
-	/**
-	 * @brief Returns the list of css to be included in the document 
-	 * 
-	 * @return the array containing the theme css to include in the document
-	 */
-	public function getCss() {
+}
 
-		$css = array();
+  /**
+   * @brief Returns the list of css to be included in the document, looks also for mobile css 
+   * 
+   * @return the array containing the theme css to include in the document
+   */
+  public function getCss() {
 
-		// theme css
-		if(is_readable($this->path().DS.'css'.DS."stylesheet.css"))
-			$css[] = relativePath($this->path())."/css/stylesheet.css";
+    $css = array();
 
-		// template specific css
-		if(is_readable($this->path().DS.'css'.DS.$this->_tpl_name.".css"))
-			$css[] = relativePath($this->path())."/css/".$this->_tpl_name.".css";
-		elseif(is_readable($this->dftPath().DS.'css'.DS.$this->_tpl_name.".css"))
-			$css[] = relativePath($this->dftPath())."/css/".$this->_tpl_name.".css";
+    // theme css
+    if(is_readable($this->path().DS.'css'.DS."stylesheet.css"))
+      $css[] = relativePath($this->path())."/css/stylesheet.css";
+    if($this->_registry->is_mobile and is_readable($this->path().DS.'css'.DS."stylesheet_mobile.css"))
+      $css[] = relativePath($this->path())."/css/stylesheet_mobile.css";
 
-		return $css;	
+    // template specific css
+    if(is_readable($this->path().DS.'css'.DS.$this->_tpl_name.".css")) {
+      $css[] = relativePath($this->path())."/css/".$this->_tpl_name.".css";
+      if($this->_registry->is_mobile and is_readable($this->path().DS.'css'.DS.$this->_tpl_name."_mobile.css"))
+        $css[] = relativePath($this->path())."/css/".$this->_tpl_name."_mobile.css";
+    }
+    elseif(is_readable($this->dftPath().DS.'css'.DS.$this->_tpl_name.".css")) {
+      $css[] = relativePath($this->dftPath())."/css/".$this->_tpl_name.".css";
+      if($this->_registry->is_mobile and is_readable($this->dftPath().DS.'css'.DS.$this->_tpl_name."_mobile.css"))
+        $css[] = relativePath($this->dftPath())."/css/".$this->_tpl_name."_mobile.css";
+    }
 
-	}
+    return $css;	
+
+  }
 	
 	/**
 	 * @brief Returns the list of js to be included in the document 

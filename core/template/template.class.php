@@ -73,7 +73,7 @@ class template {
 	public function parse() {
 		
 		if(!is_readable($this->getPath()))
-			Error::syserrorMessage('template', 'parse', sprintf(__("TplNotFound"), $this->getTplPath()), __LINE__);
+			Error::syserrorMessage('template', 'parse', sprintf(__("TplNotFound"), $this->getPath()), __LINE__);
 
 		$tplContent = file_get_contents($this->getPath());
 

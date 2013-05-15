@@ -77,31 +77,55 @@ class view {
 		$this->_dft_css_folder = $this->_registry->theme->dftCssPath();
 	}
 
-	/**
-	 * @brief Sets the view template
-	 * 
-	 * Searches for the given template in the active theme view folder, than in the deafult theme view folder. If can't find it returns an error.<br />
-	 * Adds a stylesheet if passed through the opts parameter. 
-	 * 
-	 * @param string $tpl the template name
-	 * @param array $opts 
-	 *   an associative array of options
-	 *   - **css**: the stylesheet to charge with the template
-	 * @return void
-	 */
-	public function setTpl($tpl, $opts=null) {
+  /**
+   * @brief Sets the view template
+   * 
+   * Searches for the given template in the active theme view folder, than in the deafult theme view folder. If can't find it returns an error.<br />
+   * Adds a stylesheet if passed through the opts parameter. 
+   * It searches for mobile templates and css if mobile_site setting is true and a mobile client is detected.
+   * 
+   * @param string $tpl the template name
+   * @param array $opts 
+   *   an associative array of options
+   *   - **css**: the stylesheet to charge with the template
+   * @return void
+   */
+  public function setTpl($tpl, $opts=null) {
 
-		if(is_readable($tpl.".php")) $this->_tpl = $tpl.".php";
-		elseif(is_readable($this->_view_folder.DS.$tpl.".php")) $this->_tpl = $this->_view_folder.DS.$tpl.".php";
-		elseif(is_readable($this->_dft_view_folder.DS.$tpl.".php")) $this->_tpl = $this->_dft_view_folder.DS.$tpl.".php";
-		else Error::syserrorMessage('view', 'setTpl', sprintf(__("CantChargeTemplateError"), $tpl.".php"), __LINE__);
+    if(is_readable($tpl.".php")) $this->_tpl = $tpl.".php";
+    elseif(is_readable($this->_view_folder.DS.$tpl.".php")) $this->_tpl = $this->_view_folder.DS.$tpl;
+    elseif(is_readable($this->_dft_view_folder.DS.$tpl.".php")) $this->_tpl = $this->_dft_view_folder.DS.$tpl;
+    else Error::syserrorMessage('view', 'setTpl', sprintf(__("CantChargeTemplateError"), $tpl.".php"), __LINE__);
 
-		if(gOpt($opts, 'css') && is_readable($this->_css_folder.DS.gOpt($opts, 'css').".css"))
-			$this->_registry->addCss(relativePath($this->_css_folder).'/'.gOpt($opts, 'css').'.css');
-		elseif(gOpt($opts, 'css') && is_readable($this->_dft_css_folder.DS.gOpt($opts, 'css').".css"))
-			$this->_registry->addCss(relativePath($this->_dft_css_folder).'/'.gOpt($opts, 'css').'.css');
+    if($this->_registry->is_mobile and is_readable($this->_tpl.'_mobile.php')) {
+      $this->_tpl = $this->_tpl.'_mobile.php';
+    }
+    else {
+      $this->_tpl = $this->_tpl.'.php';
+    }
 
-	}
+    $css = array();
+
+    $opt_css = gOpt($opts, 'css', null);
+
+    if($opt_css && is_readable($this->_css_folder.DS.$opt_css.".css")) {
+      $css[] = $this->_css_folder.DS.$opt_css.'.css';
+      if($this->_registry->is_mobile && $opt_css && is_readable($this->_css_folder.DS.$opt_css."_mobile.css"))
+        $css[] = $this->_css_folder.DS.$opt_css.'_mobile.css';
+    }
+    elseif($opt_css && is_readable($this->_dft_css_folder.DS.$opt_css.".css")) {
+      $css[] = $this->_dft_css_folder.DS.$opt_css.'.css';
+      if($this->_registry->is_mobile && $opt_css && is_readable($this->_dft_css_folder.DS.$opt_css."_mobile.css"))
+        $css[] = $this->_dft_css_folder.DS.$opt_css.'_mobile.css';
+    }
+
+    if(count($css)) {
+      foreach($css as $cf) {
+        $this->_registry->addCss(relativePath($cf));
+      }
+    }
+
+  }
 
 	/**
 	 * @brief Setter method for the $_asset property 
