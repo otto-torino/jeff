@@ -820,7 +820,7 @@ class adminTable {
 				}
 			}
 			else {
-				$value = htmlInput($_SESSION[$this->_table.'_'.$fname.'_filter']);
+				$value = $_SESSION[$this->_table.'_'.$fname.'_filter'];
 			}
 			$form .= $this->formElement($myform, $fname, $field, 'filter', array("size"=>20, "value"=>$value));
 		}
@@ -1276,7 +1276,7 @@ class adminTable {
 				return $myform->hidden($fname."_".$id_f, '');
 			}
 			elseif($this->_sfields[$fname]['type']=='email') {
-				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required)); 
+				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, htmlInput($value)), array($label, $helptext), array("required"=>$required)); 
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
@@ -1309,7 +1309,7 @@ class adminTable {
 		}
 		elseif($field['type'] == 'varchar') {
 			$size = gOpt($opts, 'size', null) ? gOpt($opts, 'size') : ($field['max_length']<40 ? $field['max_length'] : 40);
-			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
+			return $myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, htmlInput($value)), array($label, $helptext), array("required"=>$required, "size"=>$size, "maxlength"=>$field['max_length']));
 		}
 		elseif($field['type'] == 'text') {
                 	return $myform->ctextarea($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array($label, $helptext), array("required"=>$required, "cols"=>45, "rows"=>6, "editor"=>(in_array($fname, $this->_html_fields) && $this->_editor)  ? true : false));
