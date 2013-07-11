@@ -179,6 +179,7 @@ class core {
   private function setIsMobile() {
 
     if(!$this->_registry->site_settings->mobile_site) {
+      $this->_registry->is_mobile = false;
       return false;
     }
 
