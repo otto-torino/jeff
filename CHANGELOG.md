@@ -10,6 +10,8 @@ All files are loaded.
 
 Added special field type in admin table: slug
 
+registry singleton passed by default to all views
+
 2013-05-15, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0

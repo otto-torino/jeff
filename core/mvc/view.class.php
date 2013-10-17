@@ -163,6 +163,7 @@ class view {
 				$buffer = $this->asset($path, $type);
 
 		foreach($this->_data as $k=>$v) $$k=$v;
+    $registry = $this->_registry;
 
 		ob_start();
 		include($this->_tpl);
