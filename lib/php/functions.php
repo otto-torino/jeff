@@ -24,22 +24,10 @@
  */
 function __($id) {
 	
-	$language = isset($_SESSION['lng']) ? $_SESSION['lng'] : 'english';
-
-	if(is_readable(ABS_THEMES.DS.'default'.DS.'languages'.DS.$language.'.php'))
-		$lng = include(ABS_THEMES.DS.'default'.DS.'languages'.DS.$language.'.php');
-	else $lng = array();
-
 	// registry singleton
 	$registry = registry::instance();
-	if(isset($registry->theme)) {
-		$theme = $registry->theme;
-		if(get_class($theme)!= 'defaultTheme')
-			if(is_readable($theme->path().DS.'languages'.DS.$language.'.php'))
-				$lng = array_merge($lng, include($theme->path().DS.'languages'.DS.$language.'.php'));
-	}
 
-	return isset($lng[$id]) ? $lng[$id] : $id;
+	return isset($registry->lng_dict[$id]) ? $registry->lng_dict[$id] : $id;
 
 };
 
