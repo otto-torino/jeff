@@ -170,6 +170,7 @@ return array(
 	"msg403"=>"Non hai i privilegi per visualizzare il contenuto richiesto.",
 	"title403"=>"403 Accesso negato",
 	"mobileSite"=>"sito mobile",
+	"slugHelpText"=>"autocompilato a partire da '%s'",
 )
 
 ?>

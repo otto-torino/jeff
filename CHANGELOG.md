@@ -8,6 +8,8 @@ Preparing new version: v1.0
 New structure of localization files, now files are included in [language-name] folders which stay inside the language folder of the theme root dir.
 All files are loaded.
 
+Added special field type in admin table: slug
+
 2013-05-15, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0
