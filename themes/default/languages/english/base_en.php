@@ -160,6 +160,7 @@ return array(
 	"msg403"=>"You don't have the permissions to view the requested content.",
 	"title403"=>"403 Forbidden",
 	"mobileSite"=>"mobile site",
+	"slugHelpText"=>"prefilled from '%s'",
 
 )
 

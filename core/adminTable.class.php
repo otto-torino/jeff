@@ -308,12 +308,12 @@ class adminTable {
 	/**
 	 * @brief Sets table special fields 
 	 *
-	 * The supported special fields types are: constant, password, bool, enum, email, multicheck (many to many), file, image, date, datetime.    
+	 * The supported special fields types are: constant, password, bool, enum, email, multicheck (many to many), file, image, date, datetime, slug.    
 	 * Date and datetime types are automatically recognized, so they have to be used as special fields only if some behaviors are needed, like the autonow (last edit date), or the autonow_add (insertion date)
 	 * 
 	 * @param array $sfields 
 	 *   Associative array in the form 'field_name'=>properties. Properties is an associative array having keys:
-	 *   - **type**: string. The type of special field. Possible values are: 'constant', 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image', 'date', 'datetime'
+	 *   - **type**: string. The type of special field. Possible values are: 'constant', 'password', 'bool', 'enum', 'email', 'multicheck', 'file', 'image', 'date', 'datetime', 'slug'
 	 *   - **value**: mixed. (constant type) The value of the field
 	 *   - **true_label**: (bool type) string. The label tied to the value true
 	 *   - **false_label**: (bool type) string. The label tied to the value false
@@ -342,8 +342,9 @@ class adminTable {
 	 *   - **resize_height**: (image type) int. The height of the resized image
 	 *   - **thumb_width**: (image type) int. The width of the thumb image
 	 *   - **thumb_height**: (image type) int. The height of the thumb image
-	 *   - **autonow: (date and datetime type) bool, default false. Whether to automatically set the field to now when the record is saved or not
-	 *   - **autonow_add: (date and datetime type) bool, default true. Whether to automatically set the field to now when the record is saved for the first time or not
+	 *   - **autonow**: (date and datetime type) bool, default false. Whether to automatically set the field to now when the record is saved or not
+	 *   - **autonow_add**: (date and datetime type) bool, default true. Whether to automatically set the field to now when the record is saved for the first time or not
+	 *   - **slug_from**: (slug type) string. The selector of the element whose value is slugified
 	 *
 	 * @return void
 	 */
@@ -1278,6 +1279,20 @@ class adminTable {
 			elseif($this->_sfields[$fname]['type']=='email') {
 				return $myform->cinput($fname."_".$id_f, 'email', $myform->retvar($fname."_".$id_f, htmlInput($value)), array($label, $helptext), array("required"=>$required)); 
 			}
+			elseif($this->_sfields[$fname]['type']=='slug') {
+        if(!$helptext) {
+          $helptext = sprintf(__('slugHelpText'), __($this->_sfields[$fname]['slug_from']));
+        }
+        if(!$id_f) {
+          $script = "<script>$$('input[name=".$this->_sfields[$fname]['slug_from']."_]')[0].addEvent('blur', function() {
+            $$('input[name=".$fname."_]')[0].set('value', this.get('value').slugify());
+          })</script>";
+        }
+        else {
+          $script = '';
+        }
+				return $script.$myform->cinput($fname."_".$id_f, 'text', $myform->retvar($fname."_".$id_f, htmlInput($value)), array($label, $helptext), array("required"=>$required)); 
+			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
 				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
@@ -1503,7 +1518,8 @@ class adminTable {
 				$model->{$fname} = $this->_sfields[$fname]['type']=='date' ? date("Y-m-d") : date("Y-m-d H:i:s");
 			}
 		}
-		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email', $options);
+		elseif($this->_sfields[$fname]['type']=='email') $model->{$fname} = cleanInput('post', $fname.'_'.$pk, 'email');
+		elseif($this->_sfields[$fname]['type']=='slug') $model->{$fname} = slugify(cleanInput('post', $fname.'_'.$pk, 'string'));
 		elseif($this->_sfields[$fname]['type']=='multicheck') {
 			$checked = cleanInputArray('post', $fname.'_'.$pk, $this->_sfields[$fname]['value_type']);
 			$model->{$fname} = implode(",", $checked);
