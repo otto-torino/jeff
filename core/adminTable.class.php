@@ -214,7 +214,7 @@ class adminTable {
 	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
 	 *   - **changelist_members**: array default null. Associative array of members to be shown in the admin list, in the form "label" => "member". 
-	 *   - **changelist_links**: array default null. Array of links to be shown in the admin list, in the form "label"=>"url". 
+	 *   - **changelist_links**: array default null. Array of links to be shown in the admin list, in the form "label"=>"url". The id of the record is automatically appended.
 	 *   - **backoffice_form_text**: string default ''. A brief information to show before the edit and insert form. 
 	 *   - **no_form_fields**: array default null. Array of fields not controlled directly by form elements. 
 	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
