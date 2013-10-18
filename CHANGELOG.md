@@ -7,6 +7,8 @@ Preparing new version: v1.0
 
 Added changelist_members options to admin Table in order to list model method outputs
 
+Added changelist_links options to admin Table in order to add custom links (m2m)
+
 Fixed missing string error for is_foreign option
 
 2013-10-17, abidibo  <abidibo@gmail.com>

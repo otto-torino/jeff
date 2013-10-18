@@ -163,6 +163,11 @@ class adminTable {
 	protected $_changelist_members;
 
 	/**
+	 * @brief array of links shown in the admin list 
+	 */
+	protected $_changelist_links;
+
+	/**
 	 * @brief information to show before the insert and edit form 
 	 */
 	protected $_backoffice_form_text;
@@ -209,6 +214,7 @@ class adminTable {
 	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
 	 *   - **changelist_members**: array default null. Associative array of members to be shown in the admin list, in the form "label" => "member". 
+	 *   - **changelist_links**: array default null. Array of links to be shown in the admin list, in the form "label"=>"url". 
 	 *   - **backoffice_form_text**: string default ''. A brief information to show before the edit and insert form. 
 	 *   - **no_form_fields**: array default null. Array of fields not controlled directly by form elements. 
 	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
@@ -234,6 +240,7 @@ class adminTable {
 		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
 		$this->_changelist_members = gOpt($opts, 'changelist_members', null);
+		$this->_changelist_links = gOpt($opts, 'changelist_links', null);
 		$this->_no_form_fields = gOpt($opts, 'no_form_fields', array());
 		$this->_editor = gOpt($opts, 'editor', false);
 		$this->_export = gOpt($opts, 'export', false);
@@ -446,6 +453,20 @@ class adminTable {
 			$this->_changelist_members = $members;
 
 	}
+
+	/**
+	 * @brief Sets the $_changelist_links property 
+	 * 
+	 * @param array $members See @ref adminTable::__construct() options
+	 *
+	 * @return void
+	 */
+	public function setChangelistLinks($links) {
+		
+		if(is_array($links))
+			$this->_changelist_links = $links;
+
+	}
 	
 	/**
 	 * @brief Sets the filter fields 
@@ -610,6 +631,10 @@ class adminTable {
       }
     }
 
+    if($this->_changelist_links) {
+      $heads[] = array('text' => '', 'class' => 'noBkg noBorder');
+    }
+
 		$rows = array();
 		foreach($records as $r) {
       $id = $r[$this->_primary_key];
@@ -640,6 +665,12 @@ class adminTable {
           else {
             error::syserrorMessage(get_class($this), 'viewTable', sprintf(__('changelistMembersNoMemberError'), $this->_model, $member), __LINE__);
           }
+        }
+      }
+
+      if($this->_changelist_links) {
+        foreach($this->_changelist_links as $label => $url) {
+          $row[] = array('text' => anchor($url, $label), 'class' => 'noBkg noBorder');
         }
       }
 
