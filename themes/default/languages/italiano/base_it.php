@@ -173,6 +173,7 @@ return array(
 	"slugHelpText"=>"autocompilato a partire da '%s'",
 	"defineModelToUseChangelistMembersError"=>"definire il modello per usare l'opzione changelist_members",
 	"changelistMembersNoMemberError"=>"la classe %s non ha il metodo %s",
+	"modelUnsetAdminTable"=>"il modello che si sta gestando non è stato settato",
 )
 
 ?>

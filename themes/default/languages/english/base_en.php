@@ -163,6 +163,7 @@ return array(
 	"slugHelpText"=>"prefilled from '%s'",
 	"defineModelToUseChangelistMembersError"=>"define a model in order to use the changelist_members option",
 	"changelistMembersNoMemberError"=>"%s class doesn't have the %s method",
+	"modelUnsetAdminTable"=>"admin table model unset",
 
 )
 

@@ -391,7 +391,6 @@ class adminTable {
 	 * @param array $is_foreign 
 	 *   Associative array in the form 'tbl_name'=>properties. Properties is an associative array having keys:
 	 *   - **hide_where**: whether or not to hide which related records have it as a foreign.
-	 *   - **this_model**: this model which is a foreign for another model
 	 *   - **label**: the label of the model which uses this model as foreign key 
 	 *   - **field_name**: the field_name of the foreign key which refers to this model 
 	 *   - **model**: the model which has a foreign key over this model 
