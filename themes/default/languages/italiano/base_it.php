@@ -171,6 +171,8 @@ return array(
 	"title403"=>"403 Accesso negato",
 	"mobileSite"=>"sito mobile",
 	"slugHelpText"=>"autocompilato a partire da '%s'",
+	"defineModelToUseChangelistMembersError"=>"definire il modello per usare l'opzione changelist_members",
+	"changelistMembersNoMemberError"=>"la classe %s non ha il metodo %s",
 )
 
 ?>
