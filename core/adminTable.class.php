@@ -670,7 +670,7 @@ class adminTable {
 
       if($this->_changelist_links) {
         foreach($this->_changelist_links as $label => $url) {
-          $row[] = array('text' => anchor($url, $label), 'class' => 'noBkg noBorder');
+          $row[] = array('text' => anchor($url.$id.'/', $label), 'class' => 'noBkg noBorder');
         }
       }
 
