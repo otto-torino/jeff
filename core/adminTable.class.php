@@ -1308,7 +1308,7 @@ class adminTable {
 			elseif($this->_sfields[$fname]['type']=='bool') {
 				$t_l = 	$this->_sfields[$fname]['true_label'];
 				$f_l = 	$this->_sfields[$fname]['false_label'];
-				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : 0;
+				$dft = 	isset($this->_sfields[$fname]['default']) ? $this->_sfields[$fname]['default'] : '';
 				return $myform->cradio($fname."_".$id_f, $myform->retvar($fname."_".$id_f, $value), array(1=>$t_l,0=>$f_l), $dft, array($label, $helptext), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='enum') {
