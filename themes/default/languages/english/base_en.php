@@ -161,6 +161,8 @@ return array(
 	"title403"=>"403 Forbidden",
 	"mobileSite"=>"mobile site",
 	"slugHelpText"=>"prefilled from '%s'",
+	"defineModelToUseChangelistMembersError"=>"define a model in order to use the changelist_members option",
+	"changelistMembersNoMemberError"=>"%s class doesn't have the %s method",
 
 )
 

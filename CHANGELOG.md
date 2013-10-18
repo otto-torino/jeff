@@ -1,6 +1,12 @@
 CHANGELOG
 ===========================================================================================
 
+2013-10-18 abidibo  <abidibo@gmail.com>
+---------------------------------------------    
+Preparing new version: v1.0
+
+Added changelist_members options to admin Table in order to list model method outputs
+
 2013-10-17, abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0

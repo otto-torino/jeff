@@ -158,6 +158,11 @@ class adminTable {
 	protected $_changelist_fields;
 
 	/**
+	 * @brief array of members shown in the admin list 
+	 */
+	protected $_changelist_members;
+
+	/**
 	 * @brief information to show before the insert and edit form 
 	 */
 	protected $_backoffice_form_text;
@@ -203,6 +208,7 @@ class adminTable {
 	 *   - **deletion**: bool default true. Whether to allow records deletion or not. 
 	 *   - **edit_deny**: mixed default array(). Deny modification for some records. Possible values are 'all', or an array of record id. 
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
+	 *   - **changelist_members**: array default null. Associative array of members to be shown in the admin list, in the form "label" => "member". 
 	 *   - **backoffice_form_text**: string default ''. A brief information to show before the edit and insert form. 
 	 *   - **no_form_fields**: array default null. Array of fields not controlled directly by form elements. 
 	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
@@ -227,6 +233,7 @@ class adminTable {
 		$this->_deletion = gOpt($opts, 'deletion', true);
 		$this->_edit_deny = gOpt($opts, 'edit_deny', array());
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
+		$this->_changelist_members = gOpt($opts, 'changelist_members', null);
 		$this->_no_form_fields = gOpt($opts, 'no_form_fields', array());
 		$this->_editor = gOpt($opts, 'editor', false);
 		$this->_export = gOpt($opts, 'export', false);
@@ -426,6 +433,20 @@ class adminTable {
 			$this->_changelist_fields = $fields;
 
 	}
+
+	/**
+	 * @brief Sets the $_changelist_members property 
+	 * 
+	 * @param array $members See @ref adminTable::__construct() options
+	 *
+	 * @return void
+	 */
+	public function setChangelistMembers($members) {
+		
+		if(is_array($members))
+			$this->_changelist_members = $members;
+
+	}
 	
 	/**
 	 * @brief Sets the filter fields 
@@ -584,9 +605,16 @@ class adminTable {
 			}
 		}
 
+    if($this->_changelist_members) {
+      foreach($this->_changelist_members as $label => $member) {
+        $heads[] = $label;
+      }
+    }
+
 		$rows = array();
 		foreach($records as $r) {
-			$input = "<input type=\"checkbox\" name=\"f[]\" value=\"".$r[$this->_primary_key]."\" />";
+      $id = $r[$this->_primary_key];
+			$input = "<input type=\"checkbox\" name=\"f[]\" value=\"".$id."\" />";
 			if($tot_fk) $r = $this->parseForeignKeys($r);
 			if($tot_sf) $r = $this->parseSpecialFields($r);
 			if($tot_pf) $r = $this->parsePluginFields($r);
@@ -597,9 +625,26 @@ class adminTable {
 				// remove primary key
 				array_shift($r);
 			}
-			if($this->_edit_deny=='all' && !$this->_export) $rows[] = $r;
-			elseif(is_array($this->_edit_deny) && in_array($pk, $this->_edit_deny)) $rows[] = array_merge(array(""), $r);
-			else $rows[] = array_merge(array($input), $r);
+			if($this->_edit_deny=='all' && !$this->_export) $row = $r;
+			elseif(is_array($this->_edit_deny) && in_array($pk, $this->_edit_deny)) $row = array_merge(array(""), $r);
+			else $row = array_merge(array($input), $r);
+
+      if($this->_changelist_members) {
+        if(!$this->_model) {
+          error::syserrorMessage(get_class($this), 'viewTable', __('defineModelToUseChangelistMembersError'), __LINE__);
+        }
+        foreach($this->_changelist_members as $label => $member) {
+          $model = new $this->_model($id);
+          if(method_exists($this->_model, $member)) {
+            $row[] = htmlVar($model->{$member}());
+          }
+          else {
+            error::syserrorMessage(get_class($this), 'viewTable', sprintf(__('changelistMembersNoMemberError'), $this->_model, $member), __LINE__);
+          }
+        }
+      }
+
+      $rows[] = $row;
 		}
 		
 
