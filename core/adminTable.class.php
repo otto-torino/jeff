@@ -1431,7 +1431,7 @@ class adminTable {
 		$res = array();
 		$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
 		$insert = false;
-		if(!$pkeys) { 
+		if(!$pkeys or (count($pkeys == 1) and !$pkeys[0])) { 
 			$pkeys = array(0=>null); 
 			$insert = true; 
 			if(!$this->_insertion) {

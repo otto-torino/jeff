@@ -38,17 +38,20 @@ class image {
 	 * @param string $filepath image file path 
 	 * @return void
 	 */
-	public function load($filepath) {
+  public function load($filepath) {
 	
 		$image_info = getimagesize($filepath);
 		$this->_type = $image_info[2];
-	   
+
 		if($this->_type == IMAGETYPE_JPEG)
 			$this->_image = imagecreatefromjpeg($filepath);
 		elseif($this->_type == IMAGETYPE_GIF)
 			$this->_image = imagecreatefromgif($filepath);
-		elseif($this->_type == IMAGETYPE_PNG)
+		elseif($this->_type == IMAGETYPE_PNG) {
 			$this->_image = imagecreatefrompng($filepath);
+      imagealphablending($this->_image, false);
+      imagesavealpha($this->_image, true);
+    }
 	}
 
 	/**
