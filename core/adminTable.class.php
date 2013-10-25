@@ -168,6 +168,11 @@ class adminTable {
 	protected $_changelist_links;
 
 	/**
+	 * @brief where clauses to use for the changelist view
+	 */
+	protected $_changelist_where;
+
+	/**
 	 * @brief information to show before the insert and edit form 
 	 */
 	protected $_backoffice_form_text;
@@ -215,6 +220,7 @@ class adminTable {
 	 *   - **changelist_fields**: array default null. Array of fields to be shown in the admin list. 
 	 *   - **changelist_members**: array default null. Associative array of members to be shown in the admin list, in the form "label" => "member". 
 	 *   - **changelist_links**: array default null. Array of links to be shown in the admin list, in the form "label"=>"url". The id of the record is automatically appended.
+	 *   - **changelist_where**: array default null. Associative array of where clauses to use in the changelist view
 	 *   - **backoffice_form_text**: string default ''. A brief information to show before the edit and insert form. 
 	 *   - **no_form_fields**: array default null. Array of fields not controlled directly by form elements. 
 	 *   - **editor**: bool default false. Charge dojo editor for html fields insertion/modification. 
@@ -241,6 +247,7 @@ class adminTable {
 		$this->_changelist_fields = gOpt($opts, 'changelist_fields', null);
 		$this->_changelist_members = gOpt($opts, 'changelist_members', null);
 		$this->_changelist_links = gOpt($opts, 'changelist_links', null);
+		$this->_changelist_where = gOpt($opts, 'changelist_where', null);
 		$this->_no_form_fields = gOpt($opts, 'no_form_fields', array());
 		$this->_editor = gOpt($opts, 'editor', false);
 		$this->_export = gOpt($opts, 'export', false);
@@ -457,7 +464,7 @@ class adminTable {
 	/**
 	 * @brief Sets the $_changelist_links property 
 	 * 
-	 * @param array $members See @ref adminTable::__construct() options
+	 * @param array $links See @ref adminTable::__construct() options
 	 *
 	 * @return void
 	 */
@@ -465,6 +472,20 @@ class adminTable {
 		
 		if(is_array($links))
 			$this->_changelist_links = $links;
+
+	}
+
+  /**
+	 * @brief Sets the $_changelist_where property 
+	 * 
+	 * @param array $members See @ref adminTable::__construct() options
+	 *
+	 * @return void
+	 */
+	public function setChangelistWhere($where) {
+		
+		if(is_array($where))
+			$this->_changelist_where = $where;
 
 	}
 	
@@ -867,6 +888,12 @@ class adminTable {
 				}
 			}
 		}
+
+    if(isset($this->_changelist_where)) {
+      foreach($this->_changelist_where as $field => $value) {
+        $where_a[] = $prefix.$field."='".$value."'";
+      }
+    }
 
 		return count($where_a) ? implode(" AND ", $where_a) : null;
 
