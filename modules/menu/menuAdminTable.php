@@ -54,7 +54,7 @@ class menuAdminTable extends adminTable {
 
 		$fields_names = $this->_registry->db->getFieldsName($this->_table);
 
-		$pag = new pagination($this->_efp, $this->_registry->db->getNumRecords($this->_table, null, $this->_primary_key));
+		$pag = new pagination($this->_efp, $this->_registry->db->count($this->_table, null, $this->_primary_key));
 
 		$limit = array($pag->start(), $this->_efp);
 
@@ -70,14 +70,13 @@ class menuAdminTable extends adminTable {
 
 		// different queries if the order field is a foreign key
 		if(isset($this->_fkeys[$field_order])) {
-			$records = $this->_registry->db->autoSelect($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), "a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
+			$records = $this->_registry->db->select($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), "a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
 		}
 		else 
-			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, null, $order, $limit);
+			$records = $this->_registry->db->select($field_selection, $this->_table, null, $order, $limit);
 
-		$all = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').setProperty('checked', 'checked');\">".__("all")."</span>";
-		$none = "<span class=\"link\" onclick=\"$$('#atbl_form input[type=checkbox]').removeProperty('checked');\">".__("none")."</span>";
-		$heads = ($this->_edit_deny != 'all' || $this->_export) ? array("0"=>"$all | $none") : array();
+        $toggle = "<span class=\"uncheck_all_toggle\" onclick=\"toggleAllChecks($('atbl_form'), this)\"></span>";
+		$heads = ($this->_edit_deny != 'all' || $this->_export) ? array("0"=>$toggle) : array();
 		foreach($fields_names as $fn) {
 			if(!$this->_changelist_fields || in_array($fn, $this->_changelist_fields)) {
 				$ord = $order == $fn." ASC" ? $fn." DESC" : $fn." ASC";
@@ -175,7 +174,7 @@ class menuAdminTable extends adminTable {
 			$input_where_query = '';	
 		}
 
-		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord")) : null;
+		$link_insert = $this->_insertion ? anchor("?insert", __("insertNewRecord"), array('class' => 'submit')) : null;
 
 		$this->_view->setTpl('admin_table');
 		$this->_view->assign('table', $table);
@@ -215,7 +214,7 @@ class menuAdminTable extends adminTable {
 
 		$required = $field['null']=='NO' ? true : false;
 
-		$records = $this->_registry->db->autoSelect("*", $this->_table, $this->_primary_key."='$id'", null);
+		$records = $this->_registry->db->select("*", $this->_table, $this->_primary_key."='$id'", null);
 		$value = count($records) ? $records[0][$fname] : null;
 
 		$parent = is_null($value) ? cleanInput('get', 'parent', 'int') : $value;
@@ -230,7 +229,7 @@ class menuAdminTable extends adminTable {
 		}
 		elseif($fname=='groups') {
 			$sf = $this->_sfields[$fname];
-			$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
+			$options = $this->_registry->db->select(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
 			return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, array(htmlVar(__($fname)), __('menuGroupsAdminExp')), array("required"=>$required));
 		
 		}

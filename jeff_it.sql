@@ -184,7 +184,8 @@ CREATE TABLE IF NOT EXISTS `themes` (
 
 INSERT INTO `themes` (`id`, `name`, `active`) VALUES
 (1, 'default', 1),
-(2, 'white', 0);
+(2, 'white', 0),
+(3, 'moderno', 0);
 
 -- --------------------------------------------------------
 

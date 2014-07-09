@@ -147,14 +147,22 @@ class menuController extends controller {
 			)
 		);
 
-		$at = new menuAdminTable(TBL_MENU, array("insertion"=>true));
+        $insert = isset($_GET['insert']) ? true : false;
+        $parent = cleanInput('get', 'parent', 'int');
+        if($parent) {
+            $voice = new menuVoice($parent);
+            $insert_info = sprintf(__('MenuInsertVoiceUnder'), htmlVar($voice->label));
+        }
+        else $insert_info = __('MenuInsertVoice');
+
+		$at = new menuAdminTable(TBL_MENU, array("insertion"=>true, 'backoffice_form_text' => $insert ? $insert_info : __('MenuEditVoices')));
 		$at->setForeignKeys($f_keys);
 		$at->setSpecialFields($s_fields);
 
 		$table = $at->manage();
 
 		$this->_view->setTpl('manage_table');
-		$this->_view->assign('title', __("ManageTable")." ".__("Menu"));
+		$this->_view->assign('title', __("Menu"));
 		$this->_view->assign('table', $table);
 
 		return $this->_view->render();

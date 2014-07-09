@@ -87,12 +87,14 @@ class languageController extends controller {
 			)
 		);
 
-		$at = new adminTable(TBL_LNG);
+        $insert = isset($_GET['insert']) ? true : false;
+
+		$at = new adminTable(TBL_LNG, array('backoffice_text' => __('LanguagesPref'), 'backoffice_form_text' => $insert ? __('LanguagesPrefInsert') : __('LanguagesPrefEdit')));
 		$at->setSpecialFields($s_fields);
 		$table = $at->manage();
 
 		$this->_view->setTpl('manage_table');
-		$this->_view->assign('title', __("ManageTable")." ".TBL_LNG);
+		$this->_view->assign('title', __("Languages"));
 		$this->_view->assign('table', $table);
 
 		return $this->_view->render();
@@ -109,14 +111,21 @@ class languageController extends controller {
 		
 		$lngs = array();
 
+        $selected = null;
+        $i = 0;
 		foreach($active_lngs as $l) {
 			$href = "?lng=".$l->code;
 			$link = anchor($href, htmlVar($l->language));
 			$lngs[] = $link;
+            if($this->_registry->lng == $l->language) {
+                $selected = $i;
+            }
+            $i++;
 		}
 
 		$this->_view->setTpl('language_choose');
 		$this->_view->assign('lngs', $lngs);
+		$this->_view->assign('selected', $selected);
 
 		return $this->_view->render();
 	}

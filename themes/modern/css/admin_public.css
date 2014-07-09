@@ -1,0 +1,27 @@
+body {
+    background: #32495E;
+    color: #333;
+}
+.login_container {
+    background: #ccc;
+    width: 500px;
+    border: 1px solid #aaa;
+    padding-top: 0;
+    margin: auto;
+    margin-top: 10%;
+}
+.login_container h1 {
+    background: #582711;
+    color: #fff;
+    padding: 10px;
+    font-size: 25px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.login_container h2 {
+    background: #DE8157;
+    color: #fff;
+    padding: 10px;
+    font-size: 22px;
+    margin-top: 0;
+}

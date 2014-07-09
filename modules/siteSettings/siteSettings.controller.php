@@ -79,14 +79,14 @@ class siteSettingsController extends controller {
       )
     );
 
-    $at = new adminTable(TBL_SYS_SETTINGS, array('insertion'=>false, 'deletion'=>false));
+    $at = new adminTable(TBL_SYS_SETTINGS, array('insertion'=>false, 'deletion'=>false, 'backoffice_text' => __('AppPrefInfo'), 'backoffice_form_text' => __('AppPrefEdit')));
     $at->setSpecialFields($s_fields);
     $at->setFieldsLabels($fields_labels);
 
     $table = $at->manage();
 
     $this->_view->setTpl('manage_table');
-    $this->_view->assign('title', __("ManageTable")." ".TBL_SYS_SETTINGS);
+    $this->_view->assign('title', __("AppPref"));
     $this->_view->assign('table', $table);
 
     return $this->_view->render();

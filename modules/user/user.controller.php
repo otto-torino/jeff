@@ -96,14 +96,16 @@ class userController extends controller {
 
     $edit_deny = $this->_registry->user->id === 1 ? array() : array(1);
 
-		$at = new adminTable(TBL_USERS, array("edit_deny" => $edit_deny));
+    $insert = isset($_GET['insert']) ? true : false;
+
+		$at = new adminTable(TBL_USERS, array("edit_deny" => $edit_deny, 'backoffice_text' => __('UsersPrefInfo'), 'backoffice_form_text' => $insert ? __('UsersPrefInsert') : __('UsersPrefEdit')));
 		$at->setSpecialFields($s_fields);
     $at->setFieldsLabels($fields_labels);
 
 		$table = $at->manage();
 
 		$this->_view->setTpl('manage_table');
-		$this->_view->assign('title', __("ManageTable")." ".TBL_USERS);
+		$this->_view->assign('title', __("Users"));
 		$this->_view->assign('table', $table);
 
 		return $this->_view->render();

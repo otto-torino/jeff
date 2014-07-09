@@ -118,7 +118,7 @@ class groupController extends controller {
 		
 		$form = $this->formGroup($g);
 
-		$title = $g->id ? __("Edit")." \"".htmlVar($g->label)."\"" : __("NewGroup");
+		$title = $g->id ? __("EditGroup")." \"".htmlVar($g->label)."\"" : __("NewGroup");
 		$this->_view->setTpl('group_manage');
 		$this->_view->assign('title', $title);
 		$this->_view->assign('form', $form);
@@ -138,20 +138,28 @@ class groupController extends controller {
 		$myform = new form('post', 'group_form', array("validation"=>true));
 		$myform->load('group_form');
 
+        $buffer = '';
+		if($g->id <= 5 && $g->id) {
+            $buffer .= "<div class=\"admin-subheader\">";
+            $buffer .= "<p>".htmlVar($g->description)."</p>";
+            $buffer .= "</div>";
+        }
+
 		$required = '';
-		$buffer = $myform->sform($this->_router->linkHref($this->_mdl_name, 'saveGroup'), $required);
+		$buffer .= $myform->sform($this->_router->linkHref($this->_mdl_name, 'saveGroup'), $required);
 		$buffer .= $myform->hidden('id', $g->id);
 
 		if($g->id > 5 || !$g->id) $buffer .= $this->formGroupData($g, $myform);
-		else $buffer .= "<p>".htmlVar($g->description)."</p>";
 
 		$buffer .= $this->formPrivileges($g, $myform);
 
+        $buffer .= "<p class=\"form-actions\">";
 		$buffer .= $myform->input('submit_edit', 'submit', __("edit"), array("class"=>"left"));
 		if($g->id>5) {
 			$onclick = "onclick=\"if(confirm('Sicuro di voler procedere con l\'eliminazione?')) location.href='".$this->_router->linkHref($this->_mdl_name, 'deleteGroup', array("id"=>$g->id))."'\"";
 			$buffer .= " ".$myform->input('submit_delete', 'button', __("delete"), array("class"=>"right", "js"=>$onclick));
 		}
+        $buffer .= "</p>";
 		$buffer .= clearFloat();
 
 		$buffer .= $myform->cform();

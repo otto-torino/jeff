@@ -52,7 +52,7 @@ class user extends model {
 		$registry = registry::instance();
 
 		$objs = array();
-		$rows = $registry->db->autoSelect("id", TBL_USERS, '', 'lastname');
+		$rows = $registry->db->select("id", TBL_USERS, '', 'lastname');
 		foreach($rows as $row) $objs[] = new user($row['id']);
 
 		return $objs;
@@ -74,7 +74,7 @@ class user extends model {
 		elseif(PWD_HASH=='sha1') $pwd_check = sha1($pwd);	
 		else $pwd_check = $pwd;
 
-		$qr = $registry->db->autoSelect(array("id"), array(TBL_USERS), "username='$user' AND password='".$pwd_check."'", null);
+		$qr = $registry->db->select(array("id"), array(TBL_USERS), "username='$user' AND password='".$pwd_check."'", null);
 
 		return count($qr) ? new user($qr[0]['id']):null;
 

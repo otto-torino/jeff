@@ -77,12 +77,12 @@ class datetimeSettingsController extends controller {
 
 		access::check($this->_class_privilege, $this->_admin_privilege, array("exitOnFailure"=>true));
 
-		$at = new adminTable(TBL_SYS_DATETIME_SETTINGS, array('insertion'=>false, "deletion"=>false));
+		$at = new adminTable(TBL_SYS_DATETIME_SETTINGS, array('insertion'=>false, "deletion"=>false, 'backoffice_text' => __('DatetimePrefInfo'), 'backoffice_form_text' => __('DatetimePrefEdit')));
 
 		$table = $at->manage();
 
 		$this->_view->setTpl('manage_table');
-		$this->_view->assign('title', __("ManageTable")." ".TBL_SYS_DATETIME_SETTINGS);
+		$this->_view->assign('title', __("DatetimePref"));
 		$this->_view->assign('table', $table);
 
 		return $this->_view->render();

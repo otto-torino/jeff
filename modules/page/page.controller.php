@@ -66,7 +66,7 @@ class pageController extends controller {
 
 		$id = $id ? $id : cleanInput('get', 'id', 'string');
 
-		if(!in_array($id, $this->_white_list)) header("Location: ".ROOT);
+		if(!in_array($id, $this->_white_list)) Error::raise404();
 
 		$this->_view->setTpl($id);
 		$this->_view->assign('registry', $this->_registry);

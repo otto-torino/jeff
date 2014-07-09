@@ -40,7 +40,7 @@ function cleanVar($var, $type, $opts=array()) {
  */
 function cleanInput($method, $name, $type, $opts=array()) {
 
-	$db = db::instance();
+	$db = DB::instance();
 
 	$flags = array();
 	$filter_opts = null;
@@ -88,10 +88,6 @@ function cleanInput($method, $name, $type, $opts=array()) {
 	if(is_null($filter)) exit($input);
 	settype($input, $type);
 
-	if(!(gOpt($opts, 'escape', true)===false)) {
-		$input = $db->escapeString($input);
-	}
-
 	return $input;
 
 }
@@ -109,7 +105,7 @@ function cleanInput($method, $name, $type, $opts=array()) {
  */
 function cleanInputArray($method, $name, $type=null, $opts=array()) {
 	
-	$db = db::instance();
+	$db = DB::instance();
 
 	$flags = array(FILTER_REQUIRE_ARRAY);
 
@@ -137,12 +133,6 @@ function cleanInputArray($method, $name, $type=null, $opts=array()) {
 	$options = array("flags"=>$f);
 
 	$input = filter_input($method_string, $name, $filter, $options);
-
-	if(!(gOpt($opts, 'escape', true)===false) && count($input)) 
-		foreach($input as $k=>$in) {
-			if(get_magic_quotes_gpc()) $input[$k] = stripslashes($in);	// magic_quotes_gpc = On
-			$input[$k] = $db->escapeString($in);
-		}
 
 	return $input;
 

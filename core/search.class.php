@@ -218,7 +218,7 @@ class search {
 		$query = $this->makeQuery($selected_fields, $required_clauses, $weight_clauses);
 
 		if($query===false) return array();
-		$rows = $this->_registry->db->queryResult($query);
+		$rows = $this->_registry->db->query($query);
 		if(sizeof($rows)>0) {
 			$i = 0;
 			foreach($rows as $row) {

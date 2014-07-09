@@ -106,7 +106,7 @@ INSERT INTO `sys_groups` (`id`, `label`, `description`, `privileges`) VALUES
 (1, 'SysAdmin', 'System administrator group. Holds all privileges', '1'),
 (2, 'Admin', 'System group to be intended with administrative tasks', '2,3,5'),
 (3, 'Power', 'System group to be intended with advanced functionalities', ''),
-(4, 'User', 'System gorup to be intended with basic functionalities', ''),
+(4, 'User', 'System group to be intended with basic functionalities', ''),
 (5, 'Guest', 'System group associated to the non authenticated user', '3');
 
 -- --------------------------------------------------------
@@ -185,7 +185,8 @@ CREATE TABLE IF NOT EXISTS `themes` (
 
 INSERT INTO `themes` (`id`, `name`, `active`) VALUES
 (1, 'default', 1),
-(2, 'white', 0);
+(2, 'white', 0),
+(3, 'modern', 0);
 
 -- --------------------------------------------------------
 

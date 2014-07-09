@@ -1014,14 +1014,14 @@ class form {
 		if(isset($_FILES[$name]['name']) && $_FILES[$name]['name']) {
 			$nfile_size = $_FILES[$name]['size'];
 			if($max_file_size && $nfile_size>$max_file_size) {
-				if($error_query) $this->registry->db->executeQuery($error_query);
+				if($error_query) $this->registry->db->query($error_query);
 				exit(error::errorMessage(array('error'=>__("MaxSizeError")), $link_error));
 			}
 			$tmp_file = $_FILES[$name]['tmp_name'];
 			$nfile = $this->setFileName($name, $path, $prefix); 
 
 			if(!$this->checkExtension($nfile, $valid_extension) || preg_match('#%00#', $nfile) || ($check_content && !in_array( $_FILES[$name]['type'], $contents_allowed))) {
-				if($error_query) $this->registry->db->executeQuery($error_query);
+				if($error_query) $this->registry->db->query($error_query);
 				exit(error::errorMessage(array('error'=>__("FileConsistentError")), $link_error));
 			}
 
@@ -1038,7 +1038,7 @@ class form {
 		if($delete) {
 			if(is_file($path.$this->_requestVars['old_'.$name]))	
 				if(!@unlink($path.$this->_requestVars['old_'.$name])) {
-					if($error_query) $this->registry->db->executeQuery($error_query);
+					if($error_query) $this->registry->db->query($error_query);
 					exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
 				}
 
@@ -1046,7 +1046,7 @@ class form {
 
 		if($upload) {
 			if(!$this->upload($tmp_file, $nfile, $path)) { 
-				if($error_query) $this->registry->db->executeQuery($error_query);
+				if($error_query) $this->registry->db->query($error_query);
 				exit(error::errorMessage(array('error'=>__("CantUploadError")), $link_error));
 			}
 		}
@@ -1118,14 +1118,14 @@ class form {
 		if(isset($_FILES[$name]['name']) && $_FILES[$name]['name']) {
 			$nfile_size = $_FILES[$name]['size'];
 			if($max_file_size && $nfile_size>$max_file_size) {
-				if($error_query) $this->registry->db->executeQuery($error_query);
+				if($error_query) $this->registry->db->query($error_query);
 				exit(error::errorMessage(array('error'=>__("MaxSizeError")), $link_error));
 			}
 			$tmp_file = $_FILES[$name]['tmp_name'];
 			$nfile = $this->setFileName($name, $path, $prefix); 
 
 			if(!$this->checkExtension($nfile, $valid_extension) || preg_match('#%00#', $nfile) || ($check_content && !in_array( $_FILES[$name]['type'], $contents_allowed))) {
-				if($error_query) $this->registry->db->executeQuery($error_query);
+				if($error_query) $this->registry->db->query($error_query);
 				exit(error::errorMessage(array('error'=>__("FileConsistentError")), $link_error));
 			}
 
@@ -1142,7 +1142,7 @@ class form {
 		if($delete) {
 			if(is_file($path.$this->_requestVars['old_'.$name]))	
 				if(!@unlink($path.$this->_requestVars['old_'.$name])) {
-					if($error_query) $this->registry->db->executeQuery($error_query);
+					if($error_query) $this->registry->db->query($error_query);
 					exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
 				}
 			if($make_thumb) {
@@ -1150,7 +1150,7 @@ class form {
 				
 				if(is_file($path.$old_file_thumb))	
 					if(!@unlink($path.$old_file_thumb)) {
-						if($error_query) $this->registry->db->executeQuery($error_query);
+						if($error_query) $this->registry->db->query($error_query);
 						exit(error::errorMessage(array('error'=>__("CantDeleteUploadedFileError")), $link_error));
 					}
 			}
@@ -1160,7 +1160,7 @@ class form {
 		if($upload) {
 			
 			if(!$this->upload($tmp_file, $nfile, $path)) { 
-				if($error_query) $this->registry->db->executeQuery($error_query);
+				if($error_query) $this->registry->db->query($error_query);
 				exit(error::errorMessage(array('error'=>__("CantUploadError")), $link_error));
 			}
 			

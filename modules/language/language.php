@@ -53,7 +53,7 @@ class language extends model {
 	
 		$objs = array();
 		$where = gOpt($opts, "where", ''); 
-		$rows = $registry->db->autoSelect("id", TBL_LNG, $where, 'language');
+		$rows = $registry->db->select("id", TBL_LNG, $where, 'language');
 		foreach($rows as $row) $objs[] = new language($row['id']);
 
 		return $objs;
@@ -70,7 +70,7 @@ class language extends model {
 
 		$registry = registry::instance();
 
-		$rows = $registry->db->autoSelect("id", TBL_LNG, "label='$label'", 'language');
+		$rows = $registry->db->select("id", TBL_LNG, array('label', $label), 'language');
 		if(count($rows)) return new language($rows[0]['id']);
 
 		return null;
@@ -91,7 +91,7 @@ class language extends model {
 		$language = null;
 		if($code = cleanInput('get', 'lng', 'string')) {
 			// charge language and put it in session
-			$rows = $registry->db->autoSelect(array("id", "language"), TBL_LNG, "code='$code'", 'language');
+			$rows = $registry->db->select(array("id", "language"), TBL_LNG, array('code' => $code), 'language');
 			$language = $rows[0]['language'];
 			$_SESSION['lng'] = $language;
 			header("Location: ".preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']));
@@ -103,7 +103,7 @@ class language extends model {
 
 		if(!$language) {
 			// default language
-			$rows = $registry->db->autoSelect(array("id", "language"), TBL_LNG, "main='1'", 'language');
+			$rows = $registry->db->select(array("id", "language"), TBL_LNG, array('main', 1), 'language');
 			$language = $rows[0]['language'];
 			$_SESSION['lng'] = $language;
 		}

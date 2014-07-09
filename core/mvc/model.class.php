@@ -122,7 +122,7 @@ class model {
 	 */
 	protected function initDbProp($id) {
 
-    $qr = $this->_registry->db->autoSelect(array("*"), array($this->_tbl_data), "id='$id'", null);
+    $qr = $this->_registry->db->select(array("*"), array($this->_tbl_data), "id='$id'", null);
 
     if(count($qr)) {
       $cache = new dataCache();

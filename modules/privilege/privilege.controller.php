@@ -63,15 +63,13 @@ class privilegeController extends controller {
 	
 		access::check($this->_class_privilege, $this->_view_privilege, array("exitOnFailure"=>true));
 
-		$at = new adminTable(TBL_SYS_PRIVILEGES, array('insertion'=>false, 'edit_deny'=>'all'));
-
 		$text = __("ManagePrivilegesExp");
+		$at = new adminTable(TBL_SYS_PRIVILEGES, array('insertion'=>false, 'edit_deny'=>'all', 'backoffice_text' => $text));
 
 		$table = $at->manage();
 
 		$this->_view->setTpl('manage_table');
-		$this->_view->assign('text', $text);
-		$this->_view->assign('title', __("TableContent")." ".TBL_SYS_PRIVILEGES);
+		$this->_view->assign('title', __("Permissions"));
 		$this->_view->assign('table', $table);
 
 		return $this->_view->render();

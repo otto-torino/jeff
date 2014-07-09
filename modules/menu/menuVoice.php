@@ -59,7 +59,7 @@ class menuVoice extends model {
 		$where = gOpt($opts, "where", ""); 
 		$order = gOpt($opts, "order", null); 
 
-		$rows = $registry->db->autoSelect("id", TBL_MENU, $where, $order, null);
+		$rows = $registry->db->select("id", TBL_MENU, $where, $order, null);
 		foreach($rows as $row) $objs[] = new menuVoice($row['id']);
 
 		return $objs;

@@ -566,7 +566,7 @@ class adminTable {
 		$order_dir = isset($matches[2]) ? $matches[2] : null;
 
 		$where_pag = $this->setWhereClause(false);
-		$pag = new pagination($this->_efp, $this->_registry->db->getNumRecords($this->_table, $where_pag, $this->_primary_key));
+		$pag = new pagination($this->_efp, $this->_registry->db->count($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
 		if(count($this->_changelist_fields)) {
@@ -585,10 +585,10 @@ class adminTable {
 
 		// different queries if the order field is a foreign key
 		if(isset($this->_fkeys[$field_order])) {
-			$records = $this->_registry->db->autoSelect($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), ($where ? $where." AND " : "")."a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
+			$records = $this->_registry->db->select($field_selection, array($this->_table." AS a", $this->_fkeys[$field_order]['table']." AS b"), ($where ? $where." AND " : "")."a.$field_order=b.".$this->_fkeys[$field_order]['key'], "b.".$this->_fkeys[$field_order]['order']." $order_dir", $limit);
 		}
 		else 
-			$records = $this->_registry->db->autoSelect($field_selection, $this->_table, $where, $order, $limit);
+			$records = $this->_registry->db->select($field_selection, $this->_table, $where, $order, $limit);
 
 		return array($pag, $records, $where);
 
@@ -609,7 +609,7 @@ class adminTable {
 		$tot_pf = count($this->_pfields);
 		$tot_ff = count($this->_filter_fields);
 
-    $toggle = "<span class=\"uncheck_all_toggle\" onclick=\"toggleAllChecks($('atbl_form'), this)\"></span>";
+        $toggle = "<span class=\"uncheck_all_toggle\" onclick=\"toggleAllChecks($('atbl_form'), this)\"></span>";
 		$heads = ($this->_edit_deny != 'all' || $this->_export) ? array("0"=>$toggle) : array();
 		foreach($fields_names as $fn) {
 			if(!$this->_changelist_fields || in_array($fn, $this->_changelist_fields)) {
@@ -958,7 +958,7 @@ class adminTable {
 		foreach($row as $k=>$v) {
 			if(isset($this->_fkeys[$k])) {
 				$fkts = $this->_registry->db->getTableStructure($this->_fkeys[$k]['table']);
-				$fk = $this->_registry->db->autoSelect($this->_fkeys[$k]['field'], $this->_fkeys[$k]['table'], $this->_fkeys[$k]['key']."='$v'" , null);
+				$fk = $this->_registry->db->select($this->_fkeys[$k]['field'], $this->_fkeys[$k]['table'], array($this->_fkeys[$k]['key'], $v) , null);
 				$res[$k] = isset($fk[0]) ? $fk[0][$this->_fkeys[$k]['field']] : null;
 			}
 			else $res[$k] = $v;
@@ -998,7 +998,7 @@ class adminTable {
 					$vf = array();
 					foreach(explode(",", $v) as $vp) {
 						$fkts = $this->_registry->db->getTableStructure($this->_sfields[$k]['table']);
-						$fk = $this->_registry->db->autoSelect($this->_sfields[$k]['field'], $this->_sfields[$k]['table'], $this->_sfields[$k]['key']."='$vp'" , null);
+						$fk = $this->_registry->db->select($this->_sfields[$k]['field'], $this->_sfields[$k]['table'], array($this->_sfields[$k]['key'], $vp) , null);
 						$vf[] = isset($fk[0]) ? $fk[0][$this->_sfields[$k]['field']] : '';
 					}
 					$res[$k] = implode(", ", $vf);
@@ -1125,7 +1125,7 @@ class adminTable {
     $buffer = '';
 
     if($this->_backoffice_form_text) {
-      $buffer .= $this->_backoffice_form_text;
+      $buffer .= "<p class=\"admin-subheader\">".$this->_backoffice_form_text."</p>";
     }
 
 		$buffer .= $myform->sform($formaction, null, array("upload"=>$this->checkUpload()));
@@ -1141,7 +1141,7 @@ class adminTable {
 					$content = $this->formRecord($f, $myform);
 					if(array_key_exists($this->_primary_key, $this->_fkeys)) {
 						$fk = $this->_fkeys[$this->_primary_key];
-						$records = $this->_registry->db->autoSelect($fk['field'], $fk['table'], $fk['key']."='$f'" , null);
+						$records = $this->_registry->db->select($fk['field'], $fk['table'], array($fk['key'], $f) , null);
 						$value_p = $records[0][$fk['field']];
 					}
 					else $value_p = $f;
@@ -1150,10 +1150,12 @@ class adminTable {
 			}
 		}
 
+        $buffer .= "<p class=\"form-actions\">";
 		$buffer .= $myform->input('submit_'.($insert ? "insert" : "modify"), 'submit', __('save'), array());
 		if($this->_save_and_continue) {
 			$buffer .= "&#160;".$myform->input('submit_c_'.($insert ? "insert" : "modify"), 'submit', __('saveContinueEditing'), array());
-		}
+        }
+        $buffer .= "</p>";
 
 		$buffer .= $myform->cform();
 		
@@ -1196,7 +1198,7 @@ class adminTable {
 					foreach($this->_is_foreign as $tbl=>$prop) {
 						$where = $prop['field_name']."='".implode("' OR ".$prop['field_name']."='", $f_s)."'";
 						$selection = array('id', $prop['field_name']);
-						$res = $this->_registry->db->autoSelect($selection, $tbl, $where, null, null);
+						$res = $this->_registry->db->select($selection, $tbl, $where, null, null);
 	
 						if(count($res)) {
 							$wngs++;
@@ -1256,12 +1258,12 @@ class adminTable {
 		foreach($f_s as $fid) {
 			foreach($this->_sfields as $fname=>$fopt) {
 				if($fopt['type']=='file') {
-					$rows = $this->_registry->db->autoSelect($fname, $this->_table, $this->_primary_key."='$fid'");
+					$rows = $this->_registry->db->select($fname, $this->_table, array($this->_primary_key, $fid));
 					$filename = $rows[0][$fname];
 					@unlink($fopt['path'].DS.$filename);	
 				}	
 				elseif($fopt['type']=='image') {
-					$rows = $this->_registry->db->autoSelect($fname, $this->_table, $this->_primary_key."='$fid'");
+					$rows = $this->_registry->db->select($fname, $this->_table, array($this->_primary_key, $fid));
 					$filename = $rows[0][$fname];
 					@unlink($fopt['path'].DS.$filename);	
 					if($fopt['make_thumb']) {
@@ -1351,7 +1353,7 @@ class adminTable {
 			$value = gOpt($opts, 'value', '');
 		}
 		else {
-			$records = $this->_registry->db->autoSelect("*", $this->_table, $this->_primary_key."='$id'", null);
+			$records = $this->_registry->db->select("*", $this->_table, array($this->_primary_key, $id), null);
 			$value = count($records) ? $records[0][$fname] : null;
 		}
 
@@ -1397,7 +1399,7 @@ class adminTable {
 			}
 			elseif($this->_sfields[$fname]['type']=='multicheck') {
 				$sf = $this->_sfields[$fname];
-				$options = $this->_registry->db->autoSelect(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
+				$options = $this->_registry->db->select(array($sf['key']." AS value", $sf['field']." AS label"), $sf['table'], $sf['where'], $sf['order']);
 				return $myform->cmulticheckbox($fname."_".$id_f."[]", $myform->retvar($fname."_".$id_f, explode(",", $value)), $options, array($label, $helptext), array("required"=>$required));
 			}
 			elseif($this->_sfields[$fname]['type']=='file' || $this->_sfields[$fname]['type']=='image') {
@@ -1409,7 +1411,7 @@ class adminTable {
 		}
 		elseif(array_key_exists($fname, $this->_fkeys)) {
 			$fk = $this->_fkeys[$fname];
-			$options = $this->_registry->db->autoSelect(array($fk['key'], $fk['field']), $fk['table'], $fk['where'], $fk['order']);
+			$options = $this->_registry->db->select(array($fk['key'], $fk['field']), $fk['table'], $fk['where'], $fk['order']);
 			$data = array();
 			foreach($options as $rec) 
 				$data[htmlInput($rec[$fk['key']])] = htmlVar($rec[$fk['field']]);
@@ -1547,7 +1549,7 @@ class adminTable {
 					$field = $structure['keys'][$error['key']-1];
 					if(isset($this->_fkeys[$field])) {
 						$fk = $this->_fkeys[$field];
-						$er_values = $this->_registry->db->autoSelect(array($fk['field']), $fk['table'], $fk['key']."='".$error['value']."'", null);
+						$er_values = $this->_registry->db->select(array($fk['field']), $fk['table'], array($fk['key'], $error['value']), null);
 						$er_value = substr($er_values[0][$fk['field']], 0, 50);
 					}
 					else $er_value = substr($error['value'], 0, 50);
@@ -1672,7 +1674,7 @@ class adminTable {
 		elseif(!$where) $rids = '*';
 		else {
 			$rids_a = array();
-			$records = $this->_registry->db->autoSelect($this->_primary_key, $this->_table, $where);
+			$records = $this->_registry->db->select($this->_primary_key, $this->_table, $where);
 			foreach($records as $r) $rids_a[] = $r[$this->_primary_key];
 			$rids = implode(",", $rids_a);
 		}		

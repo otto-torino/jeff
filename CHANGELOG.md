@@ -1,6 +1,14 @@
 CHANGELOG
 ===========================================================================================
 
+2014-06-09 abidibo  <abidibo@gmail.com>
+---------------------------------------------    
+Preparing new version: v1.0
+
+migration to PDO
+
+general templates now in php
+
 2013-10-18 abidibo  <abidibo@gmail.com>
 ---------------------------------------------    
 Preparing new version: v1.0

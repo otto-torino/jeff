@@ -53,7 +53,7 @@ class privilege extends model {
 		$registry = registry::instance();
 
 		$objs = array();
-		$rows = $registry->db->autoSelect("id", TBL_SYS_PRIVILEGES, '', 'id');
+		$rows = $registry->db->select("id", TBL_SYS_PRIVILEGES, '', 'id');
 		foreach($rows as $row) $objs[] = $row['id'];
 
 		return $objs;

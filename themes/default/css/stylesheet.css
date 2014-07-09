@@ -31,7 +31,7 @@ section {
       right: 5px; }
 
 nav.main_menu {
-  background: #CFC080; }
+  background: #CFC080; font-size: 0.9em; }
 
 div.header_lng a:link, div.header_lng a:visited {
   color: #fff; }

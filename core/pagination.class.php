@@ -205,10 +205,10 @@ class pagination {
 		$this->_view->assign('pages', $pages);
 		$prev_p = $this->_actual == 1 
 			? null 
-			: anchor(($this->_permalink ? $base_link.($this->_actual-1)."/".$params : $base_link.$params.($this->_actual-1)), "<--");
+			: anchor(($this->_permalink ? $base_link.($this->_actual-1)."/".$params : $base_link.$params.($this->_actual-1)), "&laquo;");
 		$next_p = $this->_actual == $this->_last 
 			? null : 
-			anchor(($this->_permalink ? $base_link.($this->_actual+1)."/".$params : $base_link.$params.($this->_actual+1)), "-->");
+			anchor(($this->_permalink ? $base_link.($this->_actual+1)."/".$params : $base_link.$params.($this->_actual+1)), "&raquo;");
 		$this->_view->assign('prev', $prev_p);
 		$this->_view->assign('next', $next_p);
 

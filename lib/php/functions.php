@@ -27,7 +27,7 @@ function __($id) {
 	// registry singleton
 	$registry = registry::instance();
 
-	return isset($registry->lng_dict[$id]) ? $registry->lng_dict[$id] : $id;
+	return @isset($registry->lng_dict[$id]) ? $registry->lng_dict[$id] : $id;
 
 };
 

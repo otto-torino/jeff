@@ -165,17 +165,17 @@ class theme {
 
     $this->_tpl_name = $tpl;
 
-    if(is_readable($this->path().DS.$tpl.".tpl"))
+    if(is_readable($this->path().DS.$tpl.".php"))
       $tpl_path = $this->path().DS.$tpl;
-    elseif(is_readable($this->dftPath().DS.$tpl.".tpl"))
+    elseif(is_readable($this->dftPath().DS.$tpl.".php"))
       $tpl_path = $this->dftPath().DS.$tpl;
     else $tpl_path = null;
 
-    if($this->_registry->is_mobile and $tpl_path and is_readable($tpl_path.'_mobile.tpl')) {
-      $tpl_path = $tpl_path.'_mobile.tpl';
+    if($this->_registry->is_mobile and $tpl_path and is_readable($tpl_path.'_mobile.php')) {
+      $tpl_path = $tpl_path.'_mobile.php';
     }
     elseif($tpl_path) {
-      $tpl_path = $tpl_path.'.tpl';
+      $tpl_path = $tpl_path.'.php';
     }
 
     $this->_tpl = $tpl_path ? new template($tpl_path) : null;
@@ -209,7 +209,7 @@ class theme {
         $css[] = relativePath($this->dftPath())."/css/".$this->_tpl_name."_mobile.css";
     }
 
-    return $css;	
+    return $css;
 
   }
 	

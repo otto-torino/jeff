@@ -53,7 +53,7 @@ class core {
     
     // initializing registry variable
     $this->_registry = registry::instance();
-    $this->_registry->db = db::instance();
+    $this->_registry->db = DB::instance();
     $this->_registry->url = $_SERVER['REQUEST_URI'];
     $this->_registry->admin_privilege = 1;
     $this->_registry->admin_view_privilege = 2;
@@ -98,8 +98,8 @@ class core {
         }
       }
     }
-    if(isset($this->_registry->theme)) {
-      $theme = $registry->theme;
+    if($this->_registry->theme) {
+      $theme = $this->_registry->theme;
       $path = $theme->path();
       if(get_class($theme)!= 'defaultTheme') {
         if(is_dir($path.DS.'languages'.DS.$this->_registry->lng) and $trnsl_files = scandir($path.DS.'languages'.DS.$this->_registry->lng)) {
@@ -263,20 +263,20 @@ class core {
    */
   public function getTheme() {
 
-    $rows = $this->_registry->db->autoSelect(array("name"), TBL_THEMES, "active='1'", '');
+    $rows = $this->_registry->db->select(array("name"), TBL_THEMES, array('active' => 1), '');
     $theme_name = $rows[0]['name'];
 
     if(is_readable(ABS_THEMES.DS.$theme_name.DS.$theme_name.'.php'))
       require_once(ABS_THEMES.DS.$theme_name.DS.$theme_name.'.php');
     else 
-      Error::syserrorMessage('coew', 'getTheme', sprintf(__("CantLoadThemeError"), $theme_name, __LINE__));
+      Error::syserrorMessage('coew', 'getTheme', sprintf("Can't load theme %s", $theme_name), __LINE__);
 
     $theme_class = $theme_name.'Theme';
 
     if(class_exists($theme_class))
       return new $theme_class();
     else 
-      Error::syserrorMessage('coew', 'getTheme', sprintf(__("CantLoadThemeError"), $theme_name, __LINE__));
+      Error::syserrorMessage('coew', 'getTheme', sprintf("Can't load theme %s", $theme_name), __LINE__);
 
   }
 

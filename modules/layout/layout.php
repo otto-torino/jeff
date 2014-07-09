@@ -48,7 +48,7 @@ class layout extends model {
 	
 		$registry = registry::instance();
 		$objs = array();
-		$rows = $registry->db->autoSelect("id", TBL_THEMES, '', 'active DESC,name');
+		$rows = $registry->db->select("id", TBL_THEMES, '', 'active DESC,name');
 		foreach($rows as $row) $objs[] = new layout($row['id']);
 
 		return $objs;

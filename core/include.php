@@ -31,23 +31,30 @@ include(ABS_TEMPLATE.DS.'template.class.php');
 include(ABS_TEMPLATE.DS.'template.factory.php');
 include(ABS_CORE.DS.'pagination.class.php');
 include(ABS_THEME.DS.'theme.class.php');
+include(ABS_DB.DS.'db.class.php');
 include(ABS_DB.DS.'db.factory.php');
-include(ABS_DB.DS.'mysql.php');
+include(ABS_DB.DS.'mysql.class.php');
 
 /**
- * @brief Auto includes the requested class model or exits with error 
+ * @brief Auto includes the requested class model or controller or exits with error 
  * 
- * @param mixed $class name of the model class
+ * @param mixed $class name of the model/controller class
  * @return void
  */
 function __autoload($class) {
 
    	if(is_file(ABS_MDL.DS.$class.DS.$class.'.php')) {
    		include_once(ABS_MDL.DS.$class.DS.$class.'.php');
-	}
+    }
+    else {
+        if(preg_match("#(.*?)Controller#", $class, $matches)) {
+            include_once(ABS_MDL.DS.$matches[1].DS.$matches[1].'.controller.php');
+        }
+    }
    		
 	if (!class_exists($class, false)) {
-		Error::syserrorMessage('include.php', 'autoload', sprintf(__("CantChargeModuleError"), $class, ABS_MDL.DS.$class.DS.$class.'.php'), __LINE__);
+        $registry = registry::instance();
+		Error::syserrorMessage('include.php', 'autoload', sprintf('Can\'t charge the model or controller %s', $class), __LINE__);
 	}
 }
 

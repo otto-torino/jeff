@@ -5,7 +5,7 @@
  *
  * The database instance is unique due to the use of the singleton pattern.\n       
  * The database instance returned depends on the DBMS configuration setting, so that it's easy to add support for other DBMS different from MySQL.\n
- * Look the database interface definition to see which methods a specific DBMS class should implement.
+ * Look the main Database class to see which methods a specific DBMS class can override. Each specific Db class shoud extend the Database class.
  *
  * @author abidibo abidibo@gmail.com
  * @version 0.99
@@ -20,11 +20,8 @@
  * The **abstract factory** pattern is also used in the creation of the client db instance so that the db management module is **easily extensible**.
  *
  * The class used as db client is decided at runtime reading the constant **DBMS** set in the [configuration](configuration.php) file.\n        
- * Jeff comes with the MySQL client class \ref mysql, but it's quite simple to add support for opther DBMS, just implement all the methods defined in the interface DbManager.
  *
  */
-
-require_once('interface.db.php');
 
 /**
  * \ingroup database core
@@ -36,67 +33,73 @@ require_once('interface.db.php');
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 abstract class db extends singleton {
-	
-	/**
-	 * @brief database host
- 	 */
-	private static $_db_host = DB_HOST;
 
-	/**
-	 * @brief database user
-	 */
-	private static $_db_user = DB_USER;
+    /**
+     * @brief database host
+     */
+    private static $_db_host = DB_HOST;
 
-	/**
-	 * @brief database password
-	 */
-	private static $_db_pass = DB_PASSWORD;
+    /**
+     * @brief database user
+     */
+    private static $_db_user = DB_USER;
 
-	/**
-	 * @brief database name
-	 */
-	private static $_db_dbname = DB_DBNAME;
+    /**
+     * @brief database password
+     */
+    private static $_db_pass = DB_PASSWORD;
 
-	/**
-	 * @brief database charset
-	 */
-	private static $_db_charset = DB_CHARSET;
+    /**
+     * @brief database name
+     */
+    private static $_db_dbname = DB_DBNAME;
 
-	/**
-	 * @brief database schema
-	 */
-	private static $_db_schema = DB_SCHEMA;
+    /**
+     * @brief database charset
+     */
+    private static $_db_charset = DB_CHARSET;
 
-	/**
-	 * @brief returns a singleton db instance 
-	 * 
-	 * @return 
-	 *   the singleton instance
-	 */
-	public static function instance() {
-		
-		$class = get_class();
+    /**
+     * @brief database schema
+     */
+    private static $_db_schema = DB_SCHEMA;
 
-		// singleton, return always the same instance
-		if(array_key_exists($class, self::$_instances) === false) {
+    /**
+     * @brief returns a singleton db instance 
+     * 
+     * @return 
+     *   the singleton instance
+     */
+    public static function instance() {
 
-			if(DBMS=='mysql') { 
-				self::$_instances[$class] = new mysql(
-					array(
-						"connect"=>true,
-						"host"=>self::$_db_host,
-						"user"=>self::$_db_user,
-						"password"=>self::$_db_pass,
-						"db_name"=>self::$_db_dbname,
-						"charset"=>self::$_db_charset
-					)
-				);
-			}
-		}
+        $class = get_class();
 
-		return self::$_instances[$class];
+        // singleton, return always the same instance
+        if(array_key_exists($class, self::$_instances) === false) {
 
-	}
+            if(class_exists(DBMS)) {
+                $dbclass = DBMS;
+            }
+            else{
+                $dbclass = 'Database';
+            }
+
+            self::$_instances[$class] = new $dbclass(
+                array(
+                    "connect"=>true,
+                    "dbms"=>DBMS,
+                    "host"=>DB_HOST,
+                    "user"=>DB_USER,
+                    "password"=>DB_PASSWORD,
+                    "db_name"=>DB_DBNAME,
+                    "charset"=>DB_CHARSET
+                )
+            );
+        }
+
+        return self::$_instances[$class];
+
+    }
 
 }
 

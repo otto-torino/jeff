@@ -1,0 +1,110 @@
+body.admin {
+    padding: 0 !important;
+    margin: 0;
+}
+.admin-left-sidebar {
+    background: #32495E;
+    #gradient.horizontal(#32495E;darken(#32495E, 5%);70%;100%);
+    padding: 15px 10px;
+    font-size: 0.8em;
+    .menu-adminmenu {
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            list-style-type: none;
+            text-align: center;
+            margin: 20px 0;
+            .fa {
+                display: block;
+            }
+        }
+    }
+    a:link, a:visited {
+        color: lighten(#6A7E8F, 10%);
+        text-decoration: none;
+    }
+    a:hover {
+        color: #fff;
+    }
+    .user-select(none);
+}
+
+.admin-content {
+    padding: 0;
+    > section {
+        padding: 0 20px;
+        h1 {
+            background: #582711;
+            color: #fff;
+            margin: 0;
+            margin-left: -20px;
+            margin-right: -20px;
+            margin-bottom: 0px;
+            padding: 10px;
+        }
+        .admin-subheader {
+            margin-top: 0;
+            margin-left: -20px;
+            margin-right: -20px;
+            padding: 20px 10px;
+            background: lighten(#582711, 40%);
+            color: #fff;
+            a:link, a:visited {
+                color: #ddd;
+            }
+            p {
+                margin-bottom: 0;
+            }
+        }
+        .form-actions {
+            padding: 20px 0;
+            border-top: 1px dotted #eee;
+        }
+    }
+
+    table.generic {
+        .table;
+        .table-bordered;
+        th {
+            background: #DDB29F;
+            border: 1px solid #ddb29f !important;
+            a:link, a:visited {
+                color: #fff;
+            }
+        }
+        th.noBkg {
+            background: #DDB29F !important;
+        }
+        td {
+            border: 1px solid #ddb29f !important;
+        }
+    }
+    form {
+        .form-horizontal;
+        label {
+            margin: 0;
+        }
+    }
+    a.submit[href$=insert], a.submit[href*=new] {
+        background: transparent !important;
+        border-width: 0px;
+        box-shadow: 0 0 0 #000;
+        border-radius: 0;
+        span {
+            font-size: 14px;
+        }
+        &:before {
+            content: "";
+            .fa;
+            .fa-2x;
+        }
+    }
+}
+
+.tooltip.help {
+    display: inline;
+    position: static;
+    .opacity(1);
+}

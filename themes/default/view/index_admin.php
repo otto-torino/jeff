@@ -12,5 +12,5 @@
 ?>
 <section>
 <h1><?= __('AdminArea') ?></h1>
-<?= __('adminWelcome') ?>
+<p><?= __('adminWelcome') ?></p>
 </section>

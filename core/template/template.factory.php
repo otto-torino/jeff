@@ -47,34 +47,34 @@
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
 abstract class templateFactory {
-	
-	/**
-	 * @brief Creation of the global template object 
-	 * 
-	 * @return the template object or error
-	 */
-	public static function create() {
 
-		$registry = registry::instance();
+    /**
+     * @brief Creation of the global template object 
+     * 
+     * @return the template object or error
+     */
+    public static function create() {
 
-		if($registry->site == 'admin') {
-			$tpl = access::check('main', $registry->admin_view_privilege) ? "admin_private" : "admin_public";
-		}
-		elseif($registry->site == 'main') {
-			if($registry->user->id) $tpl = $registry->isHome ? "home_private" : "page_private";
-			elseif($registry->isHome) $tpl = 'home_public'; 
-			else $tpl = 'page_public';
-		}
+        $registry = registry::instance();
 
-		$registry->theme->setTpl($tpl);
+        if($registry->site == 'admin') {
+            $tpl = access::check('main', $registry->admin_view_privilege) ? "admin_private" : "admin_public";
+        }
+        elseif($registry->site == 'main') {
+            if($registry->user->id) $tpl = $registry->isHome ? "home_private" : "page_private";
+            elseif($registry->isHome) $tpl = 'home_public'; 
+            else $tpl = 'page_public';
+        }
 
-		$tplObj = $registry->theme->getTemplate();
+        $registry->theme->setTpl($tpl);
 
-		if($tplObj) return $tplObj;
-		else
-			Error::syserrorMessage('templateFactory', 'create', sprintf(__("CantChargeTplError"), $tpl), __LINE__);
+        $tplObj = $registry->theme->getTemplate();
 
-	}
+        if($tplObj) return $tplObj;
+        else
+            Error::syserrorMessage('templateFactory', 'create', sprintf(__("CantChargeTplError"), $tpl), __LINE__);
+
+    }
 
 }
 
