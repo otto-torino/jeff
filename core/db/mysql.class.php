@@ -49,7 +49,7 @@ class Mysql extends Database  {
             $sth = $this->_db->prepare($query);
         }
         catch(PDOException $e) {
-            exit(Error::syserrorMessage(get_class($this), 'getFieldsName', $this->errorInfo($query), __LINE__));
+            exit(JeffError::syserrorMessage(get_class($this), 'getFieldsName', $this->errorInfo($query), __LINE__));
         }
         $sth->execute();
         $res = $sth->fetchAll();

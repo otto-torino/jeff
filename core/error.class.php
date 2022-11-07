@@ -29,7 +29,7 @@
  * @date 2011-2012
  * @copyright Otto srl [MIT License](http://www.opensource.org/licenses/mit-license.php)
  */
-abstract class Error {
+abstract class JeffError {
 
 	/**
 	 * @brief List of system default errors coded by int keys 

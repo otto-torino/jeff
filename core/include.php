@@ -41,7 +41,7 @@ include(ABS_DB.DS.'mysql.class.php');
  * @param mixed $class name of the model/controller class
  * @return void
  */
-function __autoload($class) {
+spl_autoload_register(function ($class) {
 
    	if(is_file(ABS_MDL.DS.$class.DS.$class.'.php')) {
    		include_once(ABS_MDL.DS.$class.DS.$class.'.php');
@@ -54,8 +54,8 @@ function __autoload($class) {
    		
 	if (!class_exists($class, false)) {
         $registry = registry::instance();
-		Error::syserrorMessage('include.php', 'autoload', sprintf('Can\'t charge the model or controller %s', $class), __LINE__);
+		JeffError::syserrorMessage('include.php', 'autoload', sprintf('Can\'t charge the model or controller %s', $class), __LINE__);
 	}
-}
+});
 
 ?>

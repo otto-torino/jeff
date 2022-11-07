@@ -83,7 +83,8 @@ function cleanInput($method, $name, $type, $opts=array()) {
 
 	$input = filter_input($method_string, $name, $filter, $options);
 
-	if(get_magic_quotes_gpc()) $input = stripslashes($input);	// magic_quotes_gpc = On
+    // @TODO check me
+	/* if(get_magic_quotes_gpc()) $input = stripslashes($input);	// magic_quotes_gpc = On */
 
 	if(is_null($filter)) exit($input);
 	settype($input, $type);

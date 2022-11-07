@@ -569,7 +569,7 @@ class adminTable {
 		$pag = new pagination($this->_efp, $this->_registry->db->count($this->_table, $where_pag, $this->_primary_key));
 		$limit = array($pag->start(), $this->_efp);
 
-		if(count($this->_changelist_fields)) {
+		if($this->_changelist_fields && count($this->_changelist_fields)) {
 			if(!in_array($this->_primary_key, $this->_changelist_fields)) { 
 				// always select the primary key
 				array_unshift($this->_changelist_fields, $this->_primary_key);
@@ -1460,7 +1460,7 @@ class adminTable {
 		$res = array();
 		$pkeys = cleanInputArray('post', $this->_primary_key, 'string');
 		$insert = false;
-		if(!$pkeys or (count($pkeys == 1) and !$pkeys[0])) { 
+		if(!$pkeys or (count($pkeys) == 1) and !$pkeys[0]) { 
 			$pkeys = array(0=>null); 
 			$insert = true; 
 			if(!$this->_insertion) {

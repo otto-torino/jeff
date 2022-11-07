@@ -38,7 +38,7 @@ class view {
 	/**
 	 * @brief associative array containing the js and css to include asynchronously in the document
 	 */
-	protected $_assets;
+	protected $_assets = [];
 
 	/**
 	 * @brief the path to the folder containing the view of the active theme
@@ -95,7 +95,7 @@ class view {
     if(is_readable($tpl.".php")) $this->_tpl = $tpl.".php";
     elseif(is_readable($this->_view_folder.DS.$tpl.".php")) $this->_tpl = $this->_view_folder.DS.$tpl;
     elseif(is_readable($this->_dft_view_folder.DS.$tpl.".php")) $this->_tpl = $this->_dft_view_folder.DS.$tpl;
-    else Error::syserrorMessage('view', 'setTpl', sprintf(__("CantChargeTemplateError"), $tpl.".php"), __LINE__);
+    else JeffError::syserrorMessage('view', 'setTpl', sprintf(__("CantChargeTemplateError"), $tpl.".php"), __LINE__);
 
     if($this->_registry->is_mobile and is_readable($this->_tpl.'_mobile.php')) {
       $this->_tpl = $this->_tpl.'_mobile.php';

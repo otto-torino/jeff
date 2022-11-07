@@ -68,7 +68,7 @@ class template {
     public function parse() {
 
         if(!is_readable($this->getPath())) {
-            Error::syserrorMessage('template', 'parse', sprintf(__("TplNotFound"), $this->getPath()), __LINE__);
+            JeffError::syserrorMessage('template', 'parse', sprintf(__("TplNotFound"), $this->getPath()), __LINE__);
         }
 
         $mdl_url_content = $this->_registry->router->loader(null);

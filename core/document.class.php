@@ -102,7 +102,7 @@ class document {
 	 */
 	public static function errorMessages() {
 
-		$errorMsg = Error::getErrorMessage();
+		$errorMsg = JeffError::getErrorMessage();
 		return empty($errorMsg) ? '' : "<script>alert('".$errorMsg."');</script>";
 
 	}

@@ -36,7 +36,7 @@ AddOutputFilterByType DEFLATE application/x-javascript
 
 RewriteEngine on
 
-RewriteBase /jeff.git/
+RewriteBase /jeff/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

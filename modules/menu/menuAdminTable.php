@@ -58,7 +58,7 @@ class menuAdminTable extends adminTable {
 
 		$limit = array($pag->start(), $this->_efp);
 
-		if(count($this->_changelist_fields)) {
+		if($this->_changelist_fields && count($this->_changelist_fields)) {
 			if(!in_array($this->_primary_key, $this->_changelist_fields)) 
 				array_unshift($this->_changelist_fields, $this->_primary_key);
 			$field_selection = isset($this->_fkeys[$field_order]) 

@@ -269,14 +269,14 @@ class core {
     if(is_readable(ABS_THEMES.DS.$theme_name.DS.$theme_name.'.php'))
       require_once(ABS_THEMES.DS.$theme_name.DS.$theme_name.'.php');
     else 
-      Error::syserrorMessage('coew', 'getTheme', sprintf("Can't load theme %s", $theme_name), __LINE__);
+      JeffError::syserrorMessage('coew', 'getTheme', sprintf("Can't load theme %s", $theme_name), __LINE__);
 
     $theme_class = $theme_name.'Theme';
 
     if(class_exists($theme_class))
       return new $theme_class();
     else 
-      Error::syserrorMessage('coew', 'getTheme', sprintf("Can't load theme %s", $theme_name), __LINE__);
+      JeffError::syserrorMessage('coew', 'getTheme', sprintf("Can't load theme %s", $theme_name), __LINE__);
 
   }
 

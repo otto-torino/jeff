@@ -232,7 +232,7 @@ class router {
 		/*** if the file is not there diaf ***/
 		if(!is_readable(ABS_MDL.DS.$module.DS.$module.'.controller.php'))
 		{
-			Error::syserrorMessage('router', 'laodController', sprintf(__("CantChargeModuleControllerError"), $module, ABS_MDL.DS.$module.DS.$module.'.controller.php'), __LINE__);
+			JeffError::syserrorMessage('router', 'laodController', sprintf(__("CantChargeModuleControllerError"), $module, ABS_MDL.DS.$module.DS.$module.'.controller.php'), __LINE__);
 		}
 
 		/*** include the controller ***/

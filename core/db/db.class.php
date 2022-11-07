@@ -79,7 +79,7 @@ class Database {
             }
         }
         catch(PDOException $e) {
-            Error::syserrorMessage(get_class($this), '__construct', $e->getMessage(), __LINE__);
+            JeffError::syserrorMessage(get_class($this), '__construct', $e->getMessage(), __LINE__);
         }
     }
 

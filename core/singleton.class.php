@@ -65,7 +65,7 @@ abstract class singleton {
 	 * @return error
 	 */
 	public function __clone() {
-		Error::syserrorMessage('singleton', '__clone', __("CannotCloneSingleton"), __LINE__);
+		JeffError::syserrorMessage('singleton', '__clone', __("CannotCloneSingleton"), __LINE__);
 	}
 	
 	/**
@@ -76,7 +76,7 @@ abstract class singleton {
 	 * @return error
 	 */
 	public function __sleep() {
-		Error::syserrorMessage('singleton', '__sleep', __("CannotSerializeSingleton").get_called_class(), __LINE__);
+		JeffError::syserrorMessage('singleton', '__sleep', __("CannotSerializeSingleton").get_called_class(), __LINE__);
 	}
 	
 	/**
@@ -87,7 +87,7 @@ abstract class singleton {
 	 * @return error
 	 */
 	public function __wakeup() {
-		Error::syserrorMessage('singleton', '__wakeup', __("CannotSerializeSingleton"), __LINE__);
+		JeffError::syserrorMessage('singleton', '__wakeup', __("CannotSerializeSingleton"), __LINE__);
 	}
 
 }

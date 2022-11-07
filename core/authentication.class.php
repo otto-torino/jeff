@@ -48,7 +48,7 @@ class authentication {
 				}
 			}	
 			
-			Error::errorMessage(array("error"=>__("authError")), $redirect);
+			JeffError::errorMessage(array("error"=>__("authError")), $redirect);
 		}
 		elseif(isset($_GET['logout'])) {
 			unset($_SESSION);

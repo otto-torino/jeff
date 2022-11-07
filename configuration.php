@@ -27,7 +27,7 @@ define('SESSIONNAME', 'JEFF_SID');
 /**
  * @brief application language (head meta tag)
  */
-define('APP_LANGUAGE', 'it_IT');
+define('APP_LANGUAGE', 'en_US');
 
 /**
  * @brief Database Management System
